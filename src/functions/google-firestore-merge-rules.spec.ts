@@ -62,4 +62,16 @@ service cloud.firestore {
 `,
     );
   });
+
+  it('should not merge files during teardown', async () => {
+    const actualResult = await context.call(GoogleFirestoreMergeRules, {
+      tearDown: true,
+    });
+
+    expect(actualResult).toEqual({
+      configuration: {},
+      securityRuleFile: null,
+    });
+    expect(mergeFirebaseRulesFilesMock).not.toHaveBeenCalled();
+  });
 });
