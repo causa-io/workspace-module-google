@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+Fixes:
+
+- Make `GoogleFirestoreMergeRules` and `GoogleFirebaseStorageMergeRules` accept the infrastructure processor `tearDown` argument.
+
 ## v0.1.0 (2023-05-19)
 
 Features:
