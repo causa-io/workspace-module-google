@@ -25,6 +25,7 @@ type GoogleServicesEnableResult = {
 
   /**
    * The list of services that were enabled.
+   * This is empty during teardown.
    */
   services: string[];
 };

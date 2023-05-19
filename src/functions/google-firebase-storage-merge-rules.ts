@@ -1,6 +1,8 @@
 import { CliCommand } from '@causa/cli';
 import { WorkspaceContext, WorkspaceFunction } from '@causa/workspace';
 import { InfrastructureProcessor } from '@causa/workspace-core';
+import { AllowMissing } from '@causa/workspace/validation';
+import { IsBoolean } from 'class-validator';
 import { firebaseStorageCommandDefinition } from '../cli/index.js';
 import { GoogleConfiguration } from '../configurations/index.js';
 import { mergeFirebaseRulesFiles } from '../firebase/index.js';
@@ -21,8 +23,9 @@ type GoogleFirebaseStorageMergeRulesResult = {
 
   /**
    * The path to the merged rules file.
+   * This is `null` during teardown.
    */
-  securityRuleFile: string;
+  securityRuleFile: string | null;
 };
 
 /**
@@ -47,9 +50,17 @@ export class GoogleFirebaseStorageMergeRules
   extends WorkspaceFunction<Promise<GoogleFirebaseStorageMergeRulesResult>>
   implements InfrastructureProcessor
 {
+  @IsBoolean()
+  @AllowMissing()
+  readonly tearDown?: boolean;
+
   async _call(
     context: WorkspaceContext,
   ): Promise<GoogleFirebaseStorageMergeRulesResult> {
+    if (this.tearDown) {
+      return { configuration: {}, securityRuleFile: null };
+    }
+
     const googleConf = context.asConfiguration<GoogleConfiguration>();
     let securityRuleFile =
       googleConf.get('google.firebaseStorage.securityRuleFile') ??
