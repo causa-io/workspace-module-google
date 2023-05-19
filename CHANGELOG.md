@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.1.0 (2023-05-19)
+
 Features:
 
 - Implement the `GoogleSecretManagerService`.
