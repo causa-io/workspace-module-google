@@ -5,6 +5,7 @@
 Features:
 
 - Implement the `ProjectGetArtefactDestination` function for `serviceContainer` projects backed by the `google.cloudRun` `serviceContainer.platform`.
+- Implement the `GoogleSpannerListDatabases` function.
 
 ## v0.1.1 (2023-05-19)
 
