@@ -6,6 +6,8 @@ Features:
 
 - Implement the `ProjectGetArtefactDestination` function for `serviceContainer` projects backed by the `google.cloudRun` `serviceContainer.platform`.
 - Implement the `GoogleSpannerListDatabases` function.
+- Implement the `GcloudEmulatorService`.
+- Implement `EmulatorStart` and `EmulatorStop` for the Pub/Sub emulator.
 
 ## v0.1.1 (2023-05-19)
 
