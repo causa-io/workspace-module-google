@@ -61,17 +61,17 @@ export type GoogleConfiguration = {
        * If not set, this default to `<GCP project>.firebaseapp.com`.
        */
       authDomain?: string;
-    };
 
-    /**
-     * Configuration for Firebase tools (the CLI).
-     * This applies to Dockerized calls to the `firebase` CLI.
-     */
-    firebaseTools?: {
       /**
-       * The version of the CLI to use.
+       * Configuration for Firebase tools (the CLI).
+       * This applies to Dockerized calls to the `firebase` CLI.
        */
-      version?: string;
+      tools?: {
+        /**
+         * The version of the CLI to use.
+         */
+        version?: string;
+      };
     };
 
     /**
