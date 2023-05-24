@@ -8,6 +8,7 @@ Features:
 - Implement the `GoogleSpannerListDatabases` function.
 - Implement the `GcloudEmulatorService`.
 - Implement `EmulatorStart` and `EmulatorStop` for the Pub/Sub emulator.
+- Implement `EmulatorStart` and `EmulatorStop` for the Firestore emulator.
 
 ## v0.1.1 (2023-05-19)
 

@@ -34,7 +34,7 @@ export class EmulatorStartForPubSub extends EmulatorStart {
    * Starts the Pub/Sub emulator and creates the topics defined in the workspace.
    *
    * @param context The {@link WorkspaceContext}.
-   * @returns The configuration listing the local Pub/Sub topics.
+   * @returns The configuration for the emulator and the local Pub/Sub topics.
    */
   private async startPubSub(
     context: WorkspaceContext,
@@ -43,35 +43,44 @@ export class EmulatorStartForPubSub extends EmulatorStart {
       return {};
     }
 
-    await this.startPubSubEmulator(context);
-    const configuration = await this.createTopicsIfNeeded(context);
+    const emulatorConf = await this.startPubSubEmulator(context);
+    const topicsConf = await this.createTopicsIfNeeded(context);
 
     context.logger.info('📫 Successfully initialized Pub/Sub emulator.');
 
-    return configuration;
+    return { ...emulatorConf, ...topicsConf };
   }
 
   /**
    * Starts the Pub/Sub emulator.
    *
    * @param context The {@link WorkspaceContext}.
+   * @returns The configuration for the Pub/Sub emulator.
    */
-  private async startPubSubEmulator(context: WorkspaceContext): Promise<void> {
+  private async startPubSubEmulator(
+    context: WorkspaceContext,
+  ): Promise<Record<string, string>> {
     context.logger.info('📫 Starting Pub/Sub emulator.');
 
     const gcpProject = getLocalGcpProject(context);
     const containerName = getPubSubContainerName(context);
 
-    await context
-      .service(GcloudEmulatorService)
-      .start(
-        'pubsub',
-        containerName,
-        [{ host: '127.0.0.1', local: PUBSUB_PORT, container: PUBSUB_PORT }],
-        {
-          availabilityEndpoint: `http://127.0.0.1:${PUBSUB_PORT}/v1/projects/${gcpProject}/topics`,
-        },
-      );
+    const gcloudEmulatorService = context.service(GcloudEmulatorService);
+    await gcloudEmulatorService.start(
+      'pubsub',
+      containerName,
+      [{ host: '127.0.0.1', local: PUBSUB_PORT, container: PUBSUB_PORT }],
+      {
+        availabilityEndpoint: `http://127.0.0.1:${PUBSUB_PORT}/v1/projects/${gcpProject}/topics`,
+      },
+    );
+
+    return {
+      PUBSUB_EMULATOR_HOST: `127.0.0.1:${PUBSUB_PORT}`,
+      GOOGLE_CLOUD_PROJECT: gcloudEmulatorService.localGcpProject,
+      GCP_PROJECT: gcloudEmulatorService.localGcpProject,
+      GCLOUD_PROJECT: gcloudEmulatorService.localGcpProject,
+    };
   }
 
   /**
