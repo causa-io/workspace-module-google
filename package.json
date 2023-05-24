@@ -22,6 +22,7 @@
   "scripts": {
     "prebuild": "rimraf ./dist",
     "build": "tsc -p tsconfig.build.json",
+    "postbuild": "copyfiles -u 1 src/**/assets/**/* dist/",
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "eslint \"src/**/*.ts\"",
     "test": "NODE_OPTIONS=\"--experimental-vm-modules --no-warnings=ExperimentalWarning\" jest",
