@@ -1,6 +1,7 @@
 import { ModuleRegistrationContext } from '@causa/workspace';
 import { EmulatorStartForFirestore } from './emulator-start-firestore.js';
 import { EmulatorStartForPubSub } from './emulator-start-pubsub.js';
+import { EmulatorStopForFirebaseStorage } from './emulator-stop-firebase-storage.js';
 import { EmulatorStopForFirestore } from './emulator-stop-firestore.js';
 import { EmulatorStopForPubSub } from './emulator-stop-pubsub.js';
 import { GoogleFirebaseStorageMergeRules } from './google-firebase-storage-merge-rules.js';
@@ -14,6 +15,7 @@ export function registerFunctions(context: ModuleRegistrationContext) {
   context.registerFunctionImplementations(
     EmulatorStartForFirestore,
     EmulatorStartForPubSub,
+    EmulatorStopForFirebaseStorage,
     EmulatorStopForFirestore,
     EmulatorStopForPubSub,
     GoogleFirebaseStorageMergeRules,
