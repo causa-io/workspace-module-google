@@ -1,6 +1,7 @@
 import { ModuleRegistrationContext } from '@causa/workspace';
 import { EmulatorStartForFirebaseStorage } from './emulator-start-firebase-storage.js';
 import { EmulatorStartForFirestore } from './emulator-start-firestore.js';
+import { EmulatorStartForIdentityPlatform } from './emulator-start-identity-platform.js';
 import { EmulatorStartForPubSub } from './emulator-start-pubsub.js';
 import { EmulatorStopForFirebaseStorage } from './emulator-stop-firebase-storage.js';
 import { EmulatorStopForFirestore } from './emulator-stop-firestore.js';
@@ -17,6 +18,7 @@ export function registerFunctions(context: ModuleRegistrationContext) {
   context.registerFunctionImplementations(
     EmulatorStartForFirebaseStorage,
     EmulatorStartForFirestore,
+    EmulatorStartForIdentityPlatform,
     EmulatorStartForPubSub,
     EmulatorStopForFirebaseStorage,
     EmulatorStopForFirestore,
