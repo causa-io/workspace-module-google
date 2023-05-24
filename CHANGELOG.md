@@ -12,6 +12,7 @@ Features:
 - Implement the `FirebaseEmulatorService`.
 - Implement `EmulatorStart` and `EmulatorStop` for the Firebase Storage emulator.
 - Implement `EmulatorStart` and `EmulatorStop` for the Identity Platform emulator.
+- Implement `EmulatorStart` and `EmulatorStop` for the Spanner emulator.
 
 ## v0.1.1 (2023-05-19)
 
