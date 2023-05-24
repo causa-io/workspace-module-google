@@ -21,11 +21,12 @@ import { EmulatorStopForPubSub } from './emulator-stop-pubsub.js';
 describe('EmulatorStartForPubSub', () => {
   let context: WorkspaceContext;
   let functionRegistry: FunctionRegistry<WorkspaceContext>;
+  let dockerService: DockerService;
 
   beforeEach(async () => {
     ({ context, functionRegistry } = createContext({
       configuration: {
-        workspace: { name: 'test' },
+        workspace: { name: 'pubsub-test' },
         events: { broker: 'google.pubSub' },
       },
       functions: [EmulatorStartForPubSub, EmulatorStopForPubSub],
@@ -46,15 +47,22 @@ describe('EmulatorStartForPubSub', () => {
 
     // Actually downloading the gcloud image takes a long time, but it makes it much easier to test the function...
     // And is a more thorough test than mocking everything.
-    await context
-      .service(DockerService)
-      .docker('pull', [
-        'gcr.io/google.com/cloudsdktool/google-cloud-cli:emulators',
-      ]);
+    dockerService = context.service(DockerService);
+    await dockerService.docker('pull', [
+      'gcr.io/google.com/cloudsdktool/google-cloud-cli:emulators',
+    ]);
   }, 300000);
 
   afterEach(async () => {
     await context.call(EmulatorStop, { name: 'google.pubSub' });
+  });
+
+  afterAll(async () => {
+    await dockerService.docker('network', [
+      'rm',
+      '-f',
+      dockerService.networkName,
+    ]);
   });
 
   it('should not handle an emulator other than Pub/Sub', async () => {
@@ -82,19 +90,22 @@ describe('EmulatorStartForPubSub', () => {
     expect(actualResult.name).toEqual('google.pubSub');
     expect(actualResult.configuration).toEqual({
       PUBSUB_TOPIC_MY_FIRST_TOPIC_V1:
-        'projects/demo-test/topics/my.first-topic.v1',
+        'projects/demo-pubsub-test/topics/my.first-topic.v1',
       PUBSUB_TOPIC_MY_SECOND_TOPIC_V1:
-        'projects/demo-test/topics/my.second-topic.v1',
+        'projects/demo-pubsub-test/topics/my.second-topic.v1',
     });
     expect(await getPubSubEmulatorTopics()).toEqual([
-      'projects/demo-test/topics/my.first-topic.v1',
-      'projects/demo-test/topics/my.second-topic.v1',
+      'projects/demo-pubsub-test/topics/my.first-topic.v1',
+      'projects/demo-pubsub-test/topics/my.second-topic.v1',
     ]);
   }, 120000);
 
   it('should not set up topics if the broker is not Pub/Sub', async () => {
     ({ context, functionRegistry } = createContext({
-      configuration: { workspace: { name: 'test' }, events: { broker: '📫' } },
+      configuration: {
+        workspace: { name: 'pubsub-test' },
+        events: { broker: '📫' },
+      },
       functions: [EmulatorStartForPubSub, EmulatorStopForPubSub],
     }));
     registerMockFunction(functionRegistry, EventTopicList, async () => [
@@ -114,7 +125,7 @@ describe('EmulatorStartForPubSub', () => {
 
   async function getPubSubEmulatorTopics(): Promise<string[]> {
     const [topics] = await new PubSub({
-      projectId: 'demo-test',
+      projectId: 'demo-pubsub-test',
       apiEndpoint: `127.0.0.1:${PUBSUB_PORT}`,
     }).getTopics();
     return topics.map((t) => t.name).sort();
