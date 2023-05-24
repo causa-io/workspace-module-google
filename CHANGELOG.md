@@ -9,6 +9,8 @@ Features:
 - Implement the `GcloudEmulatorService`.
 - Implement `EmulatorStart` and `EmulatorStop` for the Pub/Sub emulator.
 - Implement `EmulatorStart` and `EmulatorStop` for the Firestore emulator.
+- Implement the `FirebaseEmulatorService`.
+- Implement `EmulatorStart` and `EmulatorStop` for the Firebase Storage emulator.
 
 ## v0.1.1 (2023-05-19)
 
