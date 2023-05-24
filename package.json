@@ -38,7 +38,8 @@
     "@google-cloud/spanner": "^6.10.0",
     "class-validator": "^0.14.0",
     "globby": "^13.1.4",
-    "google-gax": "^3.6.0"
+    "google-gax": "^3.6.0",
+    "googleapis": "^118.0.0"
   },
   "devDependencies": {
     "@tsconfig/node18": "^2.0.1",
