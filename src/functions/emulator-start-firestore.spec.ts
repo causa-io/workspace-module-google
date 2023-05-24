@@ -1,5 +1,5 @@
 import { WorkspaceContext } from '@causa/workspace';
-import { EmulatorStart, EmulatorStop } from '@causa/workspace-core';
+import { EmulatorStart } from '@causa/workspace-core';
 import {
   FunctionRegistry,
   NoImplementationFoundError,
@@ -34,9 +34,9 @@ describe('EmulatorStartForFirestore', () => {
   });
 
   it('should not handle an emulator other than Firestore', async () => {
-    expect(() => context.call(EmulatorStop, { name: 'otherEmulator' })).toThrow(
-      NoImplementationFoundError,
-    );
+    expect(() =>
+      context.call(EmulatorStart, { name: 'otherEmulator' }),
+    ).toThrow(NoImplementationFoundError);
   });
 
   it('should not start the emulator for a dry run', async () => {
