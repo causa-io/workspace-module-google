@@ -89,6 +89,10 @@ describe('EmulatorStartForPubSub', () => {
 
     expect(actualResult.name).toEqual('google.pubSub');
     expect(actualResult.configuration).toEqual({
+      PUBSUB_EMULATOR_HOST: '127.0.0.1:8085',
+      GOOGLE_CLOUD_PROJECT: 'demo-pubsub-test',
+      GCP_PROJECT: 'demo-pubsub-test',
+      GCLOUD_PROJECT: 'demo-pubsub-test',
       PUBSUB_TOPIC_MY_FIRST_TOPIC_V1:
         'projects/demo-pubsub-test/topics/my.first-topic.v1',
       PUBSUB_TOPIC_MY_SECOND_TOPIC_V1:
@@ -119,7 +123,12 @@ describe('EmulatorStartForPubSub', () => {
     const actualResult = await context.call(EmulatorStart, {});
 
     expect(actualResult.name).toEqual('google.pubSub');
-    expect(actualResult.configuration).toEqual({});
+    expect(actualResult.configuration).toEqual({
+      PUBSUB_EMULATOR_HOST: '127.0.0.1:8085',
+      GOOGLE_CLOUD_PROJECT: 'demo-pubsub-test',
+      GCP_PROJECT: 'demo-pubsub-test',
+      GCLOUD_PROJECT: 'demo-pubsub-test',
+    });
     expect(await getPubSubEmulatorTopics()).toBeEmpty();
   });
 
