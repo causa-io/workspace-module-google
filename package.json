@@ -35,8 +35,10 @@
     "@google-cloud/pubsub": "^3.6.0",
     "@google-cloud/secret-manager": "^4.2.2",
     "@google-cloud/service-usage": "^2.2.2",
+    "@google-cloud/spanner": "^6.10.0",
     "class-validator": "^0.14.0",
-    "globby": "^13.1.4"
+    "globby": "^13.1.4",
+    "google-gax": "^3.6.0"
   },
   "devDependencies": {
     "@tsconfig/node18": "^2.0.1",
