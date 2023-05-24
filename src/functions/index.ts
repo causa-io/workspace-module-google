@@ -3,6 +3,7 @@ import { EmulatorStartForFirebaseStorage } from './emulator-start-firebase-stora
 import { EmulatorStartForFirestore } from './emulator-start-firestore.js';
 import { EmulatorStartForIdentityPlatform } from './emulator-start-identity-platform.js';
 import { EmulatorStartForPubSub } from './emulator-start-pubsub.js';
+import { EmulatorStartForSpanner } from './emulator-start-spanner.js';
 import { EmulatorStopForFirebaseStorage } from './emulator-stop-firebase-storage.js';
 import { EmulatorStopForFirestore } from './emulator-stop-firestore.js';
 import { EmulatorStopForIdentityPlatform } from './emulator-stop-identity-platform.js';
@@ -21,6 +22,7 @@ export function registerFunctions(context: ModuleRegistrationContext) {
     EmulatorStartForFirestore,
     EmulatorStartForIdentityPlatform,
     EmulatorStartForPubSub,
+    EmulatorStartForSpanner,
     EmulatorStopForFirebaseStorage,
     EmulatorStopForFirestore,
     EmulatorStopForIdentityPlatform,
