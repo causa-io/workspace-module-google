@@ -29,6 +29,15 @@ class ApiKeysClientMock {
   }
 }
 
+const generateAccessTokenMock = jest.fn(() =>
+  Promise.resolve([
+    { expireTime: '2999-01-01T00:00:00.000Z', accessToken: '🔑' },
+  ]),
+);
+class IAMCredentialsClientMock {
+  readonly generateAccessToken = generateAccessTokenMock;
+}
+
 const expectedApp = {};
 const initializeAppMock = jest.fn(() => expectedApp);
 const expectedAdminApp = {};
@@ -41,6 +50,9 @@ jest.unstable_mockModule('firebase/app', () => ({
 }));
 jest.unstable_mockModule('firebase-admin/app', () => ({
   initializeApp: initializeAdminAppMock,
+}));
+jest.unstable_mockModule('@google-cloud/iam-credentials', () => ({
+  IAMCredentialsClient: IAMCredentialsClientMock,
 }));
 
 describe('FirebaseAppService', () => {
@@ -193,27 +205,6 @@ describe('FirebaseAppService', () => {
   });
 
   describe('getAdminAppForAdminServiceAccount', () => {
-    const iamCredentialsMock = {
-      projects: {
-        serviceAccounts: {
-          generateAccessToken: jest.fn(() =>
-            Promise.resolve({
-              data: {
-                expireTime: '2999-01-01T00:00:00.000Z',
-                accessToken: '🔑',
-              },
-            }),
-          ),
-        },
-      },
-    };
-    beforeEach(() => {
-      const googleApisService = context.service(GoogleApisService);
-      jest
-        .spyOn(googleApisService, 'getClient')
-        .mockReturnValue(iamCredentialsMock as any);
-    });
-
     it('should return the admin Firebase app initialized with the admin account', async () => {
       const actualApp = await service.getAdminAppForAdminServiceAccount();
 
@@ -235,13 +226,9 @@ describe('FirebaseAppService', () => {
         access_token: '🔑',
         expires_in: expect.any(Number),
       });
-      expect(
-        iamCredentialsMock.projects.serviceAccounts.generateAccessToken,
-      ).toHaveBeenCalledOnceWith({
+      expect(generateAccessTokenMock).toHaveBeenCalledOnceWith({
         name: 'projects/-/serviceAccounts/bob@my-project.gcp.com',
-        requestBody: {
-          scope: ['https://www.googleapis.com/auth/cloud-platform'],
-        },
+        scope: ['https://www.googleapis.com/auth/cloud-platform'],
       });
     });
 
