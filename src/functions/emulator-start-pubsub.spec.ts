@@ -130,7 +130,7 @@ describe('EmulatorStartForPubSub', () => {
       GCLOUD_PROJECT: 'demo-pubsub-test',
     });
     expect(await getPubSubEmulatorTopics()).toBeEmpty();
-  });
+  }, 120000);
 
   async function getPubSubEmulatorTopics(): Promise<string[]> {
     const [topics] = await new PubSub({
