@@ -13,6 +13,7 @@ import { GoogleAppCheckGenerateToken } from './google-app-check-generate-token.j
 import { GoogleFirebaseStorageMergeRules } from './google-firebase-storage-merge-rules.js';
 import { GoogleFirestoreMergeRules } from './google-firestore-merge-rules.js';
 import { GoogleIdentityPlatformGenerateCustomToken } from './google-identity-platform-generate-custom-token.js';
+import { GoogleIdentityPlatformGenerateToken } from './google-identity-platform-generate-token.js';
 import { GoogleServicesEnable } from './google-services-enable.js';
 import { GoogleSpannerListDatabases } from './google-spanner-list-databases.js';
 import { ProjectGetArtefactDestinationForServiceContainer } from './project-get-artefact-destination-service-container.js';
@@ -34,6 +35,7 @@ export function registerFunctions(context: ModuleRegistrationContext) {
     GoogleFirebaseStorageMergeRules,
     GoogleFirestoreMergeRules,
     GoogleIdentityPlatformGenerateCustomToken,
+    GoogleIdentityPlatformGenerateToken,
     GoogleServicesEnable,
     GoogleSpannerListDatabases,
     ProjectGetArtefactDestinationForServiceContainer,
