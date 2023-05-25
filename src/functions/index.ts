@@ -9,6 +9,7 @@ import { EmulatorStopForFirestore } from './emulator-stop-firestore.js';
 import { EmulatorStopForIdentityPlatform } from './emulator-stop-identity-platform.js';
 import { EmulatorStopForPubSub } from './emulator-stop-pubsub.js';
 import { EmulatorStopForSpanner } from './emulator-stop-spanner.js';
+import { GoogleAppCheckGenerateToken } from './google-app-check-generate-token.js';
 import { GoogleFirebaseStorageMergeRules } from './google-firebase-storage-merge-rules.js';
 import { GoogleFirestoreMergeRules } from './google-firestore-merge-rules.js';
 import { GoogleServicesEnable } from './google-services-enable.js';
@@ -28,6 +29,7 @@ export function registerFunctions(context: ModuleRegistrationContext) {
     EmulatorStopForIdentityPlatform,
     EmulatorStopForPubSub,
     EmulatorStopForSpanner,
+    GoogleAppCheckGenerateToken,
     GoogleFirebaseStorageMergeRules,
     GoogleFirestoreMergeRules,
     GoogleServicesEnable,
