@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.2.0 (2023-05-25)
+
 Features:
 
 - Implement the `ProjectGetArtefactDestination` function for `serviceContainer` projects backed by the `google.cloudRun` `serviceContainer.platform`.
