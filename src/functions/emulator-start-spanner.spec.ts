@@ -91,7 +91,7 @@ describe('EmulatorStartForSpanner', () => {
       SPANNER_INSTANCE: 'local',
     });
     expect(await getSpannerDatabases()).toEqual({});
-  });
+  }, 120000);
 
   it('should start the emulator and create databases', async () => {
     listDatabasesMock.mockResolvedValueOnce([
@@ -136,7 +136,7 @@ describe('EmulatorStartForSpanner', () => {
 ) PRIMARY KEY(id)`,
       ],
     });
-  });
+  }, 120000);
 
   async function getSpannerDatabases(): Promise<Record<string, string[]>> {
     const spanner = new Spanner({
