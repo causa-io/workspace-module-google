@@ -57,6 +57,14 @@ export type GoogleConfiguration = {
       apiKey?: string;
 
       /**
+       * The Firebase app ID used by clients.
+       * This can be found in the Firebase Console. Each platform (Android, iOS, Web) has its own app ID.
+       * If this is not set and is needed by an operation, an attempt will be made to find the first eligible app ID
+       * using the Firebase API.
+       */
+      appId?: string;
+
+      /**
        * The domain name for the project.
        * If not set, this default to `<GCP project>.firebaseapp.com`.
        */

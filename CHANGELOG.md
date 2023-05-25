@@ -14,6 +14,7 @@ Features:
 - Implement `EmulatorStart` and `EmulatorStop` for the Identity Platform emulator.
 - Implement `EmulatorStart` and `EmulatorStop` for the Spanner emulator.
 - Implement the `GoogleApisService`.
+- Implement the `FirebaseAppService`.
 
 ## v0.1.1 (2023-05-19)
 
