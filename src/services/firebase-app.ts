@@ -1,5 +1,6 @@
 import { WorkspaceContext } from '@causa/workspace';
 import { ApiKeysClient } from '@google-cloud/apikeys';
+import { IAMCredentialsClient } from '@google-cloud/iam-credentials';
 import {
   Credential,
   App as FirebaseAdminApp,
@@ -299,33 +300,21 @@ export class FirebaseAppService {
   private async makeAdminCredential(
     serviceAccountId: string,
   ): Promise<Credential> {
-    const iamCredentialsClient = await this.googleApisService.getClient(
-      'iamcredentials',
-      'v1',
-      {},
-    );
+    const iamCredentialsClient = new IAMCredentialsClient();
 
     return {
       getAccessToken: async () => {
-        const { data } =
-          await iamCredentialsClient.projects.serviceAccounts.generateAccessToken(
-            {
-              name: `projects/-/serviceAccounts/${serviceAccountId}`,
-              requestBody: {
-                scope: ['https://www.googleapis.com/auth/cloud-platform'],
-              },
-            },
-          );
+        const [{ accessToken, expireTime }] =
+          await iamCredentialsClient.generateAccessToken({
+            name: `projects/-/serviceAccounts/${serviceAccountId}`,
+            scope: ['https://www.googleapis.com/auth/cloud-platform'],
+          });
 
-        const expireTime = new Date(data.expireTime ?? '');
-        const expires_in = Math.floor(
-          (expireTime.getTime() - Date.now()) / 1000,
-        );
+        const expireTimestamp =
+          parseInt((expireTime?.seconds as string | undefined) ?? '0') * 1000;
+        const expires_in = Math.floor((expireTimestamp - Date.now()) / 1000);
 
-        return {
-          access_token: data.accessToken ?? '',
-          expires_in,
-        };
+        return { access_token: accessToken ?? '', expires_in };
       },
     };
   }

@@ -16,6 +16,7 @@ Features:
 - Implement the `GoogleApisService`.
 - Implement the `FirebaseAppService`.
 - Implement the `GoogleAppCheckGenerateToken` function and CLI command.
+- Implement the `GoogleIdentityPlatformGenerateToken` function and CLI command.
 
 ## v0.1.1 (2023-05-19)
 
