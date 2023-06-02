@@ -226,5 +226,15 @@ export type GoogleConfiguration = {
        */
       readonly archivesStorageLocation?: string;
     };
+
+    /**
+     * Configuration for Cloud Run containers.
+     */
+    readonly cloudRun?: {
+      /**
+       * The Docker repository where Cloud Run containers should be uploaded.
+       */
+      readonly dockerRepository?: string;
+    };
   };
 };
