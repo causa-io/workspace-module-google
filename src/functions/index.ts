@@ -16,6 +16,7 @@ import { GoogleIdentityPlatformGenerateCustomToken } from './google-identity-pla
 import { GoogleIdentityPlatformGenerateToken } from './google-identity-platform-generate-token.js';
 import { GoogleServicesEnable } from './google-services-enable.js';
 import { GoogleSpannerListDatabases } from './google-spanner-list-databases.js';
+import { ProjectGetArtefactDestinationForCloudFunctions } from './project-get-artefact-destination-cloud-functions.js';
 import { ProjectGetArtefactDestinationForServiceContainer } from './project-get-artefact-destination-service-container.js';
 import { SecretFetchForGoogleSecretManager } from './secret-fetch-secret-manager.js';
 
@@ -38,6 +39,7 @@ export function registerFunctions(context: ModuleRegistrationContext) {
     GoogleIdentityPlatformGenerateToken,
     GoogleServicesEnable,
     GoogleSpannerListDatabases,
+    ProjectGetArtefactDestinationForCloudFunctions,
     ProjectGetArtefactDestinationForServiceContainer,
     SecretFetchForGoogleSecretManager,
   );
