@@ -2,9 +2,9 @@ import { WorkspaceContext } from '@causa/workspace';
 import { ProjectGetArtefactDestination } from '@causa/workspace-core';
 import { NoImplementationFoundError } from '@causa/workspace/function-registry';
 import { createContext } from '@causa/workspace/testing';
-import { ProjectGetArtefactDestinationForServiceContainer } from './project-get-artefact-destination-service-container.js';
+import { ProjectGetArtefactDestinationForCloudRun } from './project-get-artefact-destination-cloud-run.js';
 
-describe('ProjectGetArtefactDestinationForServiceContainer', () => {
+describe('ProjectGetArtefactDestinationForCloudRun', () => {
   let context: WorkspaceContext;
 
   beforeEach(() => {
@@ -19,7 +19,7 @@ describe('ProjectGetArtefactDestinationForServiceContainer', () => {
         serviceContainer: { platform: 'google.cloudRun' },
         google: { cloudRun: { dockerRepository: 'gcr.io/my-workspace' } },
       },
-      functions: [ProjectGetArtefactDestinationForServiceContainer],
+      functions: [ProjectGetArtefactDestinationForCloudRun],
     }));
   });
 
@@ -34,7 +34,7 @@ describe('ProjectGetArtefactDestinationForServiceContainer', () => {
         },
         serviceContainer: { platform: 'aws.ecs' },
       },
-      functions: [ProjectGetArtefactDestinationForServiceContainer],
+      functions: [ProjectGetArtefactDestinationForCloudRun],
     }));
 
     expect(() =>
