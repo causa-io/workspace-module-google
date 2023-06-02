@@ -31,16 +31,16 @@
   "dependencies": {
     "@causa/cli": ">= 0.3.3 < 1.0.0",
     "@causa/workspace": ">= 0.7.0 < 1.0.0",
-    "@causa/workspace-core": ">= 0.4.0 < 1.0.0",
+    "@causa/workspace-core": ">= 0.6.0 < 1.0.0",
     "@google-cloud/apikeys": "^0.2.2",
     "@google-cloud/iam-credentials": "^2.0.4",
-    "@google-cloud/pubsub": "^3.6.0",
+    "@google-cloud/pubsub": "^3.7.0",
     "@google-cloud/secret-manager": "^4.2.2",
     "@google-cloud/service-usage": "^2.2.2",
-    "@google-cloud/spanner": "^6.10.0",
+    "@google-cloud/spanner": "^6.10.1",
     "class-validator": "^0.14.0",
-    "firebase": "^9.22.0",
-    "firebase-admin": "^11.8.0",
+    "firebase": "^9.22.1",
+    "firebase-admin": "^11.9.0",
     "globby": "^13.1.4",
     "google-gax": "^3.6.0",
     "googleapis": "^118.0.0",
@@ -48,8 +48,8 @@
   },
   "devDependencies": {
     "@tsconfig/node18": "^2.0.1",
-    "@types/jest": "^29.5.1",
-    "@types/node": "^18.16.14",
+    "@types/jest": "^29.5.2",
+    "@types/node": "^18.16.16",
     "@types/uuid": "^9.0.1",
     "copyfiles": "^2.4.1",
     "eslint": "^8.41.0",
@@ -60,6 +60,6 @@
     "rimraf": "^5.0.1",
     "ts-jest": "^29.1.0",
     "ts-node": "^10.9.1",
-    "typescript": "^5.0.4"
+    "typescript": "^5.1.3"
   }
 }
