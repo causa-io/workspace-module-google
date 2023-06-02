@@ -38,6 +38,7 @@
     "@google-cloud/secret-manager": "^4.2.2",
     "@google-cloud/service-usage": "^2.2.2",
     "@google-cloud/spanner": "^6.10.1",
+    "@google-cloud/storage": "^6.10.1",
     "class-validator": "^0.14.0",
     "firebase": "^9.22.1",
     "firebase-admin": "^11.9.0",
