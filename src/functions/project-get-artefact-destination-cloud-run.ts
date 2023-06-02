@@ -3,6 +3,7 @@ import {
   ProjectGetArtefactDestination,
   ServiceContainerConfiguration,
 } from '@causa/workspace-core';
+import { GoogleConfiguration } from '../configurations/index.js';
 
 /**
  * Implements the {@link ProjectGetArtefactDestination} function for Cloud Run services.
@@ -11,9 +12,9 @@ import {
 export class ProjectGetArtefactDestinationForCloudRun extends ProjectGetArtefactDestination {
   async _call(context: WorkspaceContext): Promise<string> {
     const projectName = context.getOrThrow('project.name');
-    const dockerRepository = context.getOrThrow(
-      'google.cloudRun.dockerRepository',
-    );
+    const dockerRepository = context
+      .asConfiguration<GoogleConfiguration>()
+      .getOrThrow('google.cloudRun.dockerRepository');
 
     return `${dockerRepository}/${projectName}:${this.tag}`;
   }

@@ -1,5 +1,6 @@
 import { WorkspaceContext } from '@causa/workspace';
 import { SecretManagerServiceClient } from '@google-cloud/secret-manager';
+import { GoogleConfiguration } from '../configurations/index.js';
 
 /**
  * A service exposing a client to the Google Secret Manager.
@@ -17,9 +18,9 @@ export class GoogleSecretManagerService {
   readonly client: SecretManagerServiceClient;
 
   constructor(context: WorkspaceContext) {
+    const conf = context.asConfiguration<GoogleConfiguration>();
     this.defaultProject =
-      context.get('google.secretManager.project') ??
-      context.get('google.project');
+      conf.get('google.secretManager.project') ?? conf.get('google.project');
     this.client = new SecretManagerServiceClient();
   }
 }

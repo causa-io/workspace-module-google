@@ -3,6 +3,7 @@ import {
   ProjectGetArtefactDestination,
   ServerlessFunctionsConfiguration,
 } from '@causa/workspace-core';
+import { GoogleConfiguration } from '../configurations/index.js';
 
 /**
  * Implements the {@link ProjectGetArtefactDestination} function for Cloud Functions projects.
@@ -12,9 +13,9 @@ import {
 export class ProjectGetArtefactDestinationForCloudFunctions extends ProjectGetArtefactDestination {
   async _call(context: WorkspaceContext): Promise<string> {
     const projectName = context.getOrThrow('project.name');
-    const archivesStorageLocation = context.getOrThrow(
-      'google.cloudFunctions.archivesStorageLocation',
-    );
+    const archivesStorageLocation = context
+      .asConfiguration<GoogleConfiguration>()
+      .getOrThrow('google.cloudFunctions.archivesStorageLocation');
 
     return `${archivesStorageLocation}/${projectName}/${this.tag}.zip`;
   }
