@@ -5,39 +5,39 @@ export type GoogleConfiguration = {
   /**
    * Configuration for everything Google / GCP-related.
    */
-  google?: {
+  readonly google?: {
     /**
      * The ID of the default GCP project used when performing operations.
      */
-    project?: string;
+    readonly project?: string;
 
     /**
      * The ID of a local GCP project (which does not exist on GCP).
      * This is for example used by emulators. It should usually start with `demo-` to be compatible with some emulators.
      */
-    localProject?: string;
+    readonly localProject?: string;
 
     /**
      * The list of GCP services on which the project depends.
      * This is useful to automatically enable those services in the GCP project.
      */
-    services?: string[];
+    readonly services?: string[];
 
     /**
      * Configuration for the `gcloud` command.
      * This applies to Dockerized calls to `gcloud` using the official `gcloud` Docker image.
      */
-    gcloud?: {
+    readonly gcloud?: {
       /**
        * The version of the `gcloud` command.
        */
-      version?: string;
+      readonly version?: string;
     };
 
     /**
      * Configuration for the Firebase project.
      */
-    firebase?: {
+    readonly firebase?: {
       /**
        * An existing service account that can be used to sign Identity Platform custom token.
        * Generating custom tokens by signing them using end-user credentials does not work with Identity Platform.
@@ -46,7 +46,7 @@ export type GoogleConfiguration = {
        * If this is not set and is needed by an operation, an attempt will be made to find this service account in the
        * current `google.project`.
        */
-      adminServiceAccount?: string;
+      readonly adminServiceAccount?: string;
 
       /**
        * The Firebase API key used by clients. Used to perform requests to Firebase as an end user.
@@ -54,7 +54,7 @@ export type GoogleConfiguration = {
        * If this is not set and is needed by an operation, an attempt will be made to find the key automatically using
        * the API.
        */
-      apiKey?: string;
+      readonly apiKey?: string;
 
       /**
        * The Firebase app ID used by clients.
@@ -62,158 +62,158 @@ export type GoogleConfiguration = {
        * If this is not set and is needed by an operation, an attempt will be made to find the first eligible app ID
        * using the Firebase API.
        */
-      appId?: string;
+      readonly appId?: string;
 
       /**
        * The domain name for the project.
        * If not set, this default to `<GCP project>.firebaseapp.com`.
        */
-      authDomain?: string;
+      readonly authDomain?: string;
 
       /**
        * Configuration for Firebase tools (the CLI).
        * This applies to Dockerized calls to the `firebase` CLI.
        */
-      tools?: {
+      readonly tools?: {
         /**
          * The version of the CLI to use.
          */
-        version?: string;
+        readonly version?: string;
       };
     };
 
     /**
      * Configuration for the Secret Manager service.
      */
-    secretManager?: {
+    readonly secretManager?: {
       /**
        * The ID of the default GCP project referenced when fetching secrets.
        */
-      project?: string;
+      readonly project?: string;
     };
 
     /**
      * Configuration for the Firebase Storage service.
      */
-    firebaseStorage?: {
+    readonly firebaseStorage?: {
       /**
        * Configuration for the emulator.
        */
-      emulator?: {
+      readonly emulator?: {
         /**
          * The name of the local Docker container running the emulator.
          */
-        containerName?: string;
+        readonly containerName?: string;
       };
 
       /**
        * A list of glob patterns to find files in the workspace defining Firebase Storage security rules.
        */
-      securityRuleFiles?: string[];
+      readonly securityRuleFiles?: string[];
 
       /**
        * The file path, relative to the workspace root, where the merged security rules file is written.
        */
-      securityRuleFile?: string;
+      readonly securityRuleFile?: string;
     };
 
     /**
      * Configuration for the Identity Platform (formerly Firebase Auth) service.
      */
-    identityPlatform?: {
+    readonly identityPlatform?: {
       /**
        * Configuration for the emulator.
        */
-      emulator?: {
+      readonly emulator?: {
         /**
          * The name of the local Docker container running the emulator.
          */
-        containerName?: string;
+        readonly containerName?: string;
       };
     };
 
     /**
      * Configuration for the Firestore service.
      */
-    firestore?: {
+    readonly firestore?: {
       /**
        * Configuration for the emulator.
        */
-      emulator?: {
+      readonly emulator?: {
         /**
          * The name of the local Docker container running the emulator.
          */
-        containerName?: string;
+        readonly containerName?: string;
       };
 
       /**
        * A list of glob patterns to find files in the workspace defining Firestore security rules.
        */
-      securityRuleFiles?: string[];
+      readonly securityRuleFiles?: string[];
 
       /**
        * The file path, relative to the workspace root, where the merged security rules file is written.
        */
-      securityRuleFile?: string;
+      readonly securityRuleFile?: string;
     };
 
     /**
      * Configuration for the Pub/Sub service.
      */
-    pubSub?: {
+    readonly pubSub?: {
       /**
        * Configuration for the emulator.
        */
-      emulator?: {
+      readonly emulator?: {
         /**
          * The name of the local Docker container running the emulator.
          */
-        containerName?: string;
+        readonly containerName?: string;
       };
     };
 
     /**
      * Configuration for the Spanner service.
      */
-    spanner?: {
+    readonly spanner?: {
       /**
        * Configuration for the emulator.
        */
-      emulator?: {
+      readonly emulator?: {
         /**
          * The name of the local Docker container running the emulator.
          */
-        containerName?: string;
+        readonly containerName?: string;
 
         /**
          * The version of the Spanner emulator Docker image to use.
          */
-        version?: string;
+        readonly version?: string;
 
         /**
          * The name of the Spanner instance that will automatically be created in the emulator.
          */
-        instanceName?: string;
+        readonly instanceName?: string;
       };
 
       /**
        * Defines how DDLs are found for the Spanner databases in the workspace.
        */
-      ddls?: {
+      readonly ddls?: {
         /**
          * The format string using groups from the regular expression used to make the database names.
          */
-        format?: string;
+        readonly format?: string;
 
         /**
          * A list of glob patterns used to find SQL files containing DDL statements for the Spanner databases.
          */
-        globs?: string[];
+        readonly globs?: string[];
 
         /**
          * The regular expression used to extract groups from the SQL file paths.
          */
-        regularExpression?: string;
+        readonly regularExpression?: string;
       };
     };
   };
