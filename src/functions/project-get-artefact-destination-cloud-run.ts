@@ -8,7 +8,7 @@ import {
  * Implements the {@link ProjectGetArtefactDestination} function for Cloud Run services.
  * The destination Docker repository is expected to be defined in `google.cloudRun.dockerRepository`.
  */
-export class ProjectGetArtefactDestinationForServiceContainer extends ProjectGetArtefactDestination {
+export class ProjectGetArtefactDestinationForCloudRun extends ProjectGetArtefactDestination {
   async _call(context: WorkspaceContext): Promise<string> {
     const projectName = context.getOrThrow('project.name');
     const dockerRepository = context.getOrThrow(
