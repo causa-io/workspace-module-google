@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+Features:
+
+- Implement `ProjectGetArtefactDestination` and `ProjectPushArtefact` for Cloud Functions projects.
+
 ## v0.2.0 (2023-05-25)
 
 Features:
