@@ -216,5 +216,15 @@ export type GoogleConfiguration = {
         readonly regularExpression?: string;
       };
     };
+
+    /**
+     * Configuration for Cloud Functions.
+     */
+    readonly cloudFunctions?: {
+      /**
+       * The Cloud Storage URI where Cloud Functions archives should be uploaded.
+       */
+      readonly archivesStorageLocation?: string;
+    };
   };
 };
