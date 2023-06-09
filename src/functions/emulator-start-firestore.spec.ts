@@ -67,7 +67,7 @@ describe('EmulatorStartForFirestore', () => {
       },
       name: 'google.firestore',
     });
-    expect(gcloudEmulatorService.start).toHaveBeenCalledOnceWith(
+    expect(gcloudEmulatorService.start).toHaveBeenCalledExactlyOnceWith(
       'firestore',
       'firestore-test-firestore',
       [{ host: '127.0.0.1', local: 8080, container: 8080 }],

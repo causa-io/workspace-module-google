@@ -31,7 +31,7 @@ describe('EmulatorStopForFirebaseStorage', () => {
     });
 
     expect(actualName).toEqual('google.firebaseStorage');
-    expect(dockerEmulatorService.stop).toHaveBeenCalledOnceWith(
+    expect(dockerEmulatorService.stop).toHaveBeenCalledExactlyOnceWith(
       'test-firebase-storage',
     );
   });

@@ -31,6 +31,8 @@ describe('EmulatorStopForSpanner', () => {
     });
 
     expect(actualName).toEqual('google.spanner');
-    expect(dockerEmulatorService.stop).toHaveBeenCalledOnceWith('test-spanner');
+    expect(dockerEmulatorService.stop).toHaveBeenCalledExactlyOnceWith(
+      'test-spanner',
+    );
   });
 });

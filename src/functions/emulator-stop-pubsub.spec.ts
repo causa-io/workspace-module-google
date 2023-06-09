@@ -31,6 +31,8 @@ describe('EmulatorStopForPubSub', () => {
     });
 
     expect(actualName).toEqual('google.pubSub');
-    expect(dockerEmulatorService.stop).toHaveBeenCalledOnceWith('test-pubsub');
+    expect(dockerEmulatorService.stop).toHaveBeenCalledExactlyOnceWith(
+      'test-pubsub',
+    );
   });
 });

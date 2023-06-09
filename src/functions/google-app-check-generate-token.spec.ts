@@ -43,7 +43,7 @@ describe('GoogleAppCheckGenerateToken', () => {
     });
 
     expect(actualToken).toEqual('🗝️');
-    expect(appCheckMock.createToken).toHaveBeenCalledOnceWith('🤖', {
+    expect(appCheckMock.createToken).toHaveBeenCalledExactlyOnceWith('🤖', {
       ttlMillis: expect.any(Number),
     });
   });
@@ -52,7 +52,7 @@ describe('GoogleAppCheckGenerateToken', () => {
     const actualToken = await context.call(GoogleAppCheckGenerateToken, {});
 
     expect(actualToken).toEqual('🗝️');
-    expect(appCheckMock.createToken).toHaveBeenCalledOnceWith('🍏', {
+    expect(appCheckMock.createToken).toHaveBeenCalledExactlyOnceWith('🍏', {
       ttlMillis: expect.any(Number),
     });
   });
@@ -67,7 +67,7 @@ describe('GoogleAppCheckGenerateToken', () => {
 
     expect(console.log).toHaveBeenCalledWith('🗝️');
     expect(actualExitCode).toEqual(0);
-    expect(appCheckMock.createToken).toHaveBeenCalledOnceWith('🤖', {
+    expect(appCheckMock.createToken).toHaveBeenCalledExactlyOnceWith('🤖', {
       ttlMillis: expect.any(Number),
     });
   });

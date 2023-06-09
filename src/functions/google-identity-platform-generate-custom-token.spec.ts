@@ -45,7 +45,7 @@ describe('GoogleIdentityPlatformGenerateCustomToken', () => {
     );
 
     expect(actualToken).toEqual('🗝️');
-    expect(authMock.createCustomToken).toHaveBeenCalledOnceWith('bob', {
+    expect(authMock.createCustomToken).toHaveBeenCalledExactlyOnceWith('bob', {
       admin: true,
     });
   });

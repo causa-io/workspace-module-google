@@ -41,7 +41,7 @@ describe('GoogleServicesEnable', () => {
 
     const actualResult = await context.call(GoogleServicesEnable, {});
 
-    expect(mockEnableServices).toHaveBeenCalledOnceWith({
+    expect(mockEnableServices).toHaveBeenCalledExactlyOnceWith({
       parent: 'projects/my-project',
       serviceIds: ['service-a', 'service-b'],
     });
