@@ -7,6 +7,7 @@ import type { GoogleIdentityPlatformGenerateCustomToken as GoogleIdentityPlatfor
 
 const firebaseAdminAppMock = {};
 const authMock = {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   createCustomToken: jest.fn((_user: string, _claims: Record<string, any>) =>
     Promise.resolve('🗝️'),
   ),
@@ -44,7 +45,7 @@ describe('GoogleIdentityPlatformGenerateCustomToken', () => {
     );
 
     expect(actualToken).toEqual('🗝️');
-    expect(authMock.createCustomToken).toHaveBeenCalledOnceWith('bob', {
+    expect(authMock.createCustomToken).toHaveBeenCalledExactlyOnceWith('bob', {
       admin: true,
     });
   });

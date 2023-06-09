@@ -31,7 +31,7 @@ describe('EmulatorStopForIdentityPlatform', () => {
     });
 
     expect(actualName).toEqual('google.identityPlatform');
-    expect(dockerEmulatorService.stop).toHaveBeenCalledOnceWith(
+    expect(dockerEmulatorService.stop).toHaveBeenCalledExactlyOnceWith(
       'test-identity-platform',
     );
   });

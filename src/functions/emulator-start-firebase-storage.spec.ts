@@ -69,7 +69,7 @@ describe('EmulatorStartForFirebaseStorage', () => {
       },
       name: 'google.firebaseStorage',
     });
-    expect(firebaseEmulatorService.start).toHaveBeenCalledOnceWith(
+    expect(firebaseEmulatorService.start).toHaveBeenCalledExactlyOnceWith(
       'firebase-storage-test-firebase-storage',
       fileURLToPath(
         new URL('../assets/firebase-storage.json', import.meta.url),

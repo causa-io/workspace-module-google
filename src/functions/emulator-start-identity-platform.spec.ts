@@ -55,7 +55,7 @@ describe('EmulatorStartForIdentityPlatform', () => {
       },
       name: 'google.identityPlatform',
     });
-    expect(firebaseEmulatorService.start).toHaveBeenCalledOnceWith(
+    expect(firebaseEmulatorService.start).toHaveBeenCalledExactlyOnceWith(
       'identity-platform-test-identity-platform',
       fileURLToPath(new URL('../assets/firebase-auth.json', import.meta.url)),
       [{ host: '127.0.0.1', container: 9099, local: 9099 }],

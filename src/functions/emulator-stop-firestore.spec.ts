@@ -31,7 +31,7 @@ describe('EmulatorStopForFirestore', () => {
     });
 
     expect(actualName).toEqual('google.firestore');
-    expect(dockerEmulatorService.stop).toHaveBeenCalledOnceWith(
+    expect(dockerEmulatorService.stop).toHaveBeenCalledExactlyOnceWith(
       'test-firestore',
     );
   });

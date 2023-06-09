@@ -158,9 +158,9 @@ export class EmulatorStartForSpanner extends EmulatorStart {
           (statement) => !statement.toUpperCase().startsWith('DROP TABLE'),
         );
 
-        const [_, operation] = await instance.createDatabase(database.id, {
-          schema: ddls,
-        });
+        const operation = (
+          await instance.createDatabase(database.id, { schema: ddls })
+        )[1];
 
         await operation.promise();
       }),

@@ -62,7 +62,7 @@ describe('GcloudEmulatorService', () => {
         },
       );
 
-      expect(dockerEmulatorService.start).toHaveBeenCalledOnceWith(
+      expect(dockerEmulatorService.start).toHaveBeenCalledExactlyOnceWith(
         'gcr.io/google.com/cloudsdktool/google-cloud-cli:emulators',
         'my-container',
         [{ container: 1234, local: 8080 }],
@@ -98,7 +98,7 @@ describe('GcloudEmulatorService', () => {
         { container: 1234, local: 8080 },
       ]);
 
-      expect(dockerEmulatorService.start).toHaveBeenCalledOnceWith(
+      expect(dockerEmulatorService.start).toHaveBeenCalledExactlyOnceWith(
         'gcr.io/google.com/cloudsdktool/google-cloud-cli:200.0.0-emulators',
         'my-container',
         [{ container: 1234, local: 8080 }],
@@ -130,7 +130,7 @@ describe('GcloudEmulatorService', () => {
         },
       );
 
-      expect(dockerEmulatorService.start).toHaveBeenCalledOnceWith(
+      expect(dockerEmulatorService.start).toHaveBeenCalledExactlyOnceWith(
         'gcr.io/google.com/cloudsdktool/google-cloud-cli:emulators',
         'my-container',
         [{ container: 1234, local: 8080 }],
@@ -147,11 +147,15 @@ describe('GcloudEmulatorService', () => {
       );
       expect(
         dockerEmulatorService.waitForAvailability,
-      ).toHaveBeenCalledOnceWith('my-container', 'http://localhost:1234', {
-        maxNumTries: 5,
-        expectedStatus: 204,
-        timeBetweenTries: 100,
-      });
+      ).toHaveBeenCalledExactlyOnceWith(
+        'my-container',
+        'http://localhost:1234',
+        {
+          maxNumTries: 5,
+          expectedStatus: 204,
+          timeBetweenTries: 100,
+        },
+      );
     });
   });
 });

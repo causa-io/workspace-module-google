@@ -63,7 +63,7 @@ describe('GoogleIdentityPlatformGenerateToken', () => {
     );
 
     expect(actualToken).toEqual('🗝️');
-    expect(signInWithCustomTokenMock).toHaveBeenCalledOnceWith(
+    expect(signInWithCustomTokenMock).toHaveBeenCalledExactlyOnceWith(
       authMock,
       '🔑 {"user":"bob","admin":true}',
     );
@@ -86,7 +86,7 @@ describe('GoogleIdentityPlatformGenerateToken', () => {
 
     expect(console.log).toHaveBeenCalledWith('🗝️');
     expect(actualExitCode).toEqual(0);
-    expect(signInWithCustomTokenMock).toHaveBeenCalledOnceWith(
+    expect(signInWithCustomTokenMock).toHaveBeenCalledExactlyOnceWith(
       authMock,
       '🔑 {"user":"bob","admin":true}',
     );

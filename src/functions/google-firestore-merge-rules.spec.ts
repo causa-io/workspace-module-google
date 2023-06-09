@@ -41,7 +41,7 @@ describe('GoogleFirestoreMergeRules', () => {
       },
       securityRuleFile: '/abs/path/output',
     });
-    expect(mergeFirebaseRulesFilesMock).toHaveBeenCalledOnceWith(
+    expect(mergeFirebaseRulesFilesMock).toHaveBeenCalledExactlyOnceWith(
       'Firestore',
       ['**/*.rules'],
       expect.any(Function),

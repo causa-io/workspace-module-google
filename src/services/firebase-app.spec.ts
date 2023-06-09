@@ -153,7 +153,7 @@ describe('FirebaseAppService', () => {
       );
       expect(
         iamClientMock.projects.serviceAccounts.list,
-      ).toHaveBeenCalledOnceWith({
+      ).toHaveBeenCalledExactlyOnceWith({
         name: 'projects/my-project',
         pageSize: expect.any(Number),
         pageToken: undefined,
@@ -179,7 +179,7 @@ describe('FirebaseAppService', () => {
       );
       expect(
         iamClientMock.projects.serviceAccounts.list,
-      ).toHaveBeenCalledOnceWith({
+      ).toHaveBeenCalledExactlyOnceWith({
         name: 'projects/my-project',
         pageSize: expect.any(Number),
         pageToken: undefined,
@@ -226,7 +226,7 @@ describe('FirebaseAppService', () => {
         access_token: '🔑',
         expires_in: expect.any(Number),
       });
-      expect(generateAccessTokenMock).toHaveBeenCalledOnceWith({
+      expect(generateAccessTokenMock).toHaveBeenCalledExactlyOnceWith({
         name: 'projects/-/serviceAccounts/bob@my-project.gcp.com',
         scope: ['https://www.googleapis.com/auth/cloud-platform'],
       });
@@ -318,7 +318,7 @@ describe('FirebaseAppService', () => {
       const actualAppId = await service.getAppId();
 
       expect(actualAppId).toEqual('🍏');
-      expect(service.getAnyAppId).toHaveBeenCalledOnceWith();
+      expect(service.getAnyAppId).toHaveBeenCalledExactlyOnceWith();
     });
 
     it('should cache the app ID', async () => {
@@ -336,7 +336,7 @@ describe('FirebaseAppService', () => {
 
       expect(actualAppId).toEqual('🍏');
       expect(actualAppId2).toEqual('🍏');
-      expect(service.getAnyAppId).toHaveBeenCalledOnceWith();
+      expect(service.getAnyAppId).toHaveBeenCalledExactlyOnceWith();
     });
   });
 });
