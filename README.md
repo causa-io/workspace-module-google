@@ -2,15 +2,21 @@
 
 This repository contains the source code for the `@causa/workspace-google` Causa module. It provides many GCP-related utilities and implementations for `cs` commands. For more information about the Causa CLI `cs`, checkout [its repository](https://github.com/causa-io/cli).
 
-## Installation
+## ➕ Requirements
+
+The Google module requires [Docker](https://www.docker.com/) in order to run local emulators of GCP services.
+
+Although not required, the [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI might be useful, e.g. to set up credentials that will be used by the Causa Google module.
+
+## 🎉 Installation
 
 Add `@causa/workspace-google` to your Causa configuration in `causa.modules`.
 
-## Configuration
+## 🔧 Configuration
 
 For all the Google-related configuration in your Causa files, look at [the schema for the `GoogleConfiguration`](./src/configurations/google.ts).
 
-## Supported project types and commands
+## ✨ Supported project types and commands
 
 ### Project types
 
@@ -45,7 +51,7 @@ secrets:
 
 When the GCP project is not specified in the secret ID, it is inferred from `google.secretManager.project`, or `google.project` (in this order). This allows defining the GCP project a single time if needed.
 
-## Custom `google` commands
+## 🔨 Custom `google` commands
 
 This modules adds a new command to the CLI: `cs google`. Here is the list of subcommands that are exposed.
 
@@ -91,7 +97,7 @@ The `cs google identityPlatform genToken` command generates an Identity Platform
 
 This command is similar to `cs google appCheck genToken` in that it requires a service account with Firebase admin permissions to sign the token. See the corresponding command for more information.
 
-## Infrastructure processors
+## 🧱 Infrastructure processors
 
 The Google module provides several infrastructure processors, which can be used to set up the Causa workspace before running infrastructure-related operations.
 
