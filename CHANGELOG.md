@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.3.1 (2023-06-09)
+
 Fixes:
 
 - Define missing Cloud Functions and Cloud Run configurations.
