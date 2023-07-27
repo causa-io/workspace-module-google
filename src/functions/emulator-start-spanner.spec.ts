@@ -152,9 +152,12 @@ describe('EmulatorStartForSpanner', () => {
         return { id: database.formattedName_, ddls };
       }),
     );
-    return idsAndDdls.reduce((databases, { id, ddls }) => {
-      databases[id] = ddls;
-      return databases;
-    }, {} as Record<string, string[]>);
+    return idsAndDdls.reduce(
+      (databases, { id, ddls }) => {
+        databases[id] = ddls;
+        return databases;
+      },
+      {} as Record<string, string[]>,
+    );
   }
 });
