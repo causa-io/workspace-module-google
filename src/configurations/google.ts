@@ -170,6 +170,21 @@ export type GoogleConfiguration = {
          */
         readonly containerName?: string;
       };
+
+      /**
+       * The directory where the topic configuration files are written by the `GooglePubSubWriteTopics` processor.
+       */
+      readonly topicConfigurationsDirectory?: string;
+
+      /**
+       * Configuration for the storage of Pub/Sub events in BigQuery.
+       */
+      readonly bigQueryStorage?: {
+        /**
+         * The ID of the BigQuery dataset where raw Pub/Sub events should be stored.
+         */
+        readonly rawEventsDatasetId?: string;
+      };
     };
 
     /**
