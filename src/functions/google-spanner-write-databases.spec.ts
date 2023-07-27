@@ -74,22 +74,22 @@ describe('GoogleSpannerWriteDatabases', () => {
         },
       },
     });
-    const actualDb1ConfigurationStr = await readFile(
+    const actualDb1ConfigurationBuffer = await readFile(
       join(context.rootPath, expectedDirectory, 'db1.json'),
     );
     const actualDb1Configuration = JSON.parse(
-      actualDb1ConfigurationStr.toString(),
+      actualDb1ConfigurationBuffer.toString(),
     );
     expect(actualDb1Configuration).toEqual({
       id: 'db1',
       ddls: ['CREATE TABLE a', 'ALTER TABLE a1', 'ALTER TABLE a2'],
       ddlFiles: [db1File1, db1File2],
     });
-    const actualDb2ConfigurationStr = await readFile(
+    const actualDb2ConfigurationBuffer = await readFile(
       join(context.rootPath, expectedDirectory, 'db2.json'),
     );
     const actualDb2Configuration = JSON.parse(
-      actualDb2ConfigurationStr.toString(),
+      actualDb2ConfigurationBuffer.toString(),
     );
     expect(actualDb2Configuration).toEqual({
       id: 'db2',
@@ -132,11 +132,11 @@ describe('GoogleSpannerWriteDatabases', () => {
         },
       },
     });
-    const actualDb1ConfigurationStr = await readFile(
+    const actualDb1ConfigurationBuffer = await readFile(
       join(context.rootPath, expectedDirectory, 'db1.json'),
     );
     const actualDb1Configuration = JSON.parse(
-      actualDb1ConfigurationStr.toString(),
+      actualDb1ConfigurationBuffer.toString(),
     );
     expect(actualDb1Configuration).toEqual({
       id: 'db1',

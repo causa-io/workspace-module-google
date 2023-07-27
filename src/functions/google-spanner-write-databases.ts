@@ -9,11 +9,11 @@ import { AllowMissing } from '@causa/workspace/validation';
 import { IsBoolean } from 'class-validator';
 import { mkdir, rm, writeFile } from 'fs/promises';
 import { join } from 'path';
-import { GoogleConfiguration } from '../index.js';
+import { GoogleConfiguration } from '../configurations/index.js';
 import { GoogleSpannerListDatabases } from './google-spanner-list-databases.js';
 
 /**
- * The default directory where project configurations are written, relative to the workspace root.
+ * The default directory where Spanner database configurations are written, relative to the workspace root.
  */
 const DEFAULT_DATABASE_CONFIGURATIONS_DIRECTORY = join(
   CAUSA_FOLDER,
@@ -51,35 +51,18 @@ export class GoogleSpannerWriteDatabases
     );
   }
 
-  /**
-   * Removes the directory where database configurations are written.
-   * This is run when the `tearDown` option is set to `true`.
-   *
-   * @param context The {@link WorkspaceContext}.
-   * @returns An empty {@link ProcessorResult}.
-   */
-  private async tearDownConfigurationsDirectory(
-    context: WorkspaceContext,
-  ): Promise<ProcessorResult> {
+  async _call(context: WorkspaceContext): Promise<ProcessorResult> {
     const databaseConfigurationsDirectory =
       this.getConfigurationsDirectory(context);
+    const absoluteDir = join(context.rootPath, databaseConfigurationsDirectory);
 
-    const absoluteDirectory = join(
-      context.rootPath,
-      databaseConfigurationsDirectory,
-    );
+    await rm(absoluteDir, { recursive: true, force: true });
 
-    context.logger.debug(
-      `🔧 Tearing down Spanner database configurations directory '${absoluteDirectory}'.`,
-    );
-    await rm(absoluteDirectory, { recursive: true, force: true });
-
-    return { configuration: {} };
-  }
-
-  async _call(context: WorkspaceContext): Promise<ProcessorResult> {
     if (this.tearDown) {
-      return await this.tearDownConfigurationsDirectory(context);
+      context.logger.debug(
+        `️🗃️ Tore down Spanner database configurations directory '${absoluteDir}'.`,
+      );
+      return { configuration: {} };
     }
 
     context.logger.info(
@@ -87,10 +70,6 @@ export class GoogleSpannerWriteDatabases
     );
 
     const databases = await context.call(GoogleSpannerListDatabases, {});
-
-    const databaseConfigurationsDirectory =
-      this.getConfigurationsDirectory(context);
-    const absoluteDir = join(context.rootPath, databaseConfigurationsDirectory);
 
     await mkdir(absoluteDir, { recursive: true });
 
