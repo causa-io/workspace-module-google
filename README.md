@@ -115,6 +115,10 @@ The Google module provides several infrastructure processors, which can be used 
 
 Although infrastructure as code tools usually expose this feature as well (e.g. the [`google_project_service`](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_project_service) Terraform resource), it might be more convenient to enable all the required services before running those tools. It avoids having to define dependencies between the services and all the actual resources being deployed.
 
+### `GoogleSpannerWriteDatabases`
+
+[GoogleSpannerWriteDatabases](./src/functions/google-spanner-write-databases.ts) writes a configuration file for each Spanner database, such that it can be picked up by the Causa Spanner Terraform module. This allows automatic setup of Spanner databases and their DDLs.
+
 ### `GooglePubSubWriteTopics`
 
 [GooglePubSubWriteTopics](./src/functions/google-pubsub-write-topics.ts) writes a configuration file for each event topic, such that it can be picked up by the Causa Pub/Sub Terraform module. This allows automatic setup of Pub/Sub topics, and optionally of the corresponding BigQuery tables.
