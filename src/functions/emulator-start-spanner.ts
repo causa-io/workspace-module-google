@@ -5,7 +5,7 @@ import {
   EmulatorStartResult,
 } from '@causa/workspace-core';
 import { Instance, Spanner } from '@google-cloud/spanner';
-import { grpc } from 'google-gax';
+import { credentials } from '@grpc/grpc-js';
 import {
   GoogleConfiguration,
   getLocalGcpProject,
@@ -121,7 +121,7 @@ export class EmulatorStartForSpanner extends EmulatorStart {
       servicePath: '127.0.0.1',
       port: SPANNER_GRPC_PORT,
       projectId: getLocalGcpProject(context),
-      sslCreds: grpc.credentials.createInsecure(),
+      sslCreds: credentials.createInsecure(),
     });
 
     const [instance, operation] = await spanner.createInstance(instanceName, {
