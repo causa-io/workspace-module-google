@@ -215,6 +215,12 @@ export type GoogleConfiguration = {
          */
         readonly regularExpression?: string;
       };
+
+      /**
+       * The directory where the database configuration files are written by the `GoogleSpannerWriteDatabases`
+       * processor.
+       */
+      readonly databaseConfigurationsDirectory?: string;
     };
 
     /**
