@@ -114,3 +114,7 @@ The Google module provides several infrastructure processors, which can be used 
 [GoogleServicesEnable](./src/functions/google-services-enable.ts) is the same underlying function as the `cs google enableServices` command. It enables GCP services before preparing or deploying the infrastructure.
 
 Although infrastructure as code tools usually expose this feature as well (e.g. the [`google_project_service`](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_project_service) Terraform resource), it might be more convenient to enable all the required services before running those tools. It avoids having to define dependencies between the services and all the actual resources being deployed.
+
+### `GooglePubSubWriteTopics`
+
+[GooglePubSubWriteTopics](./src/functions/google-pubsub-write-topics.ts) writes a configuration file for each event topic, such that it can be picked up by the Causa Pub/Sub Terraform module. This allows automatic setup of Pub/Sub topics, and optionally of the corresponding BigQuery tables.
