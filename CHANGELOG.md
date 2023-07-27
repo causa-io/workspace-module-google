@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+Features:
+
+- Define Cloud Run-related configuration used by the [`causa-io/service-container-cloud-run/google`](https://github.com/causa-io/terraform-google-service-container-cloud-run) Terraform module.
+
 ## v0.3.1 (2023-06-09)
 
 Fixes:

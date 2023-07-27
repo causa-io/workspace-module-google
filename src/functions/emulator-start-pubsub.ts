@@ -122,9 +122,12 @@ export class EmulatorStartForPubSub extends EmulatorStart {
       }),
     );
 
-    return envVars.reduce((vars, { envVar, pubSubTopic }) => {
-      vars[envVar] = pubSubTopic;
-      return vars;
-    }, {} as Record<string, string>);
+    return envVars.reduce(
+      (vars, { envVar, pubSubTopic }) => {
+        vars[envVar] = pubSubTopic;
+        return vars;
+      },
+      {} as Record<string, string>,
+    );
   }
 }

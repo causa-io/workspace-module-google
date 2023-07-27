@@ -15,8 +15,8 @@ import {
   registerMockFunction,
 } from '@causa/workspace/testing';
 import { Spanner } from '@google-cloud/spanner';
+import { credentials } from '@grpc/grpc-js';
 import { jest } from '@jest/globals';
-import { grpc } from 'google-gax';
 import 'jest-extended';
 import { EmulatorStartForSpanner } from './emulator-start-spanner.js';
 import { EmulatorStopForSpanner } from './emulator-stop-spanner.js';
@@ -143,7 +143,7 @@ describe('EmulatorStartForSpanner', () => {
       servicePath: '127.0.0.1',
       port: 9010,
       projectId: 'demo-spanner-test',
-      sslCreds: grpc.credentials.createInsecure(),
+      sslCreds: credentials.createInsecure(),
     });
     const [databases] = await spanner.instance('local').getDatabases();
     const idsAndDdls = await Promise.all(
@@ -152,9 +152,12 @@ describe('EmulatorStartForSpanner', () => {
         return { id: database.formattedName_, ddls };
       }),
     );
-    return idsAndDdls.reduce((databases, { id, ddls }) => {
-      databases[id] = ddls;
-      return databases;
-    }, {} as Record<string, string[]>);
+    return idsAndDdls.reduce(
+      (databases, { id, ddls }) => {
+        databases[id] = ddls;
+        return databases;
+      },
+      {} as Record<string, string[]>,
+    );
   }
 });
