@@ -235,6 +235,54 @@ export type GoogleConfiguration = {
        * The Docker repository where Cloud Run containers should be uploaded.
        */
       readonly dockerRepository?: string;
+
+      /**
+       * The location where Cloud Run services should be deployed.
+       */
+      readonly location?: string;
+
+      /**
+       * A map where keys are the name of environment variables, and values are secret versions IDs (e.g.
+       * `projects/my-project/secrets/my-secret/versions/1`).
+       */
+      readonly secretEnvironmentVariables?: Record<string, string>;
+
+      /**
+       * Whether the container is running between requests and can perform background operations.
+       */
+      readonly cpuAlwaysAllocated?: boolean;
+
+      /**
+       * The max duration the instance is allowed for responding to a request, in seconds.
+       */
+      readonly timeout?: number;
+
+      /**
+       * The maximum allowed in-flight (concurrent) requests per container.
+       */
+      readonly requestConcurrency?: number;
+
+      /**
+       * The type of allowed ingress that can reach the container.
+       * See https://cloud.google.com/run/docs/securing/ingress#settings for more details.
+       */
+      readonly ingress?:
+        | 'all'
+        | 'internal'
+        | 'internal-and-cloud-load-balancing';
+
+      /**
+       * The name of the VPC access connector through which egress traffic should be routed.
+       */
+      readonly vpcAccessConnector?: string;
+
+      /**
+       * The setting for egress traffic that goes through the VPC access connector.
+       * See https://cloud.google.com/run/docs/configuring/connecting-vpc#manage for more details.
+       */
+      readonly vpcAccessConnectorEgressSettings?:
+        | 'all-traffic'
+        | 'private-ranges-only';
     };
   };
 };
