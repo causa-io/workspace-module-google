@@ -212,6 +212,28 @@ export type GoogleConfiguration = {
       };
 
       /**
+       * Configuration for the Spanner instance.
+       */
+      readonly instance?: {
+        /**
+         * The name of the Spanner instance.
+         */
+        readonly name?: string;
+
+        /**
+         * The instance geographic configuration.
+         * See https://cloud.google.com/spanner/docs/instance-configurations for more details.
+         */
+        readonly configuration?: string;
+
+        /**
+         * The compute capacity of the instance.
+         * See https://cloud.google.com/spanner/docs/compute-capacity for more details.
+         */
+        readonly processingUnits?: number;
+      };
+
+      /**
        * Defines how DDLs are found for the Spanner databases in the workspace.
        */
       readonly ddls?: {
