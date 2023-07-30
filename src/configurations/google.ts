@@ -12,6 +12,11 @@ export type GoogleConfiguration = {
     readonly project?: string;
 
     /**
+     * The GCP region in which resource should be created and managed.
+     */
+    readonly region?: string;
+
+    /**
      * The ID of a local GCP project (which does not exist on GCP).
      * This is for example used by emulators. It should usually start with `demo-` to be compatible with some emulators.
      */
@@ -184,6 +189,12 @@ export type GoogleConfiguration = {
          * The ID of the BigQuery dataset where raw Pub/Sub events should be stored.
          */
         readonly rawEventsDatasetId?: string;
+
+        /**
+         * The BigQuery location for the datasets.
+         * See https://cloud.google.com/bigquery/docs/locations for more details.
+         */
+        readonly location?: string;
       };
     };
 
