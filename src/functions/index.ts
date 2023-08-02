@@ -24,9 +24,11 @@ import {
   GoogleSpannerListDatabases,
   GoogleSpannerWriteDatabases,
 } from './google-spanner/index.js';
-import { ProjectGetArtefactDestinationForCloudFunctions } from './project-get-artefact-destination-cloud-functions.js';
-import { ProjectGetArtefactDestinationForCloudRun } from './project-get-artefact-destination-cloud-run.js';
-import { ProjectPushArtefactForCloudFunctions } from './project-push-artefact-cloud-functions.js';
+import {
+  ProjectGetArtefactDestinationForCloudFunctions,
+  ProjectGetArtefactDestinationForCloudRun,
+  ProjectPushArtefactForCloudFunctions,
+} from './project/index.js';
 import { SecretFetchForGoogleSecretManager } from './secret-fetch-secret-manager.js';
 
 export function registerFunctions(context: ModuleRegistrationContext) {

@@ -2,7 +2,7 @@ import { WorkspaceContext } from '@causa/workspace';
 import { ProjectGetArtefactDestination } from '@causa/workspace-core';
 import { NoImplementationFoundError } from '@causa/workspace/function-registry';
 import { createContext } from '@causa/workspace/testing';
-import { ProjectGetArtefactDestinationForCloudFunctions } from './project-get-artefact-destination-cloud-functions.js';
+import { ProjectGetArtefactDestinationForCloudFunctions } from './get-artefact-destination-cloud-functions.js';
 
 describe('ProjectGetArtefactDestinationForCloudFunctions', () => {
   let context: WorkspaceContext;

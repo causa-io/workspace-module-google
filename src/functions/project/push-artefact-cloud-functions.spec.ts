@@ -13,9 +13,9 @@ import { join, resolve } from 'path';
 import {
   EmulatorStartForFirebaseStorage,
   EmulatorStopForFirebaseStorage,
-} from './emulator/index.js';
-import { GoogleFirebaseStorageMergeRules } from './google-firebase-storage/index.js';
-import { ProjectPushArtefactForCloudFunctions } from './project-push-artefact-cloud-functions.js';
+} from '../emulator/index.js';
+import { GoogleFirebaseStorageMergeRules } from '../google-firebase-storage/index.js';
+import { ProjectPushArtefactForCloudFunctions } from './push-artefact-cloud-functions.js';
 
 describe('ProjectPushArtefactForCloudFunctions', () => {
   let emulatorTmpDir: string;

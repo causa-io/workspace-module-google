@@ -5,7 +5,7 @@ import {
   ServerlessFunctionsConfiguration,
 } from '@causa/workspace-core';
 import { rm } from 'fs/promises';
-import { CloudStorageService } from '../services/index.js';
+import { CloudStorageService } from '../../services/index.js';
 
 /**
  * Implements the {@link ProjectPushArtefact} function for Cloud Functions projects.
