@@ -7,9 +7,9 @@ import {
 import { createContext, registerMockFunction } from '@causa/workspace/testing';
 import { jest } from '@jest/globals';
 import 'jest-extended';
-import { GcloudEmulatorService } from '../index.js';
-import { EmulatorStartForFirestore } from './emulator-start-firestore.js';
-import { GoogleFirestoreMergeRules } from './google-firestore-merge-rules.js';
+import { GcloudEmulatorService } from '../../services/index.js';
+import { GoogleFirestoreMergeRules } from '../google-firestore-merge-rules.js';
+import { EmulatorStartForFirestore } from './start-firestore.js';
 
 describe('EmulatorStartForFirestore', () => {
   let context: WorkspaceContext;

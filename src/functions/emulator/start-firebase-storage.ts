@@ -6,15 +6,15 @@ import {
   FIREBASE_STORAGE_EMULATOR_NAME,
   FIREBASE_STORAGE_PORT,
   getFirebaseStorageContainerName,
-} from '../emulators/index.js';
-import { FirebaseEmulatorService } from '../services/index.js';
-import { GoogleFirebaseStorageMergeRules } from './google-firebase-storage-merge-rules.js';
+} from '../../emulators/index.js';
+import { FirebaseEmulatorService } from '../../services/index.js';
+import { GoogleFirebaseStorageMergeRules } from '../google-firebase-storage-merge-rules.js';
 
 /**
  * The Firebase configuration file enabling only the Storage emulator.
  */
 const FIREBASE_CONF_FILE = fileURLToPath(
-  new URL('../assets/firebase-storage.json', import.meta.url),
+  new URL('../../assets/firebase-storage.json', import.meta.url),
 );
 
 /**

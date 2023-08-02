@@ -3,7 +3,7 @@ import { DockerEmulatorService, EmulatorStop } from '@causa/workspace-core';
 import {
   PUBSUB_EMULATOR_NAME,
   getPubSubContainerName,
-} from '../emulators/index.js';
+} from '../../emulators/index.js';
 
 /**
  * Implements {@link EmulatorStop} for the Pub/Sub emulator.

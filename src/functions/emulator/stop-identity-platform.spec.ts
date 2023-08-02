@@ -4,22 +4,22 @@ import { NoImplementationFoundError } from '@causa/workspace/function-registry';
 import { createContext } from '@causa/workspace/testing';
 import { jest } from '@jest/globals';
 import 'jest-extended';
-import { EmulatorStopForSpanner } from './emulator-stop-spanner.js';
+import { EmulatorStopForIdentityPlatform } from './stop-identity-platform.js';
 
-describe('EmulatorStopForSpanner', () => {
+describe('EmulatorStopForIdentityPlatform', () => {
   let context: WorkspaceContext;
   let dockerEmulatorService: DockerEmulatorService;
 
   beforeEach(() => {
     ({ context } = createContext({
       configuration: { workspace: { name: 'test' } },
-      functions: [EmulatorStopForSpanner],
+      functions: [EmulatorStopForIdentityPlatform],
     }));
     dockerEmulatorService = context.service(DockerEmulatorService);
     jest.spyOn(dockerEmulatorService, 'stop').mockResolvedValue();
   });
 
-  it('should not handle an emulator other than Spanner', async () => {
+  it('should not handle an emulator other than Identity Platform', async () => {
     expect(() => context.call(EmulatorStop, { name: 'otherEmulator' })).toThrow(
       NoImplementationFoundError,
     );
@@ -27,12 +27,12 @@ describe('EmulatorStopForSpanner', () => {
 
   it('should stop the container', async () => {
     const actualName = await context.call(EmulatorStop, {
-      name: 'google.spanner',
+      name: 'google.identityPlatform',
     });
 
-    expect(actualName).toEqual('google.spanner');
+    expect(actualName).toEqual('google.identityPlatform');
     expect(dockerEmulatorService.stop).toHaveBeenCalledExactlyOnceWith(
-      'test-spanner',
+      'test-identity-platform',
     );
   });
 });

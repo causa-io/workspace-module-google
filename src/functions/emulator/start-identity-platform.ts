@@ -5,14 +5,14 @@ import {
   FIREBASE_AUTH_PORT,
   IDENTITY_PLATFORM_EMULATOR_NAME,
   getIdentityPlatformContainerName,
-} from '../emulators/index.js';
-import { FirebaseEmulatorService } from '../services/index.js';
+} from '../../emulators/index.js';
+import { FirebaseEmulatorService } from '../../services/index.js';
 
 /**
  * The Firebase configuration file enabling only the Auth emulator.
  */
 const FIREBASE_CONF_FILE = fileURLToPath(
-  new URL('../assets/firebase-auth.json', import.meta.url),
+  new URL('../../assets/firebase-auth.json', import.meta.url),
 );
 
 /**

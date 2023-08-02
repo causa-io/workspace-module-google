@@ -5,8 +5,8 @@ import { createContext } from '@causa/workspace/testing';
 import { jest } from '@jest/globals';
 import 'jest-extended';
 import { fileURLToPath } from 'url';
-import { FirebaseEmulatorService } from '../services/index.js';
-import { EmulatorStartForIdentityPlatform } from './emulator-start-identity-platform.js';
+import { FirebaseEmulatorService } from '../../services/index.js';
+import { EmulatorStartForIdentityPlatform } from './start-identity-platform.js';
 
 describe('EmulatorStartForIdentityPlatform', () => {
   let context: WorkspaceContext;
@@ -57,7 +57,9 @@ describe('EmulatorStartForIdentityPlatform', () => {
     });
     expect(firebaseEmulatorService.start).toHaveBeenCalledExactlyOnceWith(
       'identity-platform-test-identity-platform',
-      fileURLToPath(new URL('../assets/firebase-auth.json', import.meta.url)),
+      fileURLToPath(
+        new URL('../../assets/firebase-auth.json', import.meta.url),
+      ),
       [{ host: '127.0.0.1', container: 9099, local: 9099 }],
     );
   });

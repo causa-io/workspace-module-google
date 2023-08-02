@@ -5,14 +5,14 @@ import {
   EventTopicList,
 } from '@causa/workspace-core';
 import { PubSub } from '@google-cloud/pubsub';
-import { getLocalGcpProject } from '../configurations/utils.js';
+import { getLocalGcpProject } from '../../configurations/utils.js';
 import {
   PUBSUB_EMULATOR_NAME,
   PUBSUB_PORT,
   formatPubSubTopicAsEnvironmentVariable,
   getPubSubContainerName,
-} from '../emulators/index.js';
-import { GcloudEmulatorService } from '../index.js';
+} from '../../emulators/index.js';
+import { GcloudEmulatorService } from '../../services/index.js';
 
 /**
  * Implements {@link EmulatorStart} for the Pub/Sub emulator.

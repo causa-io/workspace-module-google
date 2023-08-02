@@ -3,7 +3,7 @@ import { DockerEmulatorService, EmulatorStop } from '@causa/workspace-core';
 import {
   SPANNER_EMULATOR_NAME,
   getSpannerContainerName,
-} from '../emulators/index.js';
+} from '../../emulators/index.js';
 
 /**
  * Implements {@link EmulatorStop} for the Spanner emulator.

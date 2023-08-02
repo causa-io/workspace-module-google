@@ -10,8 +10,10 @@ import { createContext } from '@causa/workspace/testing';
 import { Storage } from '@google-cloud/storage';
 import { mkdtemp, rm, stat, writeFile } from 'fs/promises';
 import { join, resolve } from 'path';
-import { EmulatorStartForFirebaseStorage } from './emulator-start-firebase-storage.js';
-import { EmulatorStopForFirebaseStorage } from './emulator-stop-firebase-storage.js';
+import {
+  EmulatorStartForFirebaseStorage,
+  EmulatorStopForFirebaseStorage,
+} from './emulator/index.js';
 import { GoogleFirebaseStorageMergeRules } from './google-firebase-storage-merge-rules.js';
 import { ProjectPushArtefactForCloudFunctions } from './project-push-artefact-cloud-functions.js';
 

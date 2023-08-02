@@ -4,22 +4,22 @@ import { NoImplementationFoundError } from '@causa/workspace/function-registry';
 import { createContext } from '@causa/workspace/testing';
 import { jest } from '@jest/globals';
 import 'jest-extended';
-import { EmulatorStopForFirebaseStorage } from './emulator-stop-firebase-storage.js';
+import { EmulatorStopForSpanner } from './stop-spanner.js';
 
-describe('EmulatorStopForFirebaseStorage', () => {
+describe('EmulatorStopForSpanner', () => {
   let context: WorkspaceContext;
   let dockerEmulatorService: DockerEmulatorService;
 
   beforeEach(() => {
     ({ context } = createContext({
       configuration: { workspace: { name: 'test' } },
-      functions: [EmulatorStopForFirebaseStorage],
+      functions: [EmulatorStopForSpanner],
     }));
     dockerEmulatorService = context.service(DockerEmulatorService);
     jest.spyOn(dockerEmulatorService, 'stop').mockResolvedValue();
   });
 
-  it('should not handle an emulator other than Firebase Storage', async () => {
+  it('should not handle an emulator other than Spanner', async () => {
     expect(() => context.call(EmulatorStop, { name: 'otherEmulator' })).toThrow(
       NoImplementationFoundError,
     );
@@ -27,12 +27,12 @@ describe('EmulatorStopForFirebaseStorage', () => {
 
   it('should stop the container', async () => {
     const actualName = await context.call(EmulatorStop, {
-      name: 'google.firebaseStorage',
+      name: 'google.spanner',
     });
 
-    expect(actualName).toEqual('google.firebaseStorage');
+    expect(actualName).toEqual('google.spanner');
     expect(dockerEmulatorService.stop).toHaveBeenCalledExactlyOnceWith(
-      'test-firebase-storage',
+      'test-spanner',
     );
   });
 });

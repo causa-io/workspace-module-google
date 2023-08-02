@@ -8,9 +8,9 @@ import { createContext, registerMockFunction } from '@causa/workspace/testing';
 import { jest } from '@jest/globals';
 import 'jest-extended';
 import { fileURLToPath } from 'url';
-import { FirebaseEmulatorService } from '../services/index.js';
-import { EmulatorStartForFirebaseStorage } from './emulator-start-firebase-storage.js';
-import { GoogleFirebaseStorageMergeRules } from './google-firebase-storage-merge-rules.js';
+import { FirebaseEmulatorService } from '../../services/index.js';
+import { GoogleFirebaseStorageMergeRules } from '../google-firebase-storage-merge-rules.js';
+import { EmulatorStartForFirebaseStorage } from './start-firebase-storage.js';
 
 describe('EmulatorStartForFirebaseStorage', () => {
   let context: WorkspaceContext;
@@ -72,7 +72,7 @@ describe('EmulatorStartForFirebaseStorage', () => {
     expect(firebaseEmulatorService.start).toHaveBeenCalledExactlyOnceWith(
       'firebase-storage-test-firebase-storage',
       fileURLToPath(
-        new URL('../assets/firebase-storage.json', import.meta.url),
+        new URL('../../assets/firebase-storage.json', import.meta.url),
       ),
       [{ host: '127.0.0.1', container: 9199, local: 9199 }],
       {

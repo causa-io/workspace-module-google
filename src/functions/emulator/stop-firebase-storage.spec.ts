@@ -4,22 +4,22 @@ import { NoImplementationFoundError } from '@causa/workspace/function-registry';
 import { createContext } from '@causa/workspace/testing';
 import { jest } from '@jest/globals';
 import 'jest-extended';
-import { EmulatorStopForIdentityPlatform } from './emulator-stop-identity-platform.js';
+import { EmulatorStopForFirebaseStorage } from './stop-firebase-storage.js';
 
-describe('EmulatorStopForIdentityPlatform', () => {
+describe('EmulatorStopForFirebaseStorage', () => {
   let context: WorkspaceContext;
   let dockerEmulatorService: DockerEmulatorService;
 
   beforeEach(() => {
     ({ context } = createContext({
       configuration: { workspace: { name: 'test' } },
-      functions: [EmulatorStopForIdentityPlatform],
+      functions: [EmulatorStopForFirebaseStorage],
     }));
     dockerEmulatorService = context.service(DockerEmulatorService);
     jest.spyOn(dockerEmulatorService, 'stop').mockResolvedValue();
   });
 
-  it('should not handle an emulator other than Identity Platform', async () => {
+  it('should not handle an emulator other than Firebase Storage', async () => {
     expect(() => context.call(EmulatorStop, { name: 'otherEmulator' })).toThrow(
       NoImplementationFoundError,
     );
@@ -27,12 +27,12 @@ describe('EmulatorStopForIdentityPlatform', () => {
 
   it('should stop the container', async () => {
     const actualName = await context.call(EmulatorStop, {
-      name: 'google.identityPlatform',
+      name: 'google.firebaseStorage',
     });
 
-    expect(actualName).toEqual('google.identityPlatform');
+    expect(actualName).toEqual('google.firebaseStorage');
     expect(dockerEmulatorService.stop).toHaveBeenCalledExactlyOnceWith(
-      'test-identity-platform',
+      'test-firebase-storage',
     );
   });
 });

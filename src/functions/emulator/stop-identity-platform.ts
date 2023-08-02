@@ -3,7 +3,7 @@ import { DockerEmulatorService, EmulatorStop } from '@causa/workspace-core';
 import {
   IDENTITY_PLATFORM_EMULATOR_NAME,
   getIdentityPlatformContainerName,
-} from '../emulators/index.js';
+} from '../../emulators/index.js';
 
 /**
  * Implements {@link EmulatorStop} for the Identity Platform emulator.

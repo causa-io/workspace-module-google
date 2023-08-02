@@ -13,10 +13,10 @@ import { createContext, registerMockFunction } from '@causa/workspace/testing';
 import { PubSub } from '@google-cloud/pubsub';
 import { jest } from '@jest/globals';
 import 'jest-extended';
-import { PUBSUB_PORT } from '../emulators/index.js';
-import { GcloudEmulatorService } from '../index.js';
-import { EmulatorStartForPubSub } from './emulator-start-pubsub.js';
-import { EmulatorStopForPubSub } from './emulator-stop-pubsub.js';
+import { PUBSUB_PORT } from '../../emulators/index.js';
+import { GcloudEmulatorService } from '../../services/index.js';
+import { EmulatorStartForPubSub } from './start-pubsub.js';
+import { EmulatorStopForPubSub } from './stop-pubsub.js';
 
 describe('EmulatorStartForPubSub', () => {
   let context: WorkspaceContext;

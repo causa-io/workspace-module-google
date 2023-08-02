@@ -5,9 +5,9 @@ import {
   FIRESTORE_EMULATOR_NAME,
   FIRESTORE_PORT,
   getFirestoreContainerName,
-} from '../emulators/index.js';
-import { GcloudEmulatorService } from '../index.js';
-import { GoogleFirestoreMergeRules } from './google-firestore-merge-rules.js';
+} from '../../emulators/index.js';
+import { GcloudEmulatorService } from '../../services/index.js';
+import { GoogleFirestoreMergeRules } from '../google-firestore-merge-rules.js';
 
 /**
  * Implements {@link EmulatorStart} for the Firestore emulator.

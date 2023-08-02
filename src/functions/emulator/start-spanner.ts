@@ -9,15 +9,15 @@ import { credentials } from '@grpc/grpc-js';
 import {
   GoogleConfiguration,
   getLocalGcpProject,
-} from '../configurations/index.js';
+} from '../../configurations/index.js';
 import {
   SPANNER_EMULATOR_NAME,
   SPANNER_GRPC_PORT,
   SPANNER_HTTP_PORT,
   SPANNER_IMAGE,
   getSpannerContainerName,
-} from '../emulators/index.js';
-import { GoogleSpannerListDatabases } from './google-spanner-list-databases.js';
+} from '../../emulators/index.js';
+import { GoogleSpannerListDatabases } from '../google-spanner-list-databases.js';
 
 /**
  * Implements {@link EmulatorStart} for the Spanner emulator.

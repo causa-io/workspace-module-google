@@ -3,7 +3,7 @@ import { DockerEmulatorService, EmulatorStop } from '@causa/workspace-core';
 import {
   FIRESTORE_EMULATOR_NAME,
   getFirestoreContainerName,
-} from '../emulators/index.js';
+} from '../../emulators/index.js';
 
 /**
  * Implements {@link EmulatorStop} for the Firestore emulator.

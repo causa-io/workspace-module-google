@@ -4,22 +4,22 @@ import { NoImplementationFoundError } from '@causa/workspace/function-registry';
 import { createContext } from '@causa/workspace/testing';
 import { jest } from '@jest/globals';
 import 'jest-extended';
-import { EmulatorStopForPubSub } from './emulator-stop-pubsub.js';
+import { EmulatorStopForFirestore } from './stop-firestore.js';
 
-describe('EmulatorStopForPubSub', () => {
+describe('EmulatorStopForFirestore', () => {
   let context: WorkspaceContext;
   let dockerEmulatorService: DockerEmulatorService;
 
   beforeEach(() => {
     ({ context } = createContext({
       configuration: { workspace: { name: 'test' } },
-      functions: [EmulatorStopForPubSub],
+      functions: [EmulatorStopForFirestore],
     }));
     dockerEmulatorService = context.service(DockerEmulatorService);
     jest.spyOn(dockerEmulatorService, 'stop').mockResolvedValue();
   });
 
-  it('should not handle an emulator other than Pub/Sub', async () => {
+  it('should not handle an emulator other than Firestore', async () => {
     expect(() => context.call(EmulatorStop, { name: 'otherEmulator' })).toThrow(
       NoImplementationFoundError,
     );
@@ -27,12 +27,12 @@ describe('EmulatorStopForPubSub', () => {
 
   it('should stop the container', async () => {
     const actualName = await context.call(EmulatorStop, {
-      name: 'google.pubSub',
+      name: 'google.firestore',
     });
 
-    expect(actualName).toEqual('google.pubSub');
+    expect(actualName).toEqual('google.firestore');
     expect(dockerEmulatorService.stop).toHaveBeenCalledExactlyOnceWith(
-      'test-pubsub',
+      'test-firestore',
     );
   });
 });
