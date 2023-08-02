@@ -1,0 +1,23 @@
+version: 1
+
+workspace:
+  name: causa
+
+project:
+  name: workspace-module-google
+  description: The Causa workspace module providing many functionalities related to GCP and its services.
+  language: typescript
+  type: package
+
+causa:
+  modules:
+    '@causa/workspace-core': '>= 0.12.0'
+    '@causa/workspace-typescript': '>= 0.4.0'
+
+javascript:
+  dependencies:
+    update:
+      packageTargets:
+        '@types/node': minor
+        # The gRPC package should always correspond to the version required by `google-gax`.
+        '@grpc/grpc-js': patch
