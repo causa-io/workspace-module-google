@@ -13,7 +13,7 @@ import { AllowMissing } from '@causa/workspace/validation';
 import { IsBoolean } from 'class-validator';
 import { mkdir, rm, writeFile } from 'fs/promises';
 import { join } from 'path';
-import { GoogleConfiguration } from '../configurations/index.js';
+import { GoogleConfiguration } from '../../configurations/index.js';
 
 /**
  * The default directory where Pub/Sub topic configurations are written, relative to the workspace root.

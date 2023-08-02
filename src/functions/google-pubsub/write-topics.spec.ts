@@ -6,7 +6,7 @@ import { existsSync } from 'fs';
 import { mkdtemp, readFile, readdir, rm, writeFile } from 'fs/promises';
 import 'jest-extended';
 import { join, resolve } from 'path';
-import { GooglePubSubWriteTopics } from './google-pubsub-write-topics.js';
+import { GooglePubSubWriteTopics } from './write-topics.js';
 
 describe('GooglePubSubWriteTopics', () => {
   const expectedDirectory = join('.causa', 'pubsub-topics');

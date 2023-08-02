@@ -18,7 +18,7 @@ import {
   GoogleIdentityPlatformGenerateCustomToken,
   GoogleIdentityPlatformGenerateToken,
 } from './google-identity-platform/index.js';
-import { GooglePubSubWriteTopics } from './google-pubsub-write-topics.js';
+import { GooglePubSubWriteTopics } from './google-pubsub/index.js';
 import { GoogleServicesEnable } from './google-services-enable.js';
 import { GoogleSpannerListDatabases } from './google-spanner-list-databases.js';
 import { GoogleSpannerWriteDatabases } from './google-spanner-write-databases.js';
