@@ -3,7 +3,7 @@ import {
   SecretFetch,
   WorkspaceContext,
 } from '@causa/workspace';
-import { GoogleSecretManagerService } from '../services/index.js';
+import { GoogleSecretManagerService } from '../../services/index.js';
 
 /**
  * The regular expression used to match the (Secret Manager) secret ID/name, and possibly its version and project.

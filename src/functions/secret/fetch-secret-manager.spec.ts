@@ -10,7 +10,7 @@ import {
   SecretFetchForGoogleSecretManager,
   UndefinedDefaultGcpProjectError,
   UnexpectedSecretValueError,
-} from './secret-fetch-secret-manager.js';
+} from './fetch-secret-manager.js';
 
 describe('SecretFetchForGoogleSecretManager', () => {
   let context: WorkspaceContext;
