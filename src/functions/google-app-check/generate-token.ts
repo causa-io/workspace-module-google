@@ -3,8 +3,8 @@ import { WorkspaceContext, WorkspaceFunction } from '@causa/workspace';
 import { AllowMissing } from '@causa/workspace/validation';
 import { IsString } from 'class-validator';
 import { getAppCheck } from 'firebase-admin/app-check';
-import { appCheckCommandDefinition } from '../cli/index.js';
-import { FirebaseAppService } from '../services/index.js';
+import { appCheckCommandDefinition } from '../../cli/index.js';
+import { FirebaseAppService } from '../../services/index.js';
 
 /**
  * The time to live of generated tokens, in seconds.

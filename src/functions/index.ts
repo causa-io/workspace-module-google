@@ -11,7 +11,7 @@ import {
   EmulatorStopForPubSub,
   EmulatorStopForSpanner,
 } from './emulator/index.js';
-import { GoogleAppCheckGenerateToken } from './google-app-check-generate-token.js';
+import { GoogleAppCheckGenerateToken } from './google-app-check/index.js';
 import { GoogleFirebaseStorageMergeRules } from './google-firebase-storage-merge-rules.js';
 import { GoogleFirestoreMergeRules } from './google-firestore-merge-rules.js';
 import { GoogleIdentityPlatformGenerateCustomToken } from './google-identity-platform-generate-custom-token.js';

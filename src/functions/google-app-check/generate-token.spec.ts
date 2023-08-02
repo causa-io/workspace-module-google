@@ -3,8 +3,8 @@ import { WorkspaceContext } from '@causa/workspace';
 import { createContext } from '@causa/workspace/testing';
 import { jest } from '@jest/globals';
 import 'jest-extended';
-import { FirebaseAppService } from '../services/index.js';
-import type { GoogleAppCheckGenerateToken as GoogleAppCheckGenerateTokenType } from './google-app-check-generate-token.js';
+import { FirebaseAppService } from '../../services/index.js';
+import type { GoogleAppCheckGenerateToken as GoogleAppCheckGenerateTokenType } from './generate-token.js';
 
 const firebaseAdminAppMock = {};
 const appCheckMock = {
@@ -20,9 +20,7 @@ describe('GoogleAppCheckGenerateToken', () => {
   let GoogleAppCheckGenerateToken: typeof GoogleAppCheckGenerateTokenType;
 
   beforeEach(async () => {
-    ({ GoogleAppCheckGenerateToken } = await import(
-      './google-app-check-generate-token.js'
-    ));
+    ({ GoogleAppCheckGenerateToken } = await import('./generate-token.js'));
     ({ context } = createContext({
       configuration: {
         workspace: { name: 'test' },
