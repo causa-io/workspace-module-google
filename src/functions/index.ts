@@ -1,27 +1,35 @@
 import { ModuleRegistrationContext } from '@causa/workspace';
-import { EmulatorStartForFirebaseStorage } from './emulator-start-firebase-storage.js';
-import { EmulatorStartForFirestore } from './emulator-start-firestore.js';
-import { EmulatorStartForIdentityPlatform } from './emulator-start-identity-platform.js';
-import { EmulatorStartForPubSub } from './emulator-start-pubsub.js';
-import { EmulatorStartForSpanner } from './emulator-start-spanner.js';
-import { EmulatorStopForFirebaseStorage } from './emulator-stop-firebase-storage.js';
-import { EmulatorStopForFirestore } from './emulator-stop-firestore.js';
-import { EmulatorStopForIdentityPlatform } from './emulator-stop-identity-platform.js';
-import { EmulatorStopForPubSub } from './emulator-stop-pubsub.js';
-import { EmulatorStopForSpanner } from './emulator-stop-spanner.js';
-import { GoogleAppCheckGenerateToken } from './google-app-check-generate-token.js';
-import { GoogleFirebaseStorageMergeRules } from './google-firebase-storage-merge-rules.js';
-import { GoogleFirestoreMergeRules } from './google-firestore-merge-rules.js';
-import { GoogleIdentityPlatformGenerateCustomToken } from './google-identity-platform-generate-custom-token.js';
-import { GoogleIdentityPlatformGenerateToken } from './google-identity-platform-generate-token.js';
-import { GooglePubSubWriteTopics } from './google-pubsub-write-topics.js';
-import { GoogleServicesEnable } from './google-services-enable.js';
-import { GoogleSpannerListDatabases } from './google-spanner-list-databases.js';
-import { GoogleSpannerWriteDatabases } from './google-spanner-write-databases.js';
-import { ProjectGetArtefactDestinationForCloudFunctions } from './project-get-artefact-destination-cloud-functions.js';
-import { ProjectGetArtefactDestinationForCloudRun } from './project-get-artefact-destination-cloud-run.js';
-import { ProjectPushArtefactForCloudFunctions } from './project-push-artefact-cloud-functions.js';
-import { SecretFetchForGoogleSecretManager } from './secret-fetch-secret-manager.js';
+import {
+  EmulatorStartForFirebaseStorage,
+  EmulatorStartForFirestore,
+  EmulatorStartForIdentityPlatform,
+  EmulatorStartForPubSub,
+  EmulatorStartForSpanner,
+  EmulatorStopForFirebaseStorage,
+  EmulatorStopForFirestore,
+  EmulatorStopForIdentityPlatform,
+  EmulatorStopForPubSub,
+  EmulatorStopForSpanner,
+} from './emulator/index.js';
+import { GoogleAppCheckGenerateToken } from './google-app-check/index.js';
+import { GoogleFirebaseStorageMergeRules } from './google-firebase-storage/index.js';
+import { GoogleFirestoreMergeRules } from './google-firestore/index.js';
+import {
+  GoogleIdentityPlatformGenerateCustomToken,
+  GoogleIdentityPlatformGenerateToken,
+} from './google-identity-platform/index.js';
+import { GooglePubSubWriteTopics } from './google-pubsub/index.js';
+import { GoogleServicesEnable } from './google-services/index.js';
+import {
+  GoogleSpannerListDatabases,
+  GoogleSpannerWriteDatabases,
+} from './google-spanner/index.js';
+import {
+  ProjectGetArtefactDestinationForCloudFunctions,
+  ProjectGetArtefactDestinationForCloudRun,
+  ProjectPushArtefactForCloudFunctions,
+} from './project/index.js';
+import { SecretFetchForGoogleSecretManager } from './secret/index.js';
 
 export function registerFunctions(context: ModuleRegistrationContext) {
   context.registerFunctionImplementations(
