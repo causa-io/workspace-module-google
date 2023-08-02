@@ -9,8 +9,8 @@ import { AllowMissing } from '@causa/workspace/validation';
 import { IsBoolean } from 'class-validator';
 import { mkdir, rm, writeFile } from 'fs/promises';
 import { join } from 'path';
-import { GoogleConfiguration } from '../configurations/index.js';
-import { GoogleSpannerListDatabases } from './google-spanner-list-databases.js';
+import { GoogleConfiguration } from '../../configurations/index.js';
+import { GoogleSpannerListDatabases } from './list-databases.js';
 
 /**
  * The default directory where Spanner database configurations are written, relative to the workspace root.

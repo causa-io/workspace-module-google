@@ -20,8 +20,10 @@ import {
 } from './google-identity-platform/index.js';
 import { GooglePubSubWriteTopics } from './google-pubsub/index.js';
 import { GoogleServicesEnable } from './google-services/index.js';
-import { GoogleSpannerListDatabases } from './google-spanner-list-databases.js';
-import { GoogleSpannerWriteDatabases } from './google-spanner-write-databases.js';
+import {
+  GoogleSpannerListDatabases,
+  GoogleSpannerWriteDatabases,
+} from './google-spanner/index.js';
 import { ProjectGetArtefactDestinationForCloudFunctions } from './project-get-artefact-destination-cloud-functions.js';
 import { ProjectGetArtefactDestinationForCloudRun } from './project-get-artefact-destination-cloud-run.js';
 import { ProjectPushArtefactForCloudFunctions } from './project-push-artefact-cloud-functions.js';

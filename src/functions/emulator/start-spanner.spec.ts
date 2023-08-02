@@ -18,7 +18,7 @@ import { Spanner } from '@google-cloud/spanner';
 import { credentials } from '@grpc/grpc-js';
 import { jest } from '@jest/globals';
 import 'jest-extended';
-import { GoogleSpannerListDatabases } from '../google-spanner-list-databases.js';
+import { GoogleSpannerListDatabases } from '../google-spanner/index.js';
 import { EmulatorStartForSpanner } from './start-spanner.js';
 import { EmulatorStopForSpanner } from './stop-spanner.js';
 

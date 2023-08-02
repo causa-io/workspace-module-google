@@ -17,7 +17,7 @@ import {
   SPANNER_IMAGE,
   getSpannerContainerName,
 } from '../../emulators/index.js';
-import { GoogleSpannerListDatabases } from '../google-spanner-list-databases.js';
+import { GoogleSpannerListDatabases } from '../google-spanner/index.js';
 
 /**
  * Implements {@link EmulatorStart} for the Spanner emulator.

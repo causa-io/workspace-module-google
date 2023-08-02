@@ -4,8 +4,8 @@ import { existsSync } from 'fs';
 import { mkdtemp, readFile, readdir, rm, writeFile } from 'fs/promises';
 import 'jest-extended';
 import { join, resolve } from 'path';
-import { GoogleSpannerListDatabases } from './google-spanner-list-databases.js';
-import { GoogleSpannerWriteDatabases } from './google-spanner-write-databases.js';
+import { GoogleSpannerListDatabases } from './list-databases.js';
+import { GoogleSpannerWriteDatabases } from './write-databases.js';
 
 describe('GoogleSpannerWriteDatabases', () => {
   const expectedDirectory = join('.causa', 'spanner-databases');

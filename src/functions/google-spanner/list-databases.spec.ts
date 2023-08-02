@@ -2,7 +2,7 @@ import { WorkspaceContext } from '@causa/workspace';
 import { createContext } from '@causa/workspace/testing';
 import { mkdir, mkdtemp, rm, writeFile } from 'fs/promises';
 import { join, resolve } from 'path';
-import { GoogleSpannerListDatabases } from './google-spanner-list-databases.js';
+import { GoogleSpannerListDatabases } from './list-databases.js';
 
 describe('GoogleSpannerListDatabases', () => {
   let context: WorkspaceContext;

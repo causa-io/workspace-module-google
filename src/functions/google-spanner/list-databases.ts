@@ -4,7 +4,7 @@ import {
   listFilesAndFormat,
 } from '@causa/workspace';
 import { readFile } from 'fs/promises';
-import { GoogleConfiguration } from '../configurations/index.js';
+import { GoogleConfiguration } from '../../configurations/index.js';
 
 /**
  * The definition of a Spanner database with its DDL statements.
