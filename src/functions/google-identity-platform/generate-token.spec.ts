@@ -4,7 +4,7 @@ import { FunctionRegistry } from '@causa/workspace/function-registry';
 import { createContext, registerMockFunction } from '@causa/workspace/testing';
 import { jest } from '@jest/globals';
 import 'jest-extended';
-import type { GoogleIdentityPlatformGenerateToken as GoogleIdentityPlatformGenerateTokenType } from './google-identity-platform-generate-token.js';
+import type { GoogleIdentityPlatformGenerateToken as GoogleIdentityPlatformGenerateTokenType } from './generate-token.js';
 
 const firebaseAppMock = {};
 const authMock = {};
@@ -26,10 +26,10 @@ describe('GoogleIdentityPlatformGenerateToken', () => {
 
   beforeEach(async () => {
     ({ GoogleIdentityPlatformGenerateToken } = await import(
-      './google-identity-platform-generate-token.js'
+      './generate-token.js'
     ));
     const { GoogleIdentityPlatformGenerateCustomToken } = await import(
-      './google-identity-platform-generate-custom-token.js'
+      './generate-custom-token.js'
     );
 
     ({ context, functionRegistry } = createContext({
@@ -47,7 +47,7 @@ describe('GoogleIdentityPlatformGenerateToken', () => {
         `🔑 ${JSON.stringify({ user, ...claims })}`,
     );
 
-    const { FirebaseAppService } = await import('../services/index.js');
+    const { FirebaseAppService } = await import('../../services/index.js');
     jest
       .spyOn(context.service(FirebaseAppService), 'getApp')
       .mockResolvedValue(firebaseAppMock as any);

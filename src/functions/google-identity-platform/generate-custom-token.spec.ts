@@ -2,8 +2,8 @@ import { WorkspaceContext } from '@causa/workspace';
 import { createContext } from '@causa/workspace/testing';
 import { jest } from '@jest/globals';
 import 'jest-extended';
-import { FirebaseAppService } from '../services/index.js';
-import type { GoogleIdentityPlatformGenerateCustomToken as GoogleIdentityPlatformGenerateCustomTokenType } from './google-identity-platform-generate-custom-token.js';
+import { FirebaseAppService } from '../../services/index.js';
+import type { GoogleIdentityPlatformGenerateCustomToken as GoogleIdentityPlatformGenerateCustomTokenType } from './generate-custom-token.js';
 
 const firebaseAdminAppMock = {};
 const authMock = {
@@ -23,7 +23,7 @@ describe('GoogleIdentityPlatformGenerateCustomToken', () => {
 
   beforeEach(async () => {
     ({ GoogleIdentityPlatformGenerateCustomToken } = await import(
-      './google-identity-platform-generate-custom-token.js'
+      './generate-custom-token.js'
     ));
     ({ context } = createContext({
       configuration: {

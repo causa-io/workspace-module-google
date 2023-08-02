@@ -2,7 +2,7 @@ import { WorkspaceContext, WorkspaceFunction } from '@causa/workspace';
 import { AllowMissing } from '@causa/workspace/validation';
 import { IsObject, IsString } from 'class-validator';
 import { getAuth } from 'firebase-admin/auth';
-import { FirebaseAppService } from '../index.js';
+import { FirebaseAppService } from '../../services/index.js';
 
 /**
  * Generates a custom token that can be used to sign in to Identity Platform as a given user.

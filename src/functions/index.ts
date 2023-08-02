@@ -14,8 +14,10 @@ import {
 import { GoogleAppCheckGenerateToken } from './google-app-check/index.js';
 import { GoogleFirebaseStorageMergeRules } from './google-firebase-storage/index.js';
 import { GoogleFirestoreMergeRules } from './google-firestore/index.js';
-import { GoogleIdentityPlatformGenerateCustomToken } from './google-identity-platform-generate-custom-token.js';
-import { GoogleIdentityPlatformGenerateToken } from './google-identity-platform-generate-token.js';
+import {
+  GoogleIdentityPlatformGenerateCustomToken,
+  GoogleIdentityPlatformGenerateToken,
+} from './google-identity-platform/index.js';
 import { GooglePubSubWriteTopics } from './google-pubsub-write-topics.js';
 import { GoogleServicesEnable } from './google-services-enable.js';
 import { GoogleSpannerListDatabases } from './google-spanner-list-databases.js';

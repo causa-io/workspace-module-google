@@ -4,9 +4,9 @@ import { AllowMissing } from '@causa/workspace/validation';
 import { Transform } from 'class-transformer';
 import { IsObject, IsString } from 'class-validator';
 import { getAuth, signInWithCustomToken } from 'firebase/auth';
-import { identityPlatformCommandDefinition } from '../cli/index.js';
-import { FirebaseAppService } from '../services/index.js';
-import { GoogleIdentityPlatformGenerateCustomToken } from './google-identity-platform-generate-custom-token.js';
+import { identityPlatformCommandDefinition } from '../../cli/index.js';
+import { FirebaseAppService } from '../../services/index.js';
+import { GoogleIdentityPlatformGenerateCustomToken } from './generate-custom-token.js';
 
 /**
  * Generates an ID token for an Identity Platform end user.
