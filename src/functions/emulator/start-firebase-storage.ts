@@ -8,7 +8,7 @@ import {
   getFirebaseStorageContainerName,
 } from '../../emulators/index.js';
 import { FirebaseEmulatorService } from '../../services/index.js';
-import { GoogleFirebaseStorageMergeRules } from '../google-firebase-storage-merge-rules.js';
+import { GoogleFirebaseStorageMergeRules } from '../google-firebase-storage/index.js';
 
 /**
  * The Firebase configuration file enabling only the Storage emulator.

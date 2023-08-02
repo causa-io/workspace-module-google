@@ -9,7 +9,7 @@ import { jest } from '@jest/globals';
 import 'jest-extended';
 import { fileURLToPath } from 'url';
 import { FirebaseEmulatorService } from '../../services/index.js';
-import { GoogleFirebaseStorageMergeRules } from '../google-firebase-storage-merge-rules.js';
+import { GoogleFirebaseStorageMergeRules } from '../google-firebase-storage/index.js';
 import { EmulatorStartForFirebaseStorage } from './start-firebase-storage.js';
 
 describe('EmulatorStartForFirebaseStorage', () => {

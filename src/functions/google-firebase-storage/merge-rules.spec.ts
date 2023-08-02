@@ -4,7 +4,7 @@ import { jest } from '@jest/globals';
 import 'jest-extended';
 
 const mergeFirebaseRulesFilesMock = jest.fn(async () => '');
-jest.unstable_mockModule('../firebase/index.js', () => ({
+jest.unstable_mockModule('../../firebase/index.js', () => ({
   mergeFirebaseRulesFiles: mergeFirebaseRulesFilesMock,
 }));
 
@@ -13,9 +13,7 @@ describe('GoogleFirebaseStorageMergeRules', () => {
   let GoogleFirebaseStorageMergeRules: any;
 
   beforeEach(async () => {
-    ({ GoogleFirebaseStorageMergeRules } = await import(
-      './google-firebase-storage-merge-rules.js'
-    ));
+    ({ GoogleFirebaseStorageMergeRules } = await import('./merge-rules.js'));
     ({ context } = createContext({
       configuration: {
         workspace: { name: '🏷️' },

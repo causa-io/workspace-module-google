@@ -3,9 +3,9 @@ import { WorkspaceContext, WorkspaceFunction } from '@causa/workspace';
 import { InfrastructureProcessor } from '@causa/workspace-core';
 import { AllowMissing } from '@causa/workspace/validation';
 import { IsBoolean } from 'class-validator';
-import { firebaseStorageCommandDefinition } from '../cli/index.js';
-import { GoogleConfiguration } from '../configurations/index.js';
-import { mergeFirebaseRulesFiles } from '../firebase/index.js';
+import { firebaseStorageCommandDefinition } from '../../cli/index.js';
+import { GoogleConfiguration } from '../../configurations/index.js';
+import { mergeFirebaseRulesFiles } from '../../firebase/index.js';
 
 /**
  * The default location where the security rules file for Firebase Storage will be written.
