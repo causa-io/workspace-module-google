@@ -19,7 +19,7 @@ import {
   GoogleIdentityPlatformGenerateToken,
 } from './google-identity-platform/index.js';
 import { GooglePubSubWriteTopics } from './google-pubsub/index.js';
-import { GoogleServicesEnable } from './google-services-enable.js';
+import { GoogleServicesEnable } from './google-services/index.js';
 import { GoogleSpannerListDatabases } from './google-spanner-list-databases.js';
 import { GoogleSpannerWriteDatabases } from './google-spanner-write-databases.js';
 import { ProjectGetArtefactDestinationForCloudFunctions } from './project-get-artefact-destination-cloud-functions.js';

@@ -4,8 +4,8 @@ import { InfrastructureProcessor } from '@causa/workspace-core';
 import { AllowMissing } from '@causa/workspace/validation';
 import { ServiceUsageClient } from '@google-cloud/service-usage';
 import { IsBoolean } from 'class-validator';
-import { googleCommandDefinition } from '../cli/index.js';
-import { GoogleConfiguration } from '../configurations/index.js';
+import { googleCommandDefinition } from '../../cli/index.js';
+import { GoogleConfiguration } from '../../configurations/index.js';
 
 /**
  * The maximum number of GCP services that can be enabled at the same time.

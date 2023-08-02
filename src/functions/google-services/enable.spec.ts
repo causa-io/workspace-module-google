@@ -3,7 +3,7 @@ import { createContext } from '@causa/workspace/testing';
 import { ServiceUsageClient } from '@google-cloud/service-usage';
 import { jest } from '@jest/globals';
 import 'jest-extended';
-import { GoogleServicesEnable } from './google-services-enable.js';
+import { GoogleServicesEnable } from './enable.js';
 
 describe('GoogleServicesEnable', () => {
   let mockEnableServices: jest.SpiedFunction<(...args: any[]) => any>;
