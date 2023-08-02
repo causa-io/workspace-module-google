@@ -13,7 +13,7 @@ import {
 } from './emulator/index.js';
 import { GoogleAppCheckGenerateToken } from './google-app-check/index.js';
 import { GoogleFirebaseStorageMergeRules } from './google-firebase-storage/index.js';
-import { GoogleFirestoreMergeRules } from './google-firestore-merge-rules.js';
+import { GoogleFirestoreMergeRules } from './google-firestore/index.js';
 import { GoogleIdentityPlatformGenerateCustomToken } from './google-identity-platform-generate-custom-token.js';
 import { GoogleIdentityPlatformGenerateToken } from './google-identity-platform-generate-token.js';
 import { GooglePubSubWriteTopics } from './google-pubsub-write-topics.js';
