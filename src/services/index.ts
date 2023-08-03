@@ -1,3 +1,4 @@
+export { CloudRunService } from './cloud-run.js';
 export * from './firebase-app.errors.js';
 export { FirebaseAppService, FirebaseAppType } from './firebase-app.js';
 export { FirebaseEmulatorService } from './firebase-emulator.js';
