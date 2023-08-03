@@ -35,6 +35,7 @@
     "@google-cloud/apikeys": "^0.2.2",
     "@google-cloud/iam-credentials": "^2.0.4",
     "@google-cloud/pubsub": "^3.7.3",
+    "@google-cloud/resource-manager": "^4.3.0",
     "@google-cloud/secret-manager": "^4.2.2",
     "@google-cloud/service-usage": "^2.2.2",
     "@google-cloud/spanner": "^6.14.0",
