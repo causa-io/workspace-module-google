@@ -14,6 +14,7 @@ import {
 import {
   EventTopicBrokerCreateTopicForPubSub,
   EventTopicBrokerDeleteTopicForPubSub,
+  EventTopicBrokerDeleteTriggerResourceForCloudRunInvokerRole,
   EventTopicBrokerGetTopicIdForPubSub,
   EventTopicBrokerPublishEventsForGoogle,
 } from './event-topic/index.js';
@@ -51,6 +52,7 @@ export function registerFunctions(context: ModuleRegistrationContext) {
     EmulatorStopForSpanner,
     EventTopicBrokerCreateTopicForPubSub,
     EventTopicBrokerDeleteTopicForPubSub,
+    EventTopicBrokerDeleteTriggerResourceForCloudRunInvokerRole,
     EventTopicBrokerGetTopicIdForPubSub,
     EventTopicBrokerPublishEventsForGoogle,
     GoogleAppCheckGenerateToken,
