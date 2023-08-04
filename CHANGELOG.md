@@ -5,6 +5,7 @@
 Features:
 
 - Define the `google.region` and `bigQueryStorage.location` configuration fields.
+- Implement the `CloudRunService`, `IamService`, `PubSubService`, and `ResourceManagerService`.
 
 ## v0.4.0 (2023-07-28)
 
