@@ -35,6 +35,10 @@ The following emulators are implemented:
 - `google.pubSub`: The Pub/Sub emulator from the `gcloud` tools. It automatically creates the topics for all event topics found in the Causa workspace. `events.broker` must be set to `google.pubSub` for this.
 - `google.spanner`: The Spanner emulator. It automatically creates all the Spanner databases defined in the Causa workspace, and sets up their DDLs. See the `google.spanner` [configuration](./src/configurations/google.ts) for more details.
 
+### Backfilling
+
+Backfilling is supported when `google.pubSub` is set as the `events.broker`. Temporary triggers can be created for Cloud Run services, by referencing them using the format `[[projects/<projectId>/]locations/<location>/]services/<name>/path-to-trigger`.
+
 ### Secrets backend
 
 This module implements the `google.secretManager` secret backend, allowing fetching secrets from the Google Secret Manager service. Here are some example of how secrets with the `google.secretManager` backend should be defined:
