@@ -1,1 +1,1 @@
-export { PubSubBackfillEventPublisher } from './publisher.js';
+export { PubSubBackfillEventPublisher } from './pubsub.js';

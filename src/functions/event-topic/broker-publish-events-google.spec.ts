@@ -4,7 +4,7 @@ import { NoImplementationFoundError } from '@causa/workspace/function-registry';
 import { createContext } from '@causa/workspace/testing';
 import { jest } from '@jest/globals';
 import 'jest-extended';
-import { PubSubBackfillEventPublisher } from '../../backfilling/publisher.js';
+import { PubSubBackfillEventPublisher } from '../../backfilling/index.js';
 import { EventTopicBrokerPublishEventsForGoogle } from './broker-publish-events-google.js';
 
 describe('EventTopicBrokerPublishEventsForGoogle', () => {
