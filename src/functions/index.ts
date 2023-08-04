@@ -13,6 +13,7 @@ import {
 } from './emulator/index.js';
 import {
   EventTopicBrokerCreateTopicForPubSub,
+  EventTopicBrokerDeleteTopicForPubSub,
   EventTopicBrokerGetTopicIdForPubSub,
 } from './event-topic/index.js';
 import { GoogleAppCheckGenerateToken } from './google-app-check/index.js';
@@ -48,6 +49,7 @@ export function registerFunctions(context: ModuleRegistrationContext) {
     EmulatorStopForPubSub,
     EmulatorStopForSpanner,
     EventTopicBrokerCreateTopicForPubSub,
+    EventTopicBrokerDeleteTopicForPubSub,
     EventTopicBrokerGetTopicIdForPubSub,
     GoogleAppCheckGenerateToken,
     GoogleFirebaseStorageMergeRules,
