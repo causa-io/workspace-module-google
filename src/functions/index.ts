@@ -13,6 +13,7 @@ import {
 } from './emulator/index.js';
 import {
   EventTopicBrokerCreateTopicForPubSub,
+  EventTopicBrokerCreateTriggerForCloudRun,
   EventTopicBrokerDeleteTopicForPubSub,
   EventTopicBrokerDeleteTriggerResourceForCloudRunInvokerRole,
   EventTopicBrokerDeleteTriggerResourceForPubSubSubscription,
@@ -53,6 +54,7 @@ export function registerFunctions(context: ModuleRegistrationContext) {
     EmulatorStopForPubSub,
     EmulatorStopForSpanner,
     EventTopicBrokerCreateTopicForPubSub,
+    EventTopicBrokerCreateTriggerForCloudRun,
     EventTopicBrokerDeleteTopicForPubSub,
     EventTopicBrokerDeleteTriggerResourceForCloudRunInvokerRole,
     EventTopicBrokerDeleteTriggerResourceForPubSubSubscription,
