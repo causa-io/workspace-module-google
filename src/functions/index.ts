@@ -15,6 +15,7 @@ import {
   EventTopicBrokerCreateTopicForPubSub,
   EventTopicBrokerDeleteTopicForPubSub,
   EventTopicBrokerGetTopicIdForPubSub,
+  EventTopicBrokerPublishEventsForGoogle,
 } from './event-topic/index.js';
 import { GoogleAppCheckGenerateToken } from './google-app-check/index.js';
 import { GoogleFirebaseStorageMergeRules } from './google-firebase-storage/index.js';
@@ -51,6 +52,7 @@ export function registerFunctions(context: ModuleRegistrationContext) {
     EventTopicBrokerCreateTopicForPubSub,
     EventTopicBrokerDeleteTopicForPubSub,
     EventTopicBrokerGetTopicIdForPubSub,
+    EventTopicBrokerPublishEventsForGoogle,
     GoogleAppCheckGenerateToken,
     GoogleFirebaseStorageMergeRules,
     GoogleFirestoreMergeRules,
