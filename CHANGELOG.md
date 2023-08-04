@@ -6,6 +6,9 @@ Features:
 
 - Define the `google.region` and `bigQueryStorage.location` configuration fields.
 - Implement the `CloudRunService`, `IamService`, `PubSubService`, and `ResourceManagerService`.
+- Implement the `EventTopicBrokerCreateTrigger`, `EventTopicBrokerDeleteTriggerResource`, `EventTopicBrokerDeleteTriggerResource`, `EventTopicBrokerDeleteTriggerResource`, `EventTopicBrokerPublishEvents`, `EventTopicBrokerDeleteTopic`, `EventTopicBrokerCreateTopic`, and `EventTopicBrokerGetTopicId` functions for the GCP stack (specifically, Cloud Run and Pub/Sub).
+- Implement the `PubSubBackfillEventPublisher`.
+- Implement the `CloudRunPubSubTriggerService`.
 
 ## v0.4.0 (2023-07-28)
 
