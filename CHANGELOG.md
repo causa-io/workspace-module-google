@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.5.0 (2023-08-05)
+
 Features:
 
 - Define the `google.region` and `bigQueryStorage.location` configuration fields.
