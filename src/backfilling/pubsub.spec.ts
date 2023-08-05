@@ -5,7 +5,7 @@ import { FlowControlledPublisher } from '@google-cloud/pubsub/build/src/publishe
 import { jest } from '@jest/globals';
 import 'jest-extended';
 import { setTimeout } from 'timers/promises';
-import { PubSubBackfillEventPublisher } from './publisher.js';
+import { PubSubBackfillEventPublisher } from './pubsub.js';
 
 describe('PubSubBackfillEventPublisher', () => {
   let context: WorkspaceContext;

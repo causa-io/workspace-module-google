@@ -1,1 +1,2 @@
-export { PubSubBackfillEventPublisher } from './publisher.js';
+export { BigQueryEventsSource } from './bigquery.js';
+export { PubSubBackfillEventPublisher } from './pubsub.js';

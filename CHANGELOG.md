@@ -9,6 +9,8 @@ Features:
 - Implement the `EventTopicBrokerCreateTrigger`, `EventTopicBrokerDeleteTriggerResource`, `EventTopicBrokerDeleteTriggerResource`, `EventTopicBrokerDeleteTriggerResource`, `EventTopicBrokerPublishEvents`, `EventTopicBrokerDeleteTopic`, `EventTopicBrokerCreateTopic`, and `EventTopicBrokerGetTopicId` functions for the GCP stack (specifically, Cloud Run and Pub/Sub).
 - Implement the `PubSubBackfillEventPublisher`.
 - Implement the `CloudRunPubSubTriggerService`.
+- Implement the `BigQueryService` and `BigQueryEventsSource`.
+- Support BigQuery as the default event source for backfilling.
 
 ## v0.4.0 (2023-07-28)
 
