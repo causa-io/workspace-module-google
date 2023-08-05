@@ -1,10 +1,16 @@
 import { WorkspaceContext } from '@causa/workspace';
-import { EventTopicBrokerPublishEvents } from '@causa/workspace-core';
+import {
+  EventTopicBrokerPublishEvents,
+  JsonFilesEventSource,
+} from '@causa/workspace-core';
 import { NoImplementationFoundError } from '@causa/workspace/function-registry';
 import { createContext } from '@causa/workspace/testing';
 import { jest } from '@jest/globals';
 import 'jest-extended';
-import { PubSubBackfillEventPublisher } from '../../backfilling/index.js';
+import {
+  BigQueryEventsSource,
+  PubSubBackfillEventPublisher,
+} from '../../backfilling/index.js';
 import { EventTopicBrokerPublishEventsForGoogle } from './broker-publish-events-google.js';
 
 describe('EventTopicBrokerPublishEventsForGoogle', () => {
@@ -15,7 +21,15 @@ describe('EventTopicBrokerPublishEventsForGoogle', () => {
       configuration: {
         workspace: { name: 'my-workspace' },
         events: { broker: 'google.pubSub' },
-        google: { project: 'my-project' },
+        google: {
+          project: 'my-project',
+          pubSub: {
+            bigQueryStorage: {
+              rawEventsDatasetId: 'my-dataset',
+              location: 'EU',
+            },
+          },
+        },
       },
       functions: [EventTopicBrokerPublishEventsForGoogle],
     }));
@@ -38,17 +52,6 @@ describe('EventTopicBrokerPublishEventsForGoogle', () => {
     ).toThrow(NoImplementationFoundError);
   });
 
-  it('should throw if the source is not provided', async () => {
-    const actualPromise = context.call(EventTopicBrokerPublishEvents, {
-      eventTopic: 'my-topic',
-      topicId: 'my-topic',
-    });
-
-    await expect(actualPromise).rejects.toThrow(
-      'The event source is required.',
-    );
-  });
-
   it('should throw if the specified source is not supported', async () => {
     const actualPromise = context.call(EventTopicBrokerPublishEvents, {
       eventTopic: 'my-topic',
@@ -61,8 +64,8 @@ describe('EventTopicBrokerPublishEventsForGoogle', () => {
     );
   });
 
-  it('should backfill events using the PubSubBackfillEventPublisher', async () => {
-    jest
+  it('should backfill events from a JSON source using the PubSubBackfillEventPublisher', async () => {
+    const publishMock = jest
       .spyOn(PubSubBackfillEventPublisher.prototype, 'publishFromSource')
       .mockResolvedValue();
 
@@ -72,8 +75,59 @@ describe('EventTopicBrokerPublishEventsForGoogle', () => {
       source: 'json://some/path',
     });
 
-    expect(
-      PubSubBackfillEventPublisher.prototype.publishFromSource,
-    ).toHaveBeenCalledOnce();
+    expect(publishMock).toHaveBeenCalledOnce();
+    expect(publishMock.mock.calls[0][0]).toBeInstanceOf(JsonFilesEventSource);
+  });
+
+  it('should backfill events from a BigQuery source using the PubSubBackfillEventPublisher', async () => {
+    const publishMock = jest
+      .spyOn(PubSubBackfillEventPublisher.prototype, 'publishFromSource')
+      .mockResolvedValue();
+
+    await context.call(EventTopicBrokerPublishEvents, {
+      eventTopic: 'my-topic',
+      topicId: 'my-topic',
+      source: 'bq://some/table',
+    });
+
+    expect(publishMock).toHaveBeenCalledOnce();
+    expect(publishMock.mock.calls[0][0]).toBeInstanceOf(BigQueryEventsSource);
+  });
+
+  it('should backfill events from the default BigQuery storage', async () => {
+    const publishMock = jest
+      .spyOn(PubSubBackfillEventPublisher.prototype, 'publishFromSource')
+      .mockResolvedValue();
+
+    await context.call(EventTopicBrokerPublishEvents, {
+      eventTopic: 'my-topic-name',
+      topicId: 'my-topic',
+    });
+
+    expect(publishMock).toHaveBeenCalledOnce();
+    const actualSource = publishMock.mock.calls[0][0] as BigQueryEventsSource;
+    expect(actualSource).toBeInstanceOf(BigQueryEventsSource);
+    expect(actualSource.tableId).toEqual('my-project.my-dataset.my_topic_name');
+    expect(actualSource.filter).toBeUndefined();
+  });
+
+  it('should throw if the default BigQuery storage is not configured', async () => {
+    ({ context } = createContext({
+      configuration: {
+        workspace: { name: 'my-workspace' },
+        events: { broker: 'google.pubSub' },
+        google: { project: 'my-project' },
+      },
+      functions: [EventTopicBrokerPublishEventsForGoogle],
+    }));
+
+    const actualPromise = context.call(EventTopicBrokerPublishEvents, {
+      eventTopic: 'my-topic',
+      topicId: 'my-topic',
+    });
+
+    await expect(actualPromise).rejects.toThrow(
+      'Cannot use the default event source because BigQuery storage is not configured.',
+    );
   });
 });

@@ -5,7 +5,11 @@ import {
   EventsConfiguration,
   JsonFilesEventSource,
 } from '@causa/workspace-core';
-import { PubSubBackfillEventPublisher } from '../../backfilling/index.js';
+import {
+  BigQueryEventsSource,
+  PubSubBackfillEventPublisher,
+} from '../../backfilling/index.js';
+import { GoogleConfiguration } from '../../index.js';
 
 /**
  * Implements {@link EventTopicBrokerPublishEvents} for a Google / GCP stack.
@@ -22,7 +26,29 @@ export class EventTopicBrokerPublishEventsForGoogle extends EventTopicBrokerPubl
     context: WorkspaceContext,
   ): Promise<BackfillEventsSource> {
     if (!this.source) {
-      throw new Error('The event source is required.');
+      const googleConf = context.asConfiguration<GoogleConfiguration>();
+      const projectId = googleConf.getOrThrow('google.project');
+      const rawEventsDatasetId = googleConf.get(
+        'google.pubSub.bigQueryStorage.rawEventsDatasetId',
+      );
+      if (!rawEventsDatasetId) {
+        throw new Error(
+          'Cannot use the default event source because BigQuery storage is not configured.',
+        );
+      }
+
+      const tableName = this.eventTopic.replace(/[-\.]/g, '_');
+      const tableId = `${projectId}.${rawEventsDatasetId}.${tableName}`;
+      return new BigQueryEventsSource(context, tableId);
+    }
+
+    const bqSource = await BigQueryEventsSource.fromSourceAndFilter(
+      context,
+      this.source,
+      this.filter,
+    );
+    if (bqSource) {
+      return bqSource;
     }
 
     const jsonFilesSource = await JsonFilesEventSource.fromSourceAndFilter(
