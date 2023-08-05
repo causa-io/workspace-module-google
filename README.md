@@ -39,6 +39,8 @@ The following emulators are implemented:
 
 Backfilling is supported when `google.pubSub` is set as the `events.broker`. Temporary triggers can be created for Cloud Run services, by referencing them using the format `[[projects/<projectId>/]locations/<location>/]services/<name>/path-to-trigger`.
 
+When no source is specified, the default is to fetch events to backfill from the BigQuery dataset configured in `google.pubSub.bigQueryStorage`. A custom BigQuery table can also be set as source using the `bq://<projectId>.<datasetId>.<tableId>` format. It should have the `data` and `attributes` columns.
+
 ### Secrets backend
 
 This module implements the `google.secretManager` secret backend, allowing fetching secrets from the Google Secret Manager service. Here are some example of how secrets with the `google.secretManager` backend should be defined:
