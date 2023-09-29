@@ -19,5 +19,3 @@ javascript:
     update:
       packageTargets:
         '@types/node': minor
-        # The gRPC package should always correspond to the version required by `google-gax`.
-        '@grpc/grpc-js': patch
