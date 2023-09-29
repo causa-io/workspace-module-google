@@ -149,9 +149,12 @@ describe('EmulatorStartForSpanner', () => {
     const idsAndDdls = await Promise.all(
       databases.map(async (database) => {
         const [ddls] = await database.getSchema();
-        return { id: database.formattedName_, ddls };
+        const idAndDdls = { id: database.formattedName_, ddls };
+        await database.close();
+        return idAndDdls;
       }),
     );
+    spanner.close();
     return idsAndDdls.reduce(
       (databases, { id, ddls }) => {
         databases[id] = ddls;
