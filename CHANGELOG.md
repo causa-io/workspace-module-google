@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.6.0 (2023-09-29)
+
 Breaking changes:
 
 - Make `GoogleApisService.projectId` possibly undefined (instead of throwing when it is not set in the configuration).
