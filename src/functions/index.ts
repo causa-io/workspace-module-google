@@ -39,7 +39,10 @@ import {
   ProjectGetArtefactDestinationForCloudRun,
   ProjectPushArtefactForCloudFunctions,
 } from './project/index.js';
-import { SecretFetchForGoogleSecretManager } from './secret/index.js';
+import {
+  SecretFetchForGoogleAccessToken,
+  SecretFetchForGoogleSecretManager,
+} from './secret/index.js';
 
 export function registerFunctions(context: ModuleRegistrationContext) {
   context.registerFunctionImplementations(
@@ -73,6 +76,7 @@ export function registerFunctions(context: ModuleRegistrationContext) {
     ProjectGetArtefactDestinationForCloudFunctions,
     ProjectGetArtefactDestinationForCloudRun,
     ProjectPushArtefactForCloudFunctions,
+    SecretFetchForGoogleAccessToken,
     SecretFetchForGoogleSecretManager,
   );
 }
