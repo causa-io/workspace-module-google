@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+Fixes:
+
+- Ensure the Spanner client is closed.
+
 ## v0.5.0 (2023-08-05)
 
 Features:

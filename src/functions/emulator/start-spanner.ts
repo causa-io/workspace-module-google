@@ -48,12 +48,11 @@ export class EmulatorStartForSpanner extends EmulatorStart {
     }
 
     const emulatorConf = await this.startSpannerEmulator(context);
-    const { instance, instanceConf } = await this.createInstance(context);
-    const databaseConf = await this.createDatabases(instance, context);
+    const instanceAndDatabaseConf = await this.initializeEmulator(context);
 
     context.logger.info('🗃️ Successfully initialized Spanner emulator.');
 
-    return { ...emulatorConf, ...instanceConf, ...databaseConf };
+    return { ...emulatorConf, ...instanceAndDatabaseConf };
   }
 
   /**
@@ -100,12 +99,41 @@ export class EmulatorStartForSpanner extends EmulatorStart {
   }
 
   /**
+   * Creates the Spanner instance and databases within the emulator.
+   *
+   * @param context The {@link WorkspaceContext}.
+   * @returns The configuration for the created instance and databases.
+   */
+  private async initializeEmulator(
+    context: WorkspaceContext,
+  ): Promise<Record<string, string>> {
+    const spanner = new Spanner({
+      servicePath: '127.0.0.1',
+      port: SPANNER_GRPC_PORT,
+      projectId: getLocalGcpProject(context),
+      sslCreds: credentials.createInsecure(),
+    });
+
+    const { instance, instanceConf } = await this.createInstance(
+      spanner,
+      context,
+    );
+    const databaseConf = await this.createDatabases(instance, context);
+
+    spanner.close();
+
+    return { ...instanceConf, ...databaseConf };
+  }
+
+  /**
    * Creates a local instance within the Spanner emulator.
    *
+   * @param spanner The {@link Spanner} client.
    * @param context The {@link WorkspaceContext}.
    * @returns The created Spanner {@link Instance} and the corresponding client configuration.
    */
   private async createInstance(
+    spanner: Spanner,
     context: WorkspaceContext,
   ): Promise<{ instance: Instance; instanceConf: Record<string, string> }> {
     const instanceName =
@@ -116,13 +144,6 @@ export class EmulatorStartForSpanner extends EmulatorStart {
     context.logger.info(
       `🗃️ Creating Spanner emulator instance '${instanceName}'.`,
     );
-
-    const spanner = new Spanner({
-      servicePath: '127.0.0.1',
-      port: SPANNER_GRPC_PORT,
-      projectId: getLocalGcpProject(context),
-      sslCreds: credentials.createInsecure(),
-    });
 
     const [instance, operation] = await spanner.createInstance(instanceName, {
       config: 'emulator-config',
@@ -158,11 +179,12 @@ export class EmulatorStartForSpanner extends EmulatorStart {
           (statement) => !statement.toUpperCase().startsWith('DROP TABLE'),
         );
 
-        const operation = (
-          await instance.createDatabase(database.id, { schema: ddls })
-        )[1];
+        const [db, operation] = await instance.createDatabase(database.id, {
+          schema: ddls,
+        });
 
         await operation.promise();
+        await db.close();
       }),
     );
 
