@@ -47,6 +47,7 @@
     "firebase": "^10.4.0",
     "firebase-admin": "^11.11.0",
     "globby": "^13.2.2",
+    "google-auth-library": "^9.0.0",
     "googleapis": "^126.0.1",
     "pino": "^8.15.1",
     "uuid": "^9.0.1"

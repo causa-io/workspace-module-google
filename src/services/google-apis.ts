@@ -1,4 +1,5 @@
 import { WorkspaceContext } from '@causa/workspace';
+import { AuthClient } from 'google-auth-library';
 import { GoogleApis, google } from 'googleapis';
 import { GoogleConfiguration } from '../configurations/index.js';
 import { ApiClient, OptionsOfApiClient } from './google-apis.types.js';
@@ -11,24 +12,25 @@ export class GoogleApisService {
   /**
    * The GCP project ID read from the {@link WorkspaceContext} configuration.
    */
-  readonly projectId: string;
+  readonly projectId: string | undefined;
 
   constructor(context: WorkspaceContext) {
-    const googleConf = context.asConfiguration<GoogleConfiguration>();
-    this.projectId = googleConf.getOrThrow('google.project');
+    this.projectId = context
+      .asConfiguration<GoogleConfiguration>()
+      .get('google.project');
   }
 
   /**
    * The promise returning the `JSONClient` configured with the {@link GoogleApisService.projectId}.
    */
-  private authClientPromise: Promise<any> | undefined;
+  private authClientPromise: Promise<AuthClient> | undefined;
 
   /**
    * Possibly initializes and returns the auth client to use with Google API clients.
    *
    * @returns The auth client.
    */
-  async getAuthClient(): Promise<any> {
+  async getAuthClient(): Promise<AuthClient> {
     if (!this.authClientPromise) {
       const auth = new google.auth.GoogleAuth({
         projectId: this.projectId,

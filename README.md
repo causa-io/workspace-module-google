@@ -57,6 +57,14 @@ secrets:
 
 When the GCP project is not specified in the secret ID, it is inferred from `google.secretManager.project`, or `google.project` (in this order). This allows defining the GCP project a single time if needed.
 
+A second secret backend, `google.accessToken`, does not fetch secrets from a source but rather returns a GCP access token, which can be used to access Google services:
+
+```yaml
+secrets:
+  gcpAccessToken:
+    backend: google.accessToken
+```
+
 ## 🔨 Custom `google` commands
 
 This modules adds a new command to the CLI: `cs google`. Here is the list of subcommands that are exposed.
