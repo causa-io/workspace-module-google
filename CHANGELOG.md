@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+Breaking changes:
+
+- Make `GoogleApisService.projectId` possibly undefined (instead of throwing when it is not set in the configuration).
+
+Features:
+
+- Implement the `google.accessToken` secret backend, which returns an access token for the current GCP user or service account.
+
 Fixes:
 
 - Ensure the Spanner client is closed.
