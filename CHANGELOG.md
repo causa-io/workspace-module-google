@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+Features:
+
+- Implement the `google.spanner` TypeScript decorator renderer. This allows decorating generated TypeScript classes with `@SpannerTable` and `@SpannerColumn` decorators.
+
 ## v0.6.0 (2023-09-29)
 
 Breaking changes:
