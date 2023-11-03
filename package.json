@@ -32,6 +32,7 @@
     "@causa/cli": ">= 0.4.1 < 1.0.0",
     "@causa/workspace": ">= 0.12.1 < 1.0.0",
     "@causa/workspace-core": ">= 0.19.1 < 1.0.0",
+    "@causa/workspace-typescript": ">= 0.7.0",
     "@google-cloud/apikeys": "^1.0.1",
     "@google-cloud/bigquery": "^7.3.0",
     "@google-cloud/iam-credentials": "^3.0.1",
@@ -50,6 +51,7 @@
     "google-auth-library": "^9.2.0",
     "googleapis": "^128.0.0",
     "pino": "^8.16.1",
+    "quicktype-core": "^23.0.77",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
