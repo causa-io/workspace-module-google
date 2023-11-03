@@ -65,6 +65,32 @@ secrets:
     backend: google.accessToken
 ```
 
+### Code generation
+
+This module implements the `google.spanner` TypeScript decorator renderer, which can be used to add `@SpannerTable` and `@SpannerColumn` decorators to classes generated from events. Below is an example of how to enable it for a JSONSchema object:
+
+```yaml
+title: MyClass
+type: object
+additionalProperties: false
+causa:
+  # This must be set for the decorators to be added to both the class and its properties.
+  # The content of the object will be passed as the argument to the `@SpannerTable` decorator.
+  tsGoogleSpannerTable:
+    primaryKey: [id]
+properties:
+  id:
+    type: string
+    format: uuid
+    # In most cases, the property-level `tsGoogleSpannerColumn` attribute does not need to be set. The decorator configuration will be automatically inferred.
+    # If needed, the content of `tsGoogleSpannerColumn` will be passed as the argument to the `@SpannerColumn` decorator.
+    # causa:
+    #   tsGoogleSpannerColumn:
+    #     isJson: false
+  myProperty:
+    type: string
+```
+
 ## 🔨 Custom `google` commands
 
 This modules adds a new command to the CLI: `cs google`. Here is the list of subcommands that are exposed.
