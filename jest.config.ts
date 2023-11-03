@@ -15,7 +15,7 @@ const config: Config = {
   setupFilesAfterEnv: ['jest-extended/all'],
   testMatch: ['**/*.spec.ts'],
   extensionsToTreatAsEsm: ['.ts'],
-  moduleFileExtensions: ['js', 'ts'],
+  moduleFileExtensions: ['js', 'ts', 'json'],
   transform: {
     '^.+\\.ts$': ['ts-jest', { useESM: true }],
   },
