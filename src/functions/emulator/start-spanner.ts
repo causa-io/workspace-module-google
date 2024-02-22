@@ -5,7 +5,10 @@ import {
   EmulatorStartResult,
 } from '@causa/workspace-core';
 import { Instance, Spanner } from '@google-cloud/spanner';
-import { credentials } from '@grpc/grpc-js';
+// The Spanner client depends on `google-gax` rather than `@grpc/grpc-js` directly. By ensuring `google-gax` is kept in
+// sync with the version required by Spanner, and importing `grpc` from `google-gax`, the correct `grpc.credentials`
+// version can be loaded.
+import { grpc } from 'google-gax';
 import {
   GoogleConfiguration,
   getLocalGcpProject,
@@ -111,7 +114,7 @@ export class EmulatorStartForSpanner extends EmulatorStart {
       servicePath: '127.0.0.1',
       port: SPANNER_GRPC_PORT,
       projectId: getLocalGcpProject(context),
-      sslCreds: credentials.createInsecure(),
+      sslCreds: grpc.credentials.createInsecure(),
     });
 
     const { instance, instanceConf } = await this.createInstance(
