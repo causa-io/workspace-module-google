@@ -15,8 +15,8 @@ import {
   registerMockFunction,
 } from '@causa/workspace/testing';
 import { Spanner } from '@google-cloud/spanner';
-import { credentials } from '@grpc/grpc-js';
 import { jest } from '@jest/globals';
+import { grpc } from 'google-gax';
 import 'jest-extended';
 import { GoogleSpannerListDatabases } from '../google-spanner/index.js';
 import { EmulatorStartForSpanner } from './start-spanner.js';
@@ -143,7 +143,7 @@ describe('EmulatorStartForSpanner', () => {
       servicePath: '127.0.0.1',
       port: 9010,
       projectId: 'demo-spanner-test',
-      sslCreds: credentials.createInsecure(),
+      sslCreds: grpc.credentials.createInsecure(),
     });
     const [databases] = await spanner.instance('local').getDatabases();
     const idsAndDdls = await Promise.all(

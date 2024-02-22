@@ -3,7 +3,7 @@ import {
   EventTopicBrokerDeleteTopic,
   EventsConfiguration,
 } from '@causa/workspace-core';
-import { status } from '@grpc/grpc-js';
+import { grpc } from 'google-gax';
 import { PubSubService } from '../../services/index.js';
 
 /**
@@ -17,7 +17,7 @@ export class EventTopicBrokerDeleteTopicForPubSub extends EventTopicBrokerDelete
     try {
       await context.service(PubSubService).pubSub.topic(this.id).delete();
     } catch (error: any) {
-      if (error.code === status.NOT_FOUND) {
+      if (error.code === grpc.status.NOT_FOUND) {
         context.logger.warn(
           `⚠️ Pub/Sub topic to delete '${this.id}' does not exist. It might have already been deleted.`,
         );
