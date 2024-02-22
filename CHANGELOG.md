@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.7.1 (2024-02-22)
+
 Fixes:
 
 - Set `@google-cloud/spanner` and `google-gax` versions to avoid dependency issues.
