@@ -41,7 +41,7 @@
     "@google-cloud/run": "^1.1.0",
     "@google-cloud/secret-manager": "^5.1.0",
     "@google-cloud/service-usage": "^3.2.0",
-    "@google-cloud/spanner": "^7.3.0",
+    "@google-cloud/spanner": "7.3.0",
     "@google-cloud/storage": "^7.7.0",
     "class-validator": "^0.14.1",
     "firebase": "^10.8.0",
