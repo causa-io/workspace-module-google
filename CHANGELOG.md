@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.7.2 (2024-02-26)
+
 Fixes:
 
 - Log emitted Spanner database errors as warnings. These errors can occur when setting up the Spanner emulator and can safely be ignored.
