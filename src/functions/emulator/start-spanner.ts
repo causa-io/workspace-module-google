@@ -186,6 +186,15 @@ export class EmulatorStartForSpanner extends EmulatorStart {
           schema: ddls,
         });
 
+        // While unlikely, the database object might emit errors, e.g "The client has already been closed.".
+        // These errors could simply be ignored, as awaiting on the operation should be enough to ensure the database is
+        // created. However they are logged as warnings for completeness.
+        db.on('error', (error: Error) => {
+          context.logger.warn(
+            `⚠️ Uncaught Spanner database error: '${error.message}'.`,
+          );
+        });
+
         await operation.promise();
         await db.close();
       }),
