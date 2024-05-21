@@ -21,3 +21,10 @@ javascript:
         '@types/node': minor
         # `google-gax` should only be manually updated to always match the Spanner client's version.
         google-gax: semver
+        # `@typescript-eslint/eslint-plugin` is not yet compatible with ESLint 9.
+        # https://github.com/typescript-eslint/typescript-eslint/issues/8211
+        eslint: minor
+        # The Secret Manager client has a bug between version `5.4.0` and `5.5.0`. This will be fixed by:
+        # - https://github.com/googleapis/google-cloud-node/pull/5333
+        # - https://github.com/googleapis/google-cloud-node/pull/5363
+        '@google-cloud/secret-manager': semver
