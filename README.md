@@ -16,6 +16,24 @@ Add `@causa/workspace-google` to your Causa configuration in `causa.modules`.
 
 For all the Google-related configuration in your Causa files, look at [the schema for the `GoogleConfiguration`](./src/configurations/google.ts).
 
+### Firebase
+
+If you use Firebase functionalities and the corresponding CLI commands listed below (e.g. AppCheck, Identity Platform), you may want to set the configuration under the `google.firebase` path. This configuration is optional, but may speed up some CLI commands that would otherwise need to fetch the configuration from GCP using APIs every time they are run. Here is an example of such configuration:
+
+```yaml
+google:
+  firebase:
+    adminServiceAccount: firebase-adminsdk-<random ID>@<GCP project>.iam.gserviceaccount.com
+    apiKey: Public API key, e.g. for iOS, Android, or Web.
+    appId: Firebase App ID for iOS, Android, or Web.
+```
+
+- `adminServiceAccount` references a private service account only known to developers. While it cannot be used without the corresponding IAM credentials, you should ensure only developers with relevant access can read this configuration.
+- `apiKey`: Be sure to select a public API key. For example, keys embedded in client applications are safe because they are distributed to all users anyway.
+- `appId`: Firebase App IDs are also embedded in client applications. Any (public) app ID is safe to set in the configuration.
+
+This makes the `google.firebase` configuration safe to commit in your repository. Getting access to this configuration does not grant any permission that is either public or has to be set separately in IAM.
+
 ## ✨ Supported project types and commands
 
 ### Project types
