@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+Chore:
+
+- Upgrade dependencies, including `@google-cloud/secret-manager` above its buggy releases.
+
 ## v0.8.0 (2024-05-21)
 
 Breaking change:
