@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.9.0 (2024-05-27)
+
 Breaking changes:
 
 - Ignore symbolic links when listing Firebase security rules files.
