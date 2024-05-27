@@ -1,6 +1,6 @@
 import { WorkspaceContext } from '@causa/workspace';
 import { createContext } from '@causa/workspace/testing';
-import { mkdir, mkdtemp, readFile, rm, writeFile } from 'fs/promises';
+import { mkdir, mkdtemp, readFile, rm, symlink, writeFile } from 'fs/promises';
 import { join, resolve } from 'path';
 import { mergeFirebaseRulesFiles } from './rules.js';
 
@@ -20,7 +20,7 @@ describe('rules', () => {
       await rm(tmpDir, { recursive: true });
     });
 
-    it('should merge the rules files', async () => {
+    it('should merge the rules files and not follow symlinks', async () => {
       await mkdir(join(tmpDir, 'first'));
       await mkdir(join(tmpDir, 'second'));
       await writeFile(
@@ -32,6 +32,10 @@ describe('rules', () => {
         'some\n  Other\nRules\n',
       );
       await writeFile(join(tmpDir, 'second', 'c.nope'), '🙅');
+      await symlink(
+        join(tmpDir, 'second', 'b.rules'),
+        join(tmpDir, 'second', 'not-c.rules'),
+      );
 
       const actualPath = await mergeFirebaseRulesFiles(
         'Type',

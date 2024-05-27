@@ -61,7 +61,11 @@ export async function mergeFirebaseRulesFiles(
   const rootPath = context.rootPath;
   rulesFilePath = join(rootPath, rulesFilePath);
 
-  const files = await globby(globs, { cwd: rootPath, gitignore: true });
+  const files = await globby(globs, {
+    cwd: rootPath,
+    gitignore: true,
+    followSymbolicLinks: false,
+  });
   files.sort();
 
   context.logger.debug(
