@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+Breaking changes:
+
+- Ignore symbolic links when listing Firebase security rules files.
+
 ## v0.8.1 (2024-05-22)
 
 Chore:
