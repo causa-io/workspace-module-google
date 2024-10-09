@@ -367,7 +367,7 @@ export class FirebaseAppService {
       parent: `projects/${this.projectId}`,
       pageSize: 1,
     });
-    return apps ? apps[0]?.appId ?? null : null;
+    return apps ? (apps[0]?.appId ?? null) : null;
   }
 
   /**
