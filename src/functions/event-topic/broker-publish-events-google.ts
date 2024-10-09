@@ -1,15 +1,15 @@
 import { WorkspaceContext } from '@causa/workspace';
 import {
-  BackfillEventsSource,
+  type BackfillEventsSource,
   EventTopicBrokerPublishEvents,
-  EventsConfiguration,
+  type EventsConfiguration,
   JsonFilesEventSource,
 } from '@causa/workspace-core';
 import {
   BigQueryEventsSource,
   PubSubBackfillEventPublisher,
 } from '../../backfilling/index.js';
-import { GoogleConfiguration } from '../../index.js';
+import type { GoogleConfiguration } from '../../index.js';
 
 /**
  * Implements {@link EventTopicBrokerPublishEvents} for a Google / GCP stack.

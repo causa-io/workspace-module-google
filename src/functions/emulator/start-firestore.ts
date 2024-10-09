@@ -1,5 +1,5 @@
 import { WorkspaceContext } from '@causa/workspace';
-import { EmulatorStart, EmulatorStartResult } from '@causa/workspace-core';
+import { EmulatorStart, type EmulatorStartResult } from '@causa/workspace-core';
 import {
   FIRESTORE_CONTAINER_RULES_FILE,
   FIRESTORE_EMULATOR_NAME,

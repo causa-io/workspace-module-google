@@ -1,8 +1,8 @@
 import { WorkspaceContext } from '@causa/workspace';
 import { AuthClient } from 'google-auth-library';
 import { GoogleApis, google } from 'googleapis';
-import { GoogleConfiguration } from '../configurations/index.js';
-import { ApiClient, OptionsOfApiClient } from './google-apis.types.js';
+import type { GoogleConfiguration } from '../configurations/index.js';
+import type { ApiClient, OptionsOfApiClient } from './google-apis.types.js';
 
 /**
  * A service that exposes the lowest level of Google API clients, from `googleapis`.

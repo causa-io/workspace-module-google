@@ -1,4 +1,4 @@
-import { ModuleRegistrationContext } from '@causa/workspace';
+import type { ModuleRegistrationContext } from '@causa/workspace';
 import {
   EmulatorStartForFirebaseStorage,
   EmulatorStartForFirestore,

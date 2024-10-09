@@ -2,7 +2,7 @@ import { WorkspaceContext } from '@causa/workspace';
 import {
   ArtefactAlreadyExistsError,
   ProjectPushArtefact,
-  ServerlessFunctionsConfiguration,
+  type ServerlessFunctionsConfiguration,
 } from '@causa/workspace-core';
 import { rm } from 'fs/promises';
 import { CloudStorageService } from '../../services/index.js';

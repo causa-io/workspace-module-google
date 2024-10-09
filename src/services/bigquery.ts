@@ -1,6 +1,6 @@
 import { WorkspaceContext } from '@causa/workspace';
 import { BigQuery } from '@google-cloud/bigquery';
-import { GoogleConfiguration } from '../configurations/index.js';
+import type { GoogleConfiguration } from '../configurations/index.js';
 
 /**
  * A service that provides access to BigQuery.

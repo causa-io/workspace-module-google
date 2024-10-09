@@ -1,5 +1,5 @@
 import { WorkspaceContext } from '@causa/workspace';
-import { BackfillEventsSource } from '@causa/workspace-core';
+import type { BackfillEventsSource } from '@causa/workspace-core';
 import { createContext } from '@causa/workspace/testing';
 import { FlowControlledPublisher } from '@google-cloud/pubsub/build/src/publisher/flow-publisher.js';
 import { jest } from '@jest/globals';

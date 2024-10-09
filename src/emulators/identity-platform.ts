@@ -1,5 +1,5 @@
 import { WorkspaceContext } from '@causa/workspace';
-import { GoogleConfiguration } from '../configurations/index.js';
+import type { GoogleConfiguration } from '../configurations/index.js';
 
 /**
  * The name of the Identity Platform emulator.

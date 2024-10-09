@@ -2,7 +2,7 @@ import { WorkspaceContext } from '@causa/workspace';
 import {
   DockerEmulatorService,
   EmulatorStart,
-  EmulatorStartResult,
+  type EmulatorStartResult,
 } from '@causa/workspace-core';
 import { Instance, Spanner } from '@google-cloud/spanner';
 // The Spanner client depends on `google-gax` rather than `@grpc/grpc-js` directly. By ensuring `google-gax` is kept in
@@ -10,7 +10,7 @@ import { Instance, Spanner } from '@google-cloud/spanner';
 // version can be loaded.
 import { grpc } from 'google-gax';
 import {
-  GoogleConfiguration,
+  type GoogleConfiguration,
   getLocalGcpProject,
 } from '../../configurations/index.js';
 import {

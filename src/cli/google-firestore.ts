@@ -1,4 +1,4 @@
-import { ParentCliCommandDefinition } from '@causa/cli';
+import type { ParentCliCommandDefinition } from '@causa/cli';
 import { googleCommandDefinition } from './google.js';
 
 /**

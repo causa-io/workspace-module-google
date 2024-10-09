@@ -1,9 +1,9 @@
 import { WorkspaceContext } from '@causa/workspace';
 import {
   EventTopicBrokerGetTopicId,
-  EventsConfiguration,
+  type EventsConfiguration,
 } from '@causa/workspace-core';
-import { GoogleConfiguration } from '../../configurations/index.js';
+import type { GoogleConfiguration } from '../../configurations/index.js';
 
 /**
  * Implements {@link EventTopicBrokerGetTopicId} for Pub/Sub.

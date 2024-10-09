@@ -1,7 +1,7 @@
 import { WorkspaceContext } from '@causa/workspace';
 import { PubSub } from '@google-cloud/pubsub';
 import { iam_v1 } from 'googleapis';
-import { GoogleConfiguration } from '../configurations/index.js';
+import type { GoogleConfiguration } from '../configurations/index.js';
 import { ResourceManagerService } from './resource-manager.js';
 
 /**

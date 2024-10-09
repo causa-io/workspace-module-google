@@ -2,15 +2,15 @@ import { WorkspaceContext } from '@causa/workspace';
 import { ApiKeysClient } from '@google-cloud/apikeys';
 import { IAMCredentialsClient } from '@google-cloud/iam-credentials';
 import {
-  Credential,
-  App as FirebaseAdminApp,
+  type Credential,
+  type App as FirebaseAdminApp,
   initializeApp as initializeAdminApp,
 } from 'firebase-admin/app';
-import { FirebaseApp, initializeApp } from 'firebase/app';
+import { type FirebaseApp, initializeApp } from 'firebase/app';
 import { firebase_v1beta1 } from 'googleapis';
-import { Logger } from 'pino';
+import type { Logger } from 'pino';
 import * as uuid from 'uuid';
-import { GoogleConfiguration } from '../configurations/index.js';
+import type { GoogleConfiguration } from '../configurations/index.js';
 import {
   FirebaseAdminServiceAccountNotFoundError,
   FirebaseApiKeyNotFoundError,

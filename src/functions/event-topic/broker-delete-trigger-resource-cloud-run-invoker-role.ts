@@ -1,7 +1,7 @@
 import { WorkspaceContext } from '@causa/workspace';
 import {
   EventTopicBrokerDeleteTriggerResource,
-  EventsConfiguration,
+  type EventsConfiguration,
 } from '@causa/workspace-core';
 import { CloudRunService } from '../../services/index.js';
 

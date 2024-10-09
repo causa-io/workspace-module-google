@@ -1,7 +1,7 @@
 import { WorkspaceContext } from '@causa/workspace';
 import {
   EmulatorStart,
-  EmulatorStartResult,
+  type EmulatorStartResult,
   EventTopicList,
 } from '@causa/workspace-core';
 import { PubSub } from '@google-cloud/pubsub';

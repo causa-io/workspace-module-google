@@ -1,5 +1,5 @@
 import { WorkspaceContext } from '@causa/workspace';
-import { EmulatorStart, EmulatorStartResult } from '@causa/workspace-core';
+import { EmulatorStart, type EmulatorStartResult } from '@causa/workspace-core';
 import { fileURLToPath } from 'url';
 import {
   FIREBASE_AUTH_PORT,

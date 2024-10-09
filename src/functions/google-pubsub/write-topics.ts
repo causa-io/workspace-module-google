@@ -1,19 +1,19 @@
 import {
-  ProcessorResult,
+  type ProcessorResult,
   WorkspaceContext,
   WorkspaceFunction,
 } from '@causa/workspace';
 import {
-  EventTopicDefinition,
+  type EventTopicDefinition,
   EventTopicList,
-  InfrastructureProcessor,
+  type InfrastructureProcessor,
 } from '@causa/workspace-core';
 import { CAUSA_FOLDER } from '@causa/workspace/initialization';
 import { AllowMissing } from '@causa/workspace/validation';
 import { IsBoolean } from 'class-validator';
 import { mkdir, rm, writeFile } from 'fs/promises';
 import { join } from 'path';
-import { GoogleConfiguration } from '../../configurations/index.js';
+import type { GoogleConfiguration } from '../../configurations/index.js';
 
 /**
  * The default directory where Pub/Sub topic configurations are written, relative to the workspace root.
