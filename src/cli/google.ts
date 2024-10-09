@@ -1,4 +1,4 @@
-import { ParentCliCommandDefinition } from '@causa/cli';
+import type { ParentCliCommandDefinition } from '@causa/cli';
 
 /**
  * The parent `google` command.

@@ -1,10 +1,10 @@
 import { WorkspaceContext } from '@causa/workspace';
 import {
-  DockerContainerPublish,
+  type DockerContainerPublish,
   DockerEmulatorService,
 } from '@causa/workspace-core';
 import {
-  GoogleConfiguration,
+  type GoogleConfiguration,
   getLocalGcpProject,
 } from '../configurations/index.js';
 

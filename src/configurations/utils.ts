@@ -1,5 +1,5 @@
 import { WorkspaceContext } from '@causa/workspace';
-import { GoogleConfiguration } from './google.js';
+import type { GoogleConfiguration } from './google.js';
 
 /**
  * Gets or formats the ID of the local GCP project.

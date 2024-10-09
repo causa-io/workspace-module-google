@@ -1,6 +1,6 @@
 import { WorkspaceContext } from '@causa/workspace';
 import { SecretManagerServiceClient } from '@google-cloud/secret-manager';
-import { GoogleConfiguration } from '../configurations/index.js';
+import type { GoogleConfiguration } from '../configurations/index.js';
 
 /**
  * A service exposing a client to the Google Secret Manager.

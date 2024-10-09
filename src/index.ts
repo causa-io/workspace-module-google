@@ -1,4 +1,4 @@
-import { ModuleRegistrationFunction } from '@causa/workspace';
+import type { ModuleRegistrationFunction } from '@causa/workspace';
 import { registerFunctions } from './functions/index.js';
 
 export * from './configurations/index.js';

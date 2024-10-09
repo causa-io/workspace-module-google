@@ -1,10 +1,10 @@
 import { CliCommand } from '@causa/cli';
 import { WorkspaceContext, WorkspaceFunction } from '@causa/workspace';
-import { InfrastructureProcessor } from '@causa/workspace-core';
+import type { InfrastructureProcessor } from '@causa/workspace-core';
 import { AllowMissing } from '@causa/workspace/validation';
 import { IsBoolean } from 'class-validator';
 import { firestoreCommandDefinition } from '../../cli/index.js';
-import { GoogleConfiguration } from '../../configurations/index.js';
+import type { GoogleConfiguration } from '../../configurations/index.js';
 import { mergeFirebaseRulesFiles } from '../../firebase/index.js';
 
 /**

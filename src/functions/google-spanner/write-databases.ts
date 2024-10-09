@@ -1,15 +1,15 @@
 import {
-  ProcessorResult,
+  type ProcessorResult,
   WorkspaceContext,
   WorkspaceFunction,
 } from '@causa/workspace';
-import { InfrastructureProcessor } from '@causa/workspace-core';
+import type { InfrastructureProcessor } from '@causa/workspace-core';
 import { CAUSA_FOLDER } from '@causa/workspace/initialization';
 import { AllowMissing } from '@causa/workspace/validation';
 import { IsBoolean } from 'class-validator';
 import { mkdir, rm, writeFile } from 'fs/promises';
 import { join } from 'path';
-import { GoogleConfiguration } from '../../configurations/index.js';
+import type { GoogleConfiguration } from '../../configurations/index.js';
 import { GoogleSpannerListDatabases } from './list-databases.js';
 
 /**

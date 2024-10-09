@@ -1,7 +1,7 @@
 import {
-  ClassContext,
-  ClassPropertyContext,
-  TypeScriptDecorator,
+  type ClassContext,
+  type ClassPropertyContext,
+  type TypeScriptDecorator,
   TypeScriptDecoratorsRenderer,
   getSingleType,
   typeScriptSourceForObject,

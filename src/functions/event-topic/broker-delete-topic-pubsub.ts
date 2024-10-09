@@ -1,7 +1,7 @@
 import { WorkspaceContext } from '@causa/workspace';
 import {
   EventTopicBrokerDeleteTopic,
-  EventsConfiguration,
+  type EventsConfiguration,
 } from '@causa/workspace-core';
 import { grpc } from 'google-gax';
 import { PubSubService } from '../../services/index.js';

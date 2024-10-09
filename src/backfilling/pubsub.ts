@@ -1,6 +1,9 @@
 import { WorkspaceContext } from '@causa/workspace';
-import { BackfillEvent, BackfillEventPublisher } from '@causa/workspace-core';
-import { PublishOptions } from '@google-cloud/pubsub';
+import {
+  type BackfillEvent,
+  BackfillEventPublisher,
+} from '@causa/workspace-core';
+import type { PublishOptions } from '@google-cloud/pubsub';
 import { FlowControlledPublisher } from '@google-cloud/pubsub/build/src/publisher/flow-publisher.js';
 import { PubSubService } from '../services/index.js';
 
