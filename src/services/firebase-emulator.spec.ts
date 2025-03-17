@@ -58,7 +58,7 @@ describe('FirebaseEmulatorService', () => {
       );
 
       expect(dockerEmulatorService.start).toHaveBeenCalledWith(
-        'andreysenov/firebase-tools:latest-node-18-alpine',
+        'andreysenov/firebase-tools:latest-node-22-slim',
         'my-emulator',
         [{ container: 1234, local: 8080 }],
         expect.objectContaining({

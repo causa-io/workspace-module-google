@@ -71,7 +71,7 @@ export class FirebaseEmulatorService {
     options: FirebaseEmulatorStartOptions = {},
   ): Promise<void> {
     await this.dockerEmulatorService.start(
-      `${FIREBASE_TOOLS_IMAGE}:${this.firebaseToolsVersion}-node-18-alpine`,
+      `${FIREBASE_TOOLS_IMAGE}:${this.firebaseToolsVersion}-node-22-slim`,
       containerName,
       publish,
       {
