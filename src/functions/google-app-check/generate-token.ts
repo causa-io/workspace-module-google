@@ -2,14 +2,8 @@ import { CliCommand, CliOption } from '@causa/cli';
 import { WorkspaceContext, WorkspaceFunction } from '@causa/workspace';
 import { AllowMissing } from '@causa/workspace/validation';
 import { IsString } from 'class-validator';
-import { getAppCheck } from 'firebase-admin/app-check';
+import { fileURLToPath } from 'url';
 import { appCheckCommandDefinition } from '../../cli/index.js';
-import { FirebaseAppService } from '../../services/index.js';
-
-/**
- * The time to live of generated tokens, in seconds.
- */
-const TOKEN_TTL = 3600;
 
 /**
  * Generates a new AppCheck token.
@@ -41,22 +35,24 @@ export class GoogleAppCheckGenerateToken extends WorkspaceFunction<
   @AllowMissing()
   readonly app?: string;
 
+  protected async _callImported<T = any>(
+    context: WorkspaceContext,
+    options: {
+      file?: string;
+      args?: any[];
+    } = {},
+  ): Promise<T> {
+    const file =
+      options.file ??
+      fileURLToPath(import.meta.url.replace(/(\.[jt]s)$/, '.call$1'));
+    const args = options.args ?? [context, this];
+
+    const importedModule = await import(file);
+    return importedModule.default(...args);
+  }
+
   async _call(context: WorkspaceContext): Promise<string> {
-    const firebaseAppService = context.service(FirebaseAppService);
-    const app = await firebaseAppService.getAdminAppForAdminServiceAccount();
-    const appId = this.app ?? (await firebaseAppService.getAppId());
-
-    context.logger.info(
-      `🛂 Generating AppCheck token for Firebase application '${appId}'.`,
-    );
-
-    const appCheck = getAppCheck(app);
-
-    const { token } = await appCheck.createToken(appId, {
-      ttlMillis: TOKEN_TTL * 1000,
-    });
-
-    return token;
+    return await this._callImported(context);
   }
 
   _supports(): boolean {
