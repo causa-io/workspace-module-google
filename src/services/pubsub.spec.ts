@@ -18,6 +18,12 @@ describe('PubSubService', () => {
     service = context.service(PubSubService);
   });
 
+  describe('pubSub', () => {
+    it('should configure the Pub/Sub client with the project ID', () => {
+      expect(service.pubSub.projectId).toEqual('my-project');
+    });
+  });
+
   describe('getGcpServiceAccount', () => {
     it('should return the service account email', async () => {
       jest
