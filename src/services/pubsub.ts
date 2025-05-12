@@ -24,11 +24,11 @@ export class PubSubService {
   readonly projectId: string;
 
   constructor(context: WorkspaceContext) {
-    this.pubSub = new PubSub();
     this.resourceManagerService = context.service(ResourceManagerService);
     this.projectId = context
       .asConfiguration<GoogleConfiguration>()
       .getOrThrow('google.project');
+    this.pubSub = new PubSub({ projectId: this.projectId });
   }
 
   /**
