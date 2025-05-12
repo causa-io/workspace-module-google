@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+Fixes:
+
+- Set the project ID when initializing the Pub/Sub client.
+
 Chores:
 
 - Adapt to `quicktype` breaking changes.
