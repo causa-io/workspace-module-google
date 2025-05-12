@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+Chores:
+
+- Adapt to `quicktype` breaking changes.
+
 ## v0.9.2 (2025-03-17)
 
 Chores:
