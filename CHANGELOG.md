@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.9.3 (2025-05-12)
+
 Fixes:
 
 - Set the project ID when initializing the Pub/Sub client.
