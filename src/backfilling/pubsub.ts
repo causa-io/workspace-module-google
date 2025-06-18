@@ -12,8 +12,8 @@ import { PubSubService } from '../services/index.js';
  */
 const PUBLISH_OPTIONS: PublishOptions = {
   flowControlOptions: {
-    maxOutstandingBytes: 512 * 1024 * 1024,
-    maxOutstandingMessages: 100000,
+    maxOutstandingBytes: 10 * 1024 * 1024,
+    maxOutstandingMessages: 1000,
   },
   batching: {
     maxBytes: 10 * 1024 * 1024,

@@ -1,4 +1,5 @@
 import { jest } from '@jest/globals';
+import { grpc } from 'google-gax';
 import 'jest-extended';
 import { CloudRunService } from './cloud-run.js';
 
@@ -48,15 +49,18 @@ describe('CloudRunService', () => {
       });
       expect(
         service.servicesClient.setIamPolicy,
-      ).toHaveBeenCalledExactlyOnceWith({
-        resource: 'my-service',
-        policy: {
-          bindings: [
-            { role: 'roles/run.invoker', members: ['serviceAccount:alice'] },
-            { role: 'roles/run.invoker', members: ['serviceAccount:bob'] },
-          ],
+      ).toHaveBeenCalledExactlyOnceWith(
+        {
+          resource: 'my-service',
+          policy: {
+            bindings: [
+              { role: 'roles/run.invoker', members: ['serviceAccount:alice'] },
+              { role: 'roles/run.invoker', members: ['serviceAccount:bob'] },
+            ],
+          },
         },
-      });
+        { retry: { retryCodes: [grpc.status.INVALID_ARGUMENT] } },
+      );
     });
   });
 

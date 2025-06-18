@@ -2,6 +2,7 @@ import { WorkspaceContext } from '@causa/workspace';
 import { EventTopicTriggerCreationError } from '@causa/workspace-core';
 import { Subscription } from '@google-cloud/pubsub';
 import { randomBytes } from 'crypto';
+import { grpc } from 'google-gax';
 import type { Logger } from 'pino';
 import type { GoogleConfiguration } from '../configurations/index.js';
 import { CloudRunService } from './cloud-run.js';
@@ -216,6 +217,8 @@ export class CloudRunPubSubTriggerService {
           minimumBackoff: { seconds: 1, nanos: 0 },
           maximumBackoff: { seconds: 60, nanos: 0 },
         },
+        // This can occur due to eventual consistency when the service account is created.
+        gaxOpts: { retry: { retryCodes: [grpc.status.INVALID_ARGUMENT] } },
       },
     );
 
