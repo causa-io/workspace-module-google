@@ -1,4 +1,5 @@
 import { ServicesClient } from '@google-cloud/run';
+import { grpc } from 'google-gax';
 
 /**
  * The role used to allow a service account to call a Cloud Run service.
@@ -49,10 +50,11 @@ export class CloudRunService {
     const binding = { role: INVOKER_ROLE, members };
     policy.bindings = [...(policy.bindings ?? []), binding];
 
-    await this.servicesClient.setIamPolicy({
-      resource: serviceId,
-      policy,
-    });
+    await this.servicesClient.setIamPolicy(
+      { resource: serviceId, policy },
+      // This can occur due to eventual consistency when the service account is created.
+      { retry: { retryCodes: [grpc.status.INVALID_ARGUMENT] } },
+    );
   }
 
   /**

@@ -2,6 +2,7 @@ import { WorkspaceContext } from '@causa/workspace';
 import { EventTopicTriggerCreationError } from '@causa/workspace-core';
 import { createContext } from '@causa/workspace/testing';
 import { jest } from '@jest/globals';
+import { grpc } from 'google-gax';
 import 'jest-extended';
 import { CloudRunPubSubTriggerService } from './cloud-run-pubsub-trigger.js';
 import { CloudRunService } from './cloud-run.js';
@@ -84,6 +85,7 @@ describe('CloudRunPubSubTriggerService', () => {
               'backfill-pubsub-1234@my-project.iam.gserviceaccount.com',
           },
         },
+        gaxOpts: { retry: { retryCodes: [grpc.status.INVALID_ARGUMENT] } },
       }),
     );
     const actualPubSubSubscriptionId = (
