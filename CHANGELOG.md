@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.9.4 (2025-06-18)
+
 Fixes:
 
 - Handle errors due to eventual consistency of service account creation, when creating a Cloud Run Pub/Sub trigger.
