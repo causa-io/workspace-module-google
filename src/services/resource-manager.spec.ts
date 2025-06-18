@@ -17,7 +17,7 @@ describe('ResourceManagerService', () => {
 
       const actualPromise = service.getProjectNumber('my-project');
 
-      await expect(actualPromise).rejects.toThrowError(
+      await expect(actualPromise).rejects.toThrow(
         `Could not find GCP project 'my-project'.`,
       );
     });
@@ -33,10 +33,10 @@ describe('ResourceManagerService', () => {
       expect(actualProjectNumber).toEqual('123456789');
       expect(
         service.projectsClient.searchProjects,
-      ).toHaveBeenCalledExactlyOnceWith({
-        query: 'projectId:my-project',
-        pageSize: 1,
-      });
+      ).toHaveBeenCalledExactlyOnceWith(
+        { query: 'projectId:my-project', pageSize: 1 },
+        { autoPaginate: false },
+      );
     });
   });
 });

@@ -20,18 +20,17 @@ export class ResourceManagerService {
    * @returns The number of the GCP project.
    */
   async getProjectNumber(projectId: string): Promise<string> {
-    const [projects] = await this.projectsClient.searchProjects({
-      query: `projectId:${projectId}`,
-      pageSize: 1,
-    });
+    const [projects] = await this.projectsClient.searchProjects(
+      { query: `projectId:${projectId}`, pageSize: 1 },
+      { autoPaginate: false },
+    );
 
     if (projects.length < 1) {
       throw new Error(`Could not find GCP project '${projectId}'.`);
     }
     const [project] = projects;
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [projectsConst, projectNumber] = project.name?.split('/') ?? [];
+    const projectNumber = project.name?.split('/').at(1);
     if (!projectNumber) {
       throw new Error(
         `Failed to parse invalid project name '${project.name}'.`,
