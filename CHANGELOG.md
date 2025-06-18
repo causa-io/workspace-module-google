@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+Fixes:
+
+- Handle errors due to eventual consistency of service account creation, when creating a Cloud Run Pub/Sub trigger.
+- Fix gRPC warning about auto pagination when retrieving the GCP project number.
+
+Chores:
+
+- Update default Pub/Sub publisher configuration to avoid likely timeout errors.
+
 ## v0.9.3 (2025-05-12)
 
 Fixes:
