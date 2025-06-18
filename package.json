@@ -1,6 +1,6 @@
 {
   "name": "@causa/workspace-google",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "description": "The Causa workspace module providing many functionalities related to GCP and its services.",
   "repository": "github:causa-io/workspace-module-google",
   "license": "ISC",
