@@ -1,4 +1,8 @@
-import { TypeScriptWithDecoratorsTargetLanguage } from '@causa/workspace-typescript';
+import {
+  TypeScriptModelClassTargetLanguage,
+  TypeScriptWithDecoratorsTargetLanguage,
+} from '@causa/workspace-typescript';
+import { createContext } from '@causa/workspace/testing';
 import { jest } from '@jest/globals';
 import { mkdtemp, rm } from 'fs/promises';
 import { tmpdir } from 'os';
@@ -17,10 +21,16 @@ describe('GoogleSpannerRenderer', () => {
   beforeEach(async () => {
     tmpDir = await mkdtemp(join(tmpdir(), 'causa-test-'));
     outputFile = join(tmpDir, 'test-output.ts');
-    language = new TypeScriptWithDecoratorsTargetLanguage(outputFile, {
-      decoratorRenderers: [GoogleSpannerRenderer],
-      decoratorOptions: { googleSpannerSoftDeletionColumn: 'isDeleted' },
-    });
+    language = new TypeScriptModelClassTargetLanguage(
+      outputFile,
+      createContext().context,
+      {
+        decoratorRenderers: [GoogleSpannerRenderer],
+        generatorOptions: {
+          google: { spanner: { softDeletionColumn: 'isDeleted' } },
+        },
+      },
+    );
   });
 
   afterEach(async () => {

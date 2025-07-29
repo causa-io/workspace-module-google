@@ -2,7 +2,7 @@ import {
   type ClassContext,
   type ClassPropertyContext,
   type TypeScriptDecorator,
-  TypeScriptDecoratorsRenderer,
+  TypeScriptWithDecoratorsRenderer,
   getSingleType,
   typeScriptSourceForObject,
 } from '@causa/workspace-typescript';
@@ -24,13 +24,6 @@ const GOOGLE_SPANNER_NESTED_TYPE_ATTRIBUTE = 'tsGoogleSpannerNestedType';
  * `@SpannerColumn` decorator.
  */
 const GOOGLE_SPANNER_COLUMN_ATTRIBUTE = 'tsGoogleSpannerColumn';
-
-/**
- * The name of the `decoratorOptions` key that can be used to specify the name of the property that should be used as
- * the soft deletion column.
- */
-const GOOGLE_SPANNER_SOFT_DELETION_COLUMN_OPTION =
-  'googleSpannerSoftDeletionColumn';
 
 /**
  * The name of the Causa module for the TypeScript Google runtime.
@@ -56,7 +49,7 @@ const TYPE_INFO_COLUMN_ATTRIBUTE_NAMES = [
  * If an object schema is marked with the `tsGoogleSpannerTable` attribute, the `@SpannerTable` decorator is added to
  * the class, and `@SpannerColumn` decorators are added to all its properties.
  */
-export class GoogleSpannerRenderer extends TypeScriptDecoratorsRenderer {
+export class GoogleSpannerRenderer extends TypeScriptWithDecoratorsRenderer {
   decoratorsForClass(context: ClassContext): TypeScriptDecorator[] {
     const tableAttribute =
       context.objectAttributes[GOOGLE_SPANNER_TABLE_ATTRIBUTE];
@@ -101,9 +94,10 @@ export class GoogleSpannerRenderer extends TypeScriptDecoratorsRenderer {
     const columnAttributes =
       typeof rawColumnAttributes === 'object' ? rawColumnAttributes : {};
 
+    const { generatorOptions } = this.targetLanguage.options;
     const softDeletionColumn =
-      this.decoratorOptions[GOOGLE_SPANNER_SOFT_DELETION_COLUMN_OPTION];
-    if (softDeletionColumn && context.jsonName === softDeletionColumn) {
+      generatorOptions?.google?.spanner?.softDeletionColumn;
+    if (context.jsonName === softDeletionColumn) {
       columnAttributes.softDelete = true;
     }
 
