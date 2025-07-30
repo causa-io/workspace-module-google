@@ -1,3 +1,4 @@
+import type { WorkspaceContext } from '@causa/workspace';
 import {
   TypeScriptModelClassTargetLanguage,
   TypeScriptWithDecoratorsTargetLanguage,
@@ -14,20 +15,20 @@ describe('GoogleSpannerRenderer', () => {
   let tmpDir: string;
   let outputFile: string;
   let language: TypeScriptWithDecoratorsTargetLanguage;
+  let projectPath: string;
+  let context: WorkspaceContext;
 
   beforeEach(async () => {
     tmpDir = await mkdtemp(join(tmpdir(), 'causa-test-'));
     outputFile = join(tmpDir, 'test-output.ts');
-    language = new TypeScriptModelClassTargetLanguage(
-      outputFile,
-      createContext().context,
-      {
-        decoratorRenderers: [GoogleSpannerRenderer],
-        generatorOptions: {
-          google: { spanner: { softDeletionColumn: 'isDeleted' } },
-        },
+    projectPath = tmpDir;
+    ({ context } = createContext({ projectPath }));
+    language = new TypeScriptModelClassTargetLanguage(outputFile, context, {
+      decoratorRenderers: [GoogleSpannerRenderer],
+      generatorOptions: {
+        google: { spanner: { softDeletionColumn: 'isDeleted' } },
       },
-    );
+    });
   });
 
   afterEach(async () => {
@@ -116,5 +117,57 @@ describe('GoogleSpannerRenderer', () => {
       'properties.message',
       expect.stringContaining(`Invalid 'googleSpannerTable' attribute`),
     );
+  });
+
+  it('should not decorate when schema URI does not match any glob', async () => {
+    language = new TypeScriptModelClassTargetLanguage(outputFile, context, {
+      decoratorRenderers: [GoogleSpannerRenderer],
+      generatorOptions: {
+        google: { spanner: { globs: ['src/**/*.json', 'models/**/*.json'] } },
+      },
+    });
+    const schema = {
+      title: 'MyClass',
+      type: 'object',
+      causa: { googleSpannerTable: { primaryKey: ['id'] } },
+      properties: { id: { type: 'string' } },
+    };
+    const schemaUri = join(projectPath, 'other', 'folder', 'schema.json');
+
+    const actualCode = await generateFromSchema(
+      language,
+      schema,
+      outputFile,
+      schemaUri,
+    );
+
+    expect(actualCode).not.toInclude('@SpannerTable');
+    expect(actualCode).not.toInclude('@SpannerColumn');
+  });
+
+  it('should decorate when schema URI matches a glob', async () => {
+    language = new TypeScriptModelClassTargetLanguage(outputFile, context, {
+      decoratorRenderers: [GoogleSpannerRenderer],
+      generatorOptions: {
+        google: { spanner: { globs: ['src/**/*.json', 'models/**/*.json'] } },
+      },
+    });
+    const schema = {
+      title: 'MyClass',
+      type: 'object',
+      causa: { googleSpannerTable: { primaryKey: ['id'] } },
+      properties: { id: { type: 'string' } },
+    };
+    const schemaUri = join(projectPath, 'src', 'schemas', 'schema.json');
+
+    const actualCode = await generateFromSchema(
+      language,
+      schema,
+      outputFile,
+      schemaUri,
+    );
+
+    expect(actualCode).toInclude('@SpannerTable');
+    expect(actualCode).toInclude('@SpannerColumn');
   });
 });
