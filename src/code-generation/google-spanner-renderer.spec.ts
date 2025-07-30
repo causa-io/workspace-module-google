@@ -52,19 +52,26 @@ describe('GoogleSpannerRenderer', () => {
     const schema = {
       title: 'MyClass',
       type: 'object',
-      causa: { tsGoogleSpannerTable: { primaryKey: ['id'] } },
+      causa: { googleSpannerTable: { primaryKey: ['id'] } },
       properties: {
         id: { type: 'string' },
         normalInt: { type: 'integer' },
         overriddenInt: {
           type: 'integer',
-          causa: { tsGoogleSpannerColumn: { isBigInt: true } },
+          causa: { googleSpannerColumn: { tsOptions: { isBigInt: true } } },
+        },
+        renamed: {
+          type: 'string',
+          causa: { googleSpannerColumn: { name: 'otherName' } },
         },
         jsonColumn: { type: 'object' },
         isDeleted: { type: 'boolean' },
         customType: {
           type: 'object',
-          causa: { tsType: 'CustomType' },
+          causa: {
+            tsType: 'CustomType',
+            googleSpannerColumn: { tsOptions: { isJson: false } },
+          },
         },
       },
     };
@@ -87,14 +94,16 @@ describe('GoogleSpannerRenderer', () => {
     expect(actualCode).toMatch(
       /@SpannerColumn\(\{\s*softDelete:\s*true\s*\}\)\s*readonly isDeleted/,
     );
-    expect(actualCode).toMatch(/@SpannerColumn\(\)\s*readonly customType/);
+    expect(actualCode).toMatch(
+      /@SpannerColumn\(\{\s*isJson:\s*false\s*\}\)\s*readonly customType/,
+    );
   });
 
   it('should throw an error if the table attribute is invalid', async () => {
     const schema = {
       title: 'MyClass',
       type: 'object',
-      causa: { tsGoogleSpannerTable: 'invalid' },
+      causa: { googleSpannerTable: 'invalid' },
       properties: {
         normalInt: { type: 'integer' },
       },
@@ -105,7 +114,7 @@ describe('GoogleSpannerRenderer', () => {
     await expect(actualPromise).rejects.toThrow(QuickTypeError);
     await expect(actualPromise).rejects.toHaveProperty(
       'properties.message',
-      expect.stringContaining('Invalid tsGoogleSpannerTable attribute'),
+      expect.stringContaining(`Invalid 'googleSpannerTable' attribute`),
     );
   });
 });
