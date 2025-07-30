@@ -5,6 +5,11 @@
 Breaking changes:
 
 - Upgrade the minimum Node.js version to `20`.
+- Update the decorator renderer for Google Spanner, remove no longer existing features in the runtime, and rename schema attributes to non-TS-specific names.
+
+Features:
+
+- Only generate the Spanner decorators if the schema URI matches the configured globs.
 
 ## v0.9.4 (2025-06-18)
 
