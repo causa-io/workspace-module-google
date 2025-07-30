@@ -14,12 +14,6 @@ import { panic } from 'quicktype-core';
 const GOOGLE_SPANNER_TABLE_ATTRIBUTE = 'tsGoogleSpannerTable';
 
 /**
- * The name of the Causa attribute that can be present on a class to only generate `@SpannerColumn` decorators for its
- * properties, but not a `@SpannerTable` decorator for the class itself.
- */
-const GOOGLE_SPANNER_NESTED_TYPE_ATTRIBUTE = 'tsGoogleSpannerNestedType';
-
-/**
  * The name of the optional Causa attribute that can be present on an object property schema to specify options for the
  * `@SpannerColumn` decorator.
  */
@@ -35,8 +29,6 @@ const CAUSA_GOOGLE_MODULE = '@causa/runtime-google';
  * specifies the type of the column. In this case, the renderer should not infer any type information.
  */
 const TYPE_INFO_COLUMN_ATTRIBUTE_NAMES = [
-  'nestedType',
-  'nullifyNested',
   'isBigInt',
   'isInt',
   'isPreciseDate',
@@ -82,10 +74,7 @@ export class GoogleSpannerRenderer extends TypeScriptWithDecoratorsRenderer {
   }
 
   decoratorsForProperty(context: ClassPropertyContext): TypeScriptDecorator[] {
-    if (
-      !context.objectAttributes[GOOGLE_SPANNER_TABLE_ATTRIBUTE] &&
-      !context.objectAttributes[GOOGLE_SPANNER_NESTED_TYPE_ATTRIBUTE]
-    ) {
+    if (!context.objectAttributes[GOOGLE_SPANNER_TABLE_ATTRIBUTE]) {
       return [];
     }
 
@@ -120,10 +109,7 @@ export class GoogleSpannerRenderer extends TypeScriptWithDecoratorsRenderer {
       }
     }
 
-    const optionsSource = typeScriptSourceForObject(columnAttributes, {
-      encoder: (key, value) =>
-        key === 'nestedType' ? value : JSON.stringify(value),
-    });
+    const optionsSource = typeScriptSourceForObject(columnAttributes);
 
     const decorators: TypeScriptDecorator[] = [];
     this.addDecoratorToList(
