@@ -7,6 +7,7 @@ import {
   typeScriptSourceForObject,
 } from '@causa/workspace-typescript';
 import { panic } from 'quicktype-core';
+import { schemaMatchesGlobPatterns } from './utils.js';
 
 /**
  * The name of the Causa attribute that should be present for a class to be decorated with Google Spanner decorators.
@@ -45,7 +46,9 @@ export class GoogleSpannerRenderer extends TypeScriptWithDecoratorsRenderer {
   decoratorsForClass(context: ClassContext): TypeScriptDecorator[] {
     const tableAttribute =
       context.objectAttributes[GOOGLE_SPANNER_TABLE_ATTRIBUTE];
-    if (!tableAttribute) {
+    const globs =
+      this.targetLanguage.options.generatorOptions?.google?.spanner?.globs;
+    if (!tableAttribute || !schemaMatchesGlobPatterns(this, context, globs)) {
       return [];
     }
 
@@ -84,7 +87,12 @@ export class GoogleSpannerRenderer extends TypeScriptWithDecoratorsRenderer {
   }
 
   decoratorsForProperty(context: ClassPropertyContext): TypeScriptDecorator[] {
-    if (!context.objectAttributes[GOOGLE_SPANNER_TABLE_ATTRIBUTE]) {
+    const globs =
+      this.targetLanguage.options.generatorOptions?.google?.spanner?.globs;
+    if (
+      !context.objectAttributes[GOOGLE_SPANNER_TABLE_ATTRIBUTE] ||
+      !schemaMatchesGlobPatterns(this, context, globs)
+    ) {
       return [];
     }
 
