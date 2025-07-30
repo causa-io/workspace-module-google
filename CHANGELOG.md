@@ -10,6 +10,7 @@ Breaking changes:
 Features:
 
 - Only generate the Spanner decorators if the schema URI matches the configured globs.
+- Implement the decorator renderer for Firestore.
 
 ## v0.9.4 (2025-06-18)
 
