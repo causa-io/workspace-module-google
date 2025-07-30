@@ -4,6 +4,7 @@ import {
   TypeScriptWithDecoratorsRenderer,
 } from '@causa/workspace-typescript';
 import { Name, panic } from 'quicktype-core';
+import type { SourcelikeArray } from 'quicktype-core/dist/Source.js';
 import { schemaMatchesGlobPatterns } from './utils.js';
 
 /**
@@ -43,29 +44,69 @@ export class GoogleFirestoreRenderer extends TypeScriptWithDecoratorsRenderer {
       );
     }
 
-    const { name, pathProperty, hasSoftDelete } = collectionAttribute;
+    const { name, path, hasSoftDelete } = collectionAttribute;
     if (typeof name !== 'string') {
       panic(
         `Invalid '${GOOGLE_FIRESTORE_COLLECTION_ATTRIBUTE}' attribute on '${debugName}'. Expected an object with a 'name' string property.`,
       );
     }
-    if (typeof pathProperty !== 'string') {
+    if (!Array.isArray(path)) {
       panic(
-        `Invalid '${GOOGLE_FIRESTORE_COLLECTION_ATTRIBUTE}' attribute on '${debugName}'. Expected an object with a 'pathProperty' string property.`,
+        `Invalid '${GOOGLE_FIRESTORE_COLLECTION_ATTRIBUTE}' attribute on '${debugName}'. Expected an object with a 'path' array property.`,
       );
     }
 
-    let generatedPathPropertyName: Name | undefined;
+    const requiredProperties = path.flatMap((e) =>
+      typeof e === 'object' &&
+      e !== null &&
+      'property' in e &&
+      typeof e.property === 'string'
+        ? [e.property]
+        : [],
+    );
+
+    const propertyReferences = new Map<string, Name>();
     this.forEachClassProperty(context.classType, 'none', (name, jsonName) => {
-      if (jsonName === pathProperty) {
-        generatedPathPropertyName = name;
+      if (requiredProperties.includes(jsonName)) {
+        propertyReferences.set(jsonName, name);
       }
     });
-    if (!generatedPathPropertyName) {
-      panic(
-        `Property '${pathProperty}' referenced in 'pathProperty' not found in '${debugName}'.`,
-      );
+    for (const propertyName of requiredProperties) {
+      if (!propertyReferences.has(propertyName)) {
+        panic(
+          `Property '${propertyName}' referenced in 'path' not found in '${debugName}'.`,
+        );
+      }
     }
+
+    const elements: SourcelikeArray = path.map((element) => {
+      if (typeof element === 'string') {
+        return JSON.stringify(element);
+      }
+
+      if (
+        typeof element === 'object' &&
+        element !== null &&
+        'property' in element
+      ) {
+        const propertyName = element.property;
+        const generatedName = propertyReferences.get(propertyName);
+        if (!generatedName) {
+          panic(`Property '${propertyName}' not found in property references.`);
+        }
+
+        return ['doc.', generatedName];
+      }
+
+      panic(
+        `Invalid path element in '${GOOGLE_FIRESTORE_COLLECTION_ATTRIBUTE}' attribute on '${debugName}'.`,
+      );
+    });
+
+    const pathExpression: SourcelikeArray =
+      path.length === 1
+        ? elements
+        : ['[', ...elements.flatMap((e) => [e, ', ']), "].join('/')"];
 
     const decorators: TypeScriptDecorator[] = [];
 
@@ -77,8 +118,8 @@ export class GoogleFirestoreRenderer extends TypeScriptWithDecoratorsRenderer {
       [
         '@FirestoreCollection({ name: ',
         JSON.stringify(name),
-        ', path: (doc) => doc.',
-        generatedPathPropertyName,
+        ', path: (doc) => ',
+        ...pathExpression,
         '})',
       ],
     );

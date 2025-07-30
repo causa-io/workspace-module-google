@@ -53,7 +53,7 @@ describe('GoogleFirestoreRenderer', () => {
       causa: {
         googleFirestoreCollection: {
           name: 'my-collection',
-          pathProperty: 'id',
+          path: [{ property: 'id' }],
         },
       },
       properties: {
@@ -77,7 +77,7 @@ describe('GoogleFirestoreRenderer', () => {
       causa: {
         googleFirestoreCollection: {
           name: 'my-collection',
-          pathProperty: 'id',
+          path: [{ property: 'id' }],
           hasSoftDelete: true,
         },
       },
@@ -98,7 +98,7 @@ describe('GoogleFirestoreRenderer', () => {
     const schema = {
       title: 'MyClass',
       type: 'object',
-      causa: { googleFirestoreCollection: { pathProperty: 'id' } },
+      causa: { googleFirestoreCollection: { path: [{ property: 'id' }] } },
       properties: { id: { type: 'string' } },
     };
 
@@ -113,7 +113,7 @@ describe('GoogleFirestoreRenderer', () => {
     );
   });
 
-  it('should throw an error if the collection attribute is missing pathProperty', async () => {
+  it('should throw an error if the collection attribute is missing path', async () => {
     const schema = {
       title: 'MyClass',
       type: 'object',
@@ -127,19 +127,19 @@ describe('GoogleFirestoreRenderer', () => {
     await expect(actualPromise).rejects.toHaveProperty(
       'properties.message',
       expect.stringContaining(
-        `Expected an object with a 'pathProperty' string property`,
+        `Expected an object with a 'path' array property`,
       ),
     );
   });
 
-  it('should throw an error if pathProperty references non-existent property', async () => {
+  it('should throw an error if path references non-existent property', async () => {
     const schema = {
       title: 'MyClass',
       type: 'object',
       causa: {
         googleFirestoreCollection: {
           name: 'my-collection',
-          pathProperty: 'nonExistent',
+          path: [{ property: 'nonExistent' }],
         },
       },
       properties: { id: { type: 'string' } },
@@ -151,7 +151,7 @@ describe('GoogleFirestoreRenderer', () => {
     await expect(actualPromise).rejects.toHaveProperty(
       'properties.message',
       expect.stringContaining(
-        `Property 'nonExistent' referenced in 'pathProperty' not found`,
+        `Property 'nonExistent' referenced in 'path' not found`,
       ),
     );
   });
@@ -169,7 +169,7 @@ describe('GoogleFirestoreRenderer', () => {
       causa: {
         googleFirestoreCollection: {
           name: 'my-collection',
-          pathProperty: 'id',
+          path: [{ property: 'id' }],
         },
       },
       properties: { id: { type: 'string' } },
@@ -197,7 +197,7 @@ describe('GoogleFirestoreRenderer', () => {
       causa: {
         googleFirestoreCollection: {
           name: 'my-collection',
-          pathProperty: 'id',
+          path: [{ property: 'id' }],
         },
       },
       properties: { id: { type: 'string' } },
@@ -212,5 +212,36 @@ describe('GoogleFirestoreRenderer', () => {
     );
 
     expect(actualCode).toInclude('@FirestoreCollection');
+  });
+
+  it('should handle complex paths with strings and properties', async () => {
+    const schema = {
+      title: 'MyClass',
+      type: 'object',
+      causa: {
+        googleFirestoreCollection: {
+          name: 'my-collection',
+          path: [
+            'users',
+            { property: 'userId' },
+            'documents',
+            { property: 'documentId' },
+          ],
+        },
+      },
+      properties: {
+        userId: { type: 'string' },
+        documentId: { type: 'string' },
+        title: { type: 'string' },
+      },
+    };
+
+    const actualCode = await generateFromSchema(language, schema, outputFile);
+
+    expect(actualCode).toMatch(/@FirestoreCollection\(/);
+    expect(actualCode).toMatch(/name:\s*"my-collection"/);
+    expect(actualCode).toMatch(
+      /path:\s*\(doc\)\s*=>\s*\["users",\s*doc\.userId,\s*"documents",\s*doc\.documentId\]\.join\("\/"\)/,
+    );
   });
 });
