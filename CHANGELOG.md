@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.10.0 (2025-08-05)
+
 Breaking changes:
 
 - Upgrade the minimum Node.js version to `20`.
