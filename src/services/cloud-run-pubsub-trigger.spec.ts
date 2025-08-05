@@ -91,7 +91,7 @@ describe('CloudRunPubSubTriggerService', () => {
     const actualPubSubSubscriptionId = (
       pubSubService.pubSub.createSubscription as jest.Mock
     ).mock.calls[0][1];
-    expect(actualResources).toIncludeAllMembers([
+    expect(actualResources).toIncludeSameMembers([
       'projects/my-project/serviceAccounts/backfill-pubsub-1234',
       'projects/my-project/locations/my-region/services/my-service/invokerBindings/backfill-pubsub-1234@my-project.iam.gserviceaccount.com',
       actualPubSubSubscriptionId,
@@ -126,7 +126,7 @@ describe('CloudRunPubSubTriggerService', () => {
     const actualPubSubSubscriptionId1 = (
       pubSubService.pubSub.createSubscription as jest.Mock
     ).mock.calls[0][1];
-    expect(actualResources1).toIncludeAllMembers([
+    expect(actualResources1).toIncludeSameMembers([
       'projects/my-project/serviceAccounts/backfill-pubsub-1234',
       'projects/my-project/locations/my-region/services/my-service/invokerBindings/backfill-pubsub-1234@my-project.iam.gserviceaccount.com',
       actualPubSubSubscriptionId1,
@@ -134,11 +134,13 @@ describe('CloudRunPubSubTriggerService', () => {
     const actualPubSubSubscriptionId2 = (
       pubSubService.pubSub.createSubscription as jest.Mock
     ).mock.calls[1][1];
-    expect(actualResources2).toIncludeAllMembers([actualPubSubSubscriptionId2]);
+    expect(actualResources2).toIncludeSameMembers([
+      actualPubSubSubscriptionId2,
+    ]);
     const actualPubSubSubscriptionId3 = (
       pubSubService.pubSub.createSubscription as jest.Mock
     ).mock.calls[2][1];
-    expect(actualResources3).toIncludeAllMembers([
+    expect(actualResources3).toIncludeSameMembers([
       'projects/my-project/locations/my-region/services/my-service2/invokerBindings/backfill-pubsub-1234@my-project.iam.gserviceaccount.com',
       actualPubSubSubscriptionId3,
     ]);

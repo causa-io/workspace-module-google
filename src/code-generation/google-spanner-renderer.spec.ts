@@ -1,5 +1,9 @@
-import { TypeScriptWithDecoratorsTargetLanguage } from '@causa/workspace-typescript';
-import { jest } from '@jest/globals';
+import type { WorkspaceContext } from '@causa/workspace';
+import {
+  TypeScriptModelClassTargetLanguage,
+  TypeScriptWithDecoratorsTargetLanguage,
+} from '@causa/workspace-typescript';
+import { createContext } from '@causa/workspace/testing';
 import { mkdtemp, rm } from 'fs/promises';
 import { tmpdir } from 'os';
 import { join } from 'path';
@@ -8,18 +12,22 @@ import { GoogleSpannerRenderer } from './google-spanner-renderer.js';
 import { generateFromSchema } from './utils.test.js';
 
 describe('GoogleSpannerRenderer', () => {
-  jest.setTimeout(30000);
-
   let tmpDir: string;
   let outputFile: string;
   let language: TypeScriptWithDecoratorsTargetLanguage;
+  let projectPath: string;
+  let context: WorkspaceContext;
 
   beforeEach(async () => {
     tmpDir = await mkdtemp(join(tmpdir(), 'causa-test-'));
     outputFile = join(tmpDir, 'test-output.ts');
-    language = new TypeScriptWithDecoratorsTargetLanguage(outputFile, {
+    projectPath = tmpDir;
+    ({ context } = createContext({ projectPath }));
+    language = new TypeScriptModelClassTargetLanguage(outputFile, context, {
       decoratorRenderers: [GoogleSpannerRenderer],
-      decoratorOptions: { googleSpannerSoftDeletionColumn: 'isDeleted' },
+      generatorOptions: {
+        google: { spanner: { softDeletionColumn: 'isDeleted' } },
+      },
     });
   });
 
@@ -45,23 +53,26 @@ describe('GoogleSpannerRenderer', () => {
     const schema = {
       title: 'MyClass',
       type: 'object',
-      causa: { tsGoogleSpannerTable: { primaryKey: ['id'] } },
+      causa: { googleSpannerTable: { primaryKey: ['id'] } },
       properties: {
         id: { type: 'string' },
         normalInt: { type: 'integer' },
         overriddenInt: {
           type: 'integer',
-          causa: { tsGoogleSpannerColumn: { isBigInt: true } },
+          causa: { googleSpannerColumn: { tsOptions: { isBigInt: true } } },
+        },
+        renamed: {
+          type: 'string',
+          causa: { googleSpannerColumn: { name: 'otherName' } },
         },
         jsonColumn: { type: 'object' },
-        overriddenJsonColumn: {
-          type: 'object',
-          causa: { tsGoogleSpannerColumn: { nestedType: 'ChildClass' } },
-        },
         isDeleted: { type: 'boolean' },
         customType: {
           type: 'object',
-          causa: { tsType: 'CustomType' },
+          causa: {
+            tsType: 'CustomType',
+            googleSpannerColumn: { tsOptions: { isJson: false } },
+          },
         },
       },
     };
@@ -82,29 +93,10 @@ describe('GoogleSpannerRenderer', () => {
       /@SpannerColumn\(\{\s*isJson:\s*true\s*\}\)\s*readonly jsonColumn/,
     );
     expect(actualCode).toMatch(
-      /@SpannerColumn\(\{\s*nestedType:\s*ChildClass\s*\}\)\s*readonly overriddenJsonColumn/,
-    );
-    expect(actualCode).toMatch(
       /@SpannerColumn\(\{\s*softDelete:\s*true\s*\}\)\s*readonly isDeleted/,
     );
-    expect(actualCode).toMatch(/@SpannerColumn\(\)\s*readonly customType/);
-  });
-
-  it('should only decorate columns when setting tsGoogleSpannerNestedType', async () => {
-    const schema = {
-      title: 'MyClass',
-      type: 'object',
-      causa: { tsGoogleSpannerNestedType: true },
-      properties: {
-        normalInt: { type: 'integer' },
-      },
-    };
-
-    const actualCode = await generateFromSchema(language, schema, outputFile);
-
-    expect(actualCode).not.toMatch(/@SpannerTable/);
     expect(actualCode).toMatch(
-      /@SpannerColumn\(\{\s*isInt:\s*true\s*\}\)\s*readonly normalInt/,
+      /@SpannerColumn\(\{\s*isJson:\s*false\s*\}\)\s*readonly customType/,
     );
   });
 
@@ -112,7 +104,7 @@ describe('GoogleSpannerRenderer', () => {
     const schema = {
       title: 'MyClass',
       type: 'object',
-      causa: { tsGoogleSpannerTable: 'invalid' },
+      causa: { googleSpannerTable: 'invalid' },
       properties: {
         normalInt: { type: 'integer' },
       },
@@ -123,7 +115,59 @@ describe('GoogleSpannerRenderer', () => {
     await expect(actualPromise).rejects.toThrow(QuickTypeError);
     await expect(actualPromise).rejects.toHaveProperty(
       'properties.message',
-      expect.stringContaining('Invalid tsGoogleSpannerTable attribute'),
+      expect.stringContaining(`Invalid 'googleSpannerTable' attribute`),
     );
+  });
+
+  it('should not decorate when schema URI does not match any glob', async () => {
+    language = new TypeScriptModelClassTargetLanguage(outputFile, context, {
+      decoratorRenderers: [GoogleSpannerRenderer],
+      generatorOptions: {
+        google: { spanner: { globs: ['src/**/*.json', 'models/**/*.json'] } },
+      },
+    });
+    const schema = {
+      title: 'MyClass',
+      type: 'object',
+      causa: { googleSpannerTable: { primaryKey: ['id'] } },
+      properties: { id: { type: 'string' } },
+    };
+    const schemaUri = join(projectPath, 'other', 'folder', 'schema.json');
+
+    const actualCode = await generateFromSchema(
+      language,
+      schema,
+      outputFile,
+      schemaUri,
+    );
+
+    expect(actualCode).not.toInclude('@SpannerTable');
+    expect(actualCode).not.toInclude('@SpannerColumn');
+  });
+
+  it('should decorate when schema URI matches a glob', async () => {
+    language = new TypeScriptModelClassTargetLanguage(outputFile, context, {
+      decoratorRenderers: [GoogleSpannerRenderer],
+      generatorOptions: {
+        google: { spanner: { globs: ['src/**/*.json', 'models/**/*.json'] } },
+      },
+    });
+    const schema = {
+      title: 'MyClass',
+      type: 'object',
+      causa: { googleSpannerTable: { primaryKey: ['id'] } },
+      properties: { id: { type: 'string' } },
+    };
+    const schemaUri = join(projectPath, 'src', 'schemas', 'schema.json');
+
+    const actualCode = await generateFromSchema(
+      language,
+      schema,
+      outputFile,
+      schemaUri,
+    );
+
+    expect(actualCode).toInclude('@SpannerTable');
+    expect(actualCode).toInclude('@SpannerColumn');
   });
 });
