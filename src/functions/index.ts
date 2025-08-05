@@ -43,7 +43,10 @@ import {
   SecretFetchForGoogleAccessToken,
   SecretFetchForGoogleSecretManager,
 } from './secret/index.js';
-import { TypeScriptGetDecoratorRendererForGoogleSpanner } from './typescript/index.js';
+import {
+  TypeScriptGetDecoratorRendererForGoogleFirestore,
+  TypeScriptGetDecoratorRendererForGoogleSpanner,
+} from './typescript/index.js';
 
 export function registerFunctions(context: ModuleRegistrationContext) {
   context.registerFunctionImplementations(
@@ -79,6 +82,7 @@ export function registerFunctions(context: ModuleRegistrationContext) {
     ProjectPushArtefactForCloudFunctions,
     SecretFetchForGoogleAccessToken,
     SecretFetchForGoogleSecretManager,
+    TypeScriptGetDecoratorRendererForGoogleFirestore,
     TypeScriptGetDecoratorRendererForGoogleSpanner,
   );
 }

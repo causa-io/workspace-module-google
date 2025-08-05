@@ -85,10 +85,10 @@ secrets:
 
 ### Code generation
 
-This module provides a TypeScript decorator renderer for Spanner, which can be used to add `@SpannerTable` and `@SpannerColumn` decorators to classes generated from events. Below is an example of how to enable it for a JSONSchema object:
+This module provides TypeScript decorator renderers for Spanner and Firestore, which can be used to add `@SpannerTable`, `@SpannerColumn`, `@FirestoreCollection`, and `@SoftDeletedFirestoreCollection` decorators to classes generated from events. Below is an example of how to enable it for a JSONSchema object:
 
 ```yaml
-title: MyClass
+title: MySpannerTable
 type: object
 additionalProperties: false
 causa:
@@ -106,6 +106,27 @@ properties:
     #   googleSpannerColumn:
     #     isJson: false
   myProperty:
+    type: string
+
+---
+title: MyFirestoreDocument
+type: object
+additionalProperties: false
+causa:
+  # This must be set for the decorators to be added to the class.
+  googleFirestoreCollection:
+    # Mandatory, the name of the Firestore collection.
+    name: myCollection
+    # Mandatory, determines how to create the path for a document.
+    path: [property: id]
+    # This could also contain plain strings, e.g. for `{id}/subCollection/{otherProp}`:
+    # path: [property: id, subCollection, property: otherProp]
+    # Optional, adds the `@SoftDeletedFirestoreCollection` decorator.
+    hasSoftDelete: true
+properties:
+  id:
+    type: string
+  otherProp:
     type: string
 ```
 
@@ -125,6 +146,11 @@ model:
             - ../entities/*.yaml
           # The name of the property / column to which the `softDelete` option should be added.
           softDeletionColumn: deletedAt
+
+        firestore:
+          # Same as Spanner globs.
+          globs:
+            - ../firestore/*.yaml
 ```
 
 ## 🔨 Custom `google` commands
