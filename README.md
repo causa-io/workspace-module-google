@@ -85,7 +85,7 @@ secrets:
 
 ### Code generation
 
-This module implements the `google.spanner` TypeScript decorator renderer, which can be used to add `@SpannerTable` and `@SpannerColumn` decorators to classes generated from events. Below is an example of how to enable it for a JSONSchema object:
+This module provides a TypeScript decorator renderer for Spanner, which can be used to add `@SpannerTable` and `@SpannerColumn` decorators to classes generated from events. Below is an example of how to enable it for a JSONSchema object:
 
 ```yaml
 title: MyClass
@@ -94,19 +94,37 @@ additionalProperties: false
 causa:
   # This must be set for the decorators to be added to both the class and its properties.
   # The content of the object will be passed as the argument to the `@SpannerTable` decorator.
-  tsGoogleSpannerTable:
+  googleSpannerTable:
     primaryKey: [id]
 properties:
   id:
     type: string
     format: uuid
-    # In most cases, the property-level `tsGoogleSpannerColumn` attribute does not need to be set. The decorator configuration will be automatically inferred.
-    # If needed, the content of `tsGoogleSpannerColumn` will be passed as the argument to the `@SpannerColumn` decorator.
+    # In most cases, the property-level `googleSpannerColumn` attribute does not need to be set. The decorator configuration will be automatically inferred.
+    # If needed, the content of `googleSpannerColumn` will be passed as the argument to the `@SpannerColumn` decorator.
     # causa:
-    #   tsGoogleSpannerColumn:
+    #   googleSpannerColumn:
     #     isJson: false
   myProperty:
     type: string
+```
+
+To restrict the decorator to some schema files, you can configure the parent `typescriptModelClass` generator:
+
+```yaml
+model:
+  codeGenerators:
+    - generator: typescriptModelClass
+
+      # ...Rest of the configuration...
+
+      google:
+        spanner:
+          # Decorators will only be added to the schemas in those files, relative to the project directory.
+          globs:
+            - ../entities/*.yaml
+          # The name of the property / column to which the `softDelete` option should be added.
+          softDeletionColumn: deletedAt
 ```
 
 ## 🔨 Custom `google` commands
