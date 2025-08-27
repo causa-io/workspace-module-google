@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.10.1 (2025-08-27)
+
 Chores:
 
 - Upgrade dependencies to fix Spanner client error message.
