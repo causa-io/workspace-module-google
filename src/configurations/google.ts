@@ -276,9 +276,19 @@ export type GoogleConfiguration = {
      */
     readonly cloudFunctions?: {
       /**
-       * The Cloud Storage URI where Cloud Functions archives should be uploaded.
+       * The Cloud Storage configuration where Cloud Functions archives should be uploaded.
        */
-      readonly archivesStorageLocation?: string;
+      readonly artefactStorage?: {
+        /**
+         * The name of the Cloud Storage bucket.
+         */
+        readonly bucket?: string;
+
+        /**
+         * An optional prefix within the Cloud Storage bucket.
+         */
+        readonly prefix?: string;
+      };
     };
 
     /**

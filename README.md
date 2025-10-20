@@ -41,7 +41,7 @@ This makes the `google.firebase` configuration safe to commit in your repository
 The following Causa `project.type`s are supported:
 
 - `serviceContainer`, with `google.cloudRun` as the `serviceContainer.platform`. This will ensure the built Docker images are pushed to the repository set in `google.cloudRun.dockerRepository`.
-- `serverlessFunctions`, with `google.cloudFunctions` as the `serverlessFunctions.platform`. This will push functions archives to the Cloud Storage bucket set in `google.cloudFunctions.archivesStorageLocation`.
+- `serverlessFunctions`, with `google.cloudFunctions` as the `serverlessFunctions.platform`. This will push functions archives to the Cloud Storage bucket set in `google.cloudFunctions.artefactStorage`.
 
 ### Emulators
 
