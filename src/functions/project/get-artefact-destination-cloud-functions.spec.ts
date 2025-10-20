@@ -18,7 +18,9 @@ describe('ProjectGetArtefactDestinationForCloudFunctions', () => {
         },
         serverlessFunctions: { platform: 'google.cloudFunctions' },
         google: {
-          cloudFunctions: { archivesStorageLocation: 'gs://my-bucket/prefix' },
+          cloudFunctions: {
+            artefactStorage: { bucket: 'my-bucket', prefix: 'prefix' },
+          },
         },
       },
       functions: [ProjectGetArtefactDestinationForCloudFunctions],
@@ -71,5 +73,31 @@ describe('ProjectGetArtefactDestinationForCloudFunctions', () => {
     expect(actualResult).toEqual(
       'gs://my-bucket/prefix/my-functions/v1.0.0.zip',
     );
+  });
+
+  it('should return the Cloud Storage URI without prefix', async () => {
+    ({ context } = createContext({
+      configuration: {
+        workspace: { name: '🏷️' },
+        project: {
+          name: 'my-functions',
+          type: 'serverlessFunctions',
+          language: 'typescript',
+        },
+        serverlessFunctions: { platform: 'google.cloudFunctions' },
+        google: {
+          cloudFunctions: {
+            artefactStorage: { bucket: 'my-bucket' },
+          },
+        },
+      },
+      functions: [ProjectGetArtefactDestinationForCloudFunctions],
+    }));
+
+    const actualResult = await context.call(ProjectGetArtefactDestination, {
+      tag: 'v1.0.0',
+    });
+
+    expect(actualResult).toEqual('gs://my-bucket/my-functions/v1.0.0.zip');
   });
 });
