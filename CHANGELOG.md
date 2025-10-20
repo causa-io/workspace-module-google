@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.11.0 (2025-10-20)
+
 Breaking changes:
 
 - Change Cloud Functions artefact storage configuration to `google.cloudFunctions.artefactStorage`.
