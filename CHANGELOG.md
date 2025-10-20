@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+Breaking changes:
+
+- Change Cloud Functions artefact storage configuration to `google.cloudFunctions.artefactStorage`.
+
+Chores:
+
+- Set `autoPaginate` to false to silence `ApiKeysClient` warning.
+
 ## v0.10.1 (2025-08-27)
 
 Chores:
