@@ -8,8 +8,8 @@ import {
 } from 'firebase-admin/app';
 import { type FirebaseApp, initializeApp } from 'firebase/app';
 import { firebase_v1beta1 } from 'googleapis';
+import { randomUUID } from 'node:crypto';
 import type { Logger } from 'pino';
-import * as uuid from 'uuid';
 import type { GoogleConfiguration } from '../configurations/index.js';
 import {
   FirebaseAdminServiceAccountNotFoundError,
@@ -174,7 +174,7 @@ export class FirebaseAppService {
       return this.app;
     }
 
-    const name = uuid.v4();
+    const name = randomUUID();
     this.app = initializeApp(
       { projectId: this.projectId, apiKey, authDomain: this.authDomain },
       name,
@@ -276,7 +276,7 @@ export class FirebaseAppService {
       return this.adminAppForAdminServiceAccount;
     }
 
-    const name = uuid.v4();
+    const name = randomUUID();
     this.adminAppForAdminServiceAccount = initializeAdminApp(
       {
         projectId: this.projectId,
