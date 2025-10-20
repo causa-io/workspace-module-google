@@ -113,7 +113,10 @@ export class FirebaseAppService {
 
     const parent = `projects/${this.projectId}/locations/global`;
     let name: string | undefined;
-    for await (const key of keysClient.listKeysAsync({ parent })) {
+    for await (const key of keysClient.listKeysAsync(
+      { parent },
+      { autoPaginate: false },
+    )) {
       if (key.displayName?.includes(FIREBASE_AUTOMATIC_KEY_INFO) && key.name) {
         name = key.name;
         break;
