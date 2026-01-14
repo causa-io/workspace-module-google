@@ -25,12 +25,10 @@ describe('GoogleIdentityPlatformGenerateToken', () => {
   let GoogleIdentityPlatformGenerateToken: typeof GoogleIdentityPlatformGenerateTokenType;
 
   beforeEach(async () => {
-    ({ GoogleIdentityPlatformGenerateToken } = await import(
-      './generate-token.js'
-    ));
-    const { GoogleIdentityPlatformGenerateCustomToken } = await import(
-      './generate-custom-token.js'
-    );
+    ({ GoogleIdentityPlatformGenerateToken } =
+      await import('./generate-token.js'));
+    const { GoogleIdentityPlatformGenerateCustomToken } =
+      await import('./generate-custom-token.js');
 
     ({ context, functionRegistry } = createContext({
       configuration: {

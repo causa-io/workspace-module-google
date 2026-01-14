@@ -22,9 +22,8 @@ describe('GoogleIdentityPlatformGenerateCustomToken', () => {
   let firebaseAppService: FirebaseAppService;
 
   beforeEach(async () => {
-    ({ GoogleIdentityPlatformGenerateCustomToken } = await import(
-      './generate-custom-token.js'
-    ));
+    ({ GoogleIdentityPlatformGenerateCustomToken } =
+      await import('./generate-custom-token.js'));
     ({ context } = createContext({
       configuration: {
         workspace: { name: 'test' },
