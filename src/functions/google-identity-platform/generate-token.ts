@@ -2,7 +2,7 @@ import { CliArgument, CliCommand, CliOption } from '@causa/cli';
 import { WorkspaceContext, WorkspaceFunction } from '@causa/workspace';
 import { AllowMissing } from '@causa/workspace/validation';
 import { Transform } from 'class-transformer';
-import { IsObject, IsString } from 'class-validator';
+import { IsBoolean, IsObject, IsString } from 'class-validator';
 import { getAuth, signInWithCustomToken } from 'firebase/auth';
 import { identityPlatformCommandDefinition } from '../../cli/index.js';
 import { FirebaseAppService } from '../../services/index.js';
@@ -51,6 +51,17 @@ export class GoogleIdentityPlatformGenerateToken extends WorkspaceFunction<
   )
   readonly claims?: Record<string, any>;
 
+  /**
+   * Whether to return the refresh token instead of the ID token.
+   */
+  @CliOption({
+    flags: '-r, --refresh-token',
+    description: 'Return the refresh token instead of the ID token.',
+  })
+  @IsBoolean()
+  @AllowMissing()
+  readonly refreshToken?: boolean;
+
   async _call(context: WorkspaceContext): Promise<string> {
     context.logger.info(
       `🛂 Signing in user '${this.user}' with a custom token.`,
@@ -63,7 +74,10 @@ export class GoogleIdentityPlatformGenerateToken extends WorkspaceFunction<
     const app = await context.service(FirebaseAppService).getApp();
     const auth = getAuth(app);
     const credentials = await signInWithCustomToken(auth, customToken);
-    return await credentials.user.getIdToken();
+
+    return this.refreshToken
+      ? credentials.user.refreshToken
+      : await credentials.user.getIdToken();
   }
 
   _supports(): boolean {
