@@ -130,7 +130,7 @@ export class GoogleSpannerRenderer extends TypeScriptWithDecoratorsRenderer {
       (name) => name in columnAttributes,
     );
     if (!schemaOverridesTypeInfo && singleTypeInfo) {
-      switch (singleTypeInfo.type.kind) {
+      switch (singleTypeInfo.type?.kind) {
         case 'class':
         case 'object':
         case 'map':

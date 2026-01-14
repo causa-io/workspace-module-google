@@ -78,9 +78,7 @@ export class GooglePubSubWriteTopics
       return { configuration: {} };
     }
 
-    context.logger.info(
-      '️📫 Listing and writing Pub/Sub topic configurations.',
-    );
+    context.logger.info('️📫 Listing and writing Pub/Sub topic configurations.');
 
     const topics = await context.call(EventTopicList, {});
 

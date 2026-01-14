@@ -10,7 +10,10 @@ const firebaseAppMock = {};
 const authMock = {};
 const signInWithCustomTokenMock = jest.fn(() =>
   Promise.resolve({
-    user: { getIdToken: jest.fn(() => Promise.resolve('🗝️')) },
+    user: {
+      getIdToken: jest.fn(() => Promise.resolve('🗝️')),
+      refreshToken: '🔄',
+    },
   }),
 );
 
@@ -25,12 +28,10 @@ describe('GoogleIdentityPlatformGenerateToken', () => {
   let GoogleIdentityPlatformGenerateToken: typeof GoogleIdentityPlatformGenerateTokenType;
 
   beforeEach(async () => {
-    ({ GoogleIdentityPlatformGenerateToken } = await import(
-      './generate-token.js'
-    ));
-    const { GoogleIdentityPlatformGenerateCustomToken } = await import(
-      './generate-custom-token.js'
-    );
+    ({ GoogleIdentityPlatformGenerateToken } =
+      await import('./generate-token.js'));
+    const { GoogleIdentityPlatformGenerateCustomToken } =
+      await import('./generate-custom-token.js');
 
     ({ context, functionRegistry } = createContext({
       configuration: {
@@ -89,6 +90,35 @@ describe('GoogleIdentityPlatformGenerateToken', () => {
     expect(signInWithCustomTokenMock).toHaveBeenCalledExactlyOnceWith(
       authMock,
       '🔑 {"user":"bob","admin":true}',
+    );
+  });
+
+  it('should return the refresh token when the option is set', async () => {
+    const actualToken = await context.call(
+      GoogleIdentityPlatformGenerateToken,
+      { user: 'bob', refreshToken: true },
+    );
+
+    expect(actualToken).toEqual('🔄');
+    expect(signInWithCustomTokenMock).toHaveBeenCalledExactlyOnceWith(
+      authMock,
+      '🔑 {"user":"bob"}',
+    );
+  });
+
+  it('should expose the --refresh-token CLI option', async () => {
+    jest.spyOn(console, 'log');
+
+    const actualExitCode = await runCli(
+      ['google', 'identityPlatform', 'genToken', 'bob', '--refresh-token'],
+      context,
+    );
+
+    expect(console.log).toHaveBeenCalledWith('🔄');
+    expect(actualExitCode).toEqual(0);
+    expect(signInWithCustomTokenMock).toHaveBeenCalledExactlyOnceWith(
+      authMock,
+      '🔑 {"user":"bob"}',
     );
   });
 });
