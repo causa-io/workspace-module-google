@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+Features:
+
+- Add an option to `GoogleIdentityPlatformGenerateToken` to return the refresh token instead of the ID token. This is also available in the CLI command via the `--refresh-token` flag.
+
 ## v0.11.0 (2025-10-20)
 
 Breaking changes:
