@@ -3,7 +3,7 @@ import {
   EventTopicBrokerDeleteTriggerResource,
   type EventsConfiguration,
 } from '@causa/workspace-core';
-import { IamService } from '../../services/iam.js';
+import { callDeferred } from '../utils.js';
 
 /**
  * Implements {@link EventTopicBrokerDeleteTriggerResource} for GCP service accounts.
@@ -12,21 +12,7 @@ import { IamService } from '../../services/iam.js';
  */
 export class EventTopicBrokerDeleteTriggerResourceForServiceAccount extends EventTopicBrokerDeleteTriggerResource {
   async _call(context: WorkspaceContext): Promise<void> {
-    context.logger.info(
-      `🛂 Deleting Pub/Sub backfilling service account '${this.id}'.`,
-    );
-
-    try {
-      await context.service(IamService).deleteServiceAccount(this.id);
-    } catch (error: any) {
-      if (error.code === 404) {
-        context.logger.warn(
-          `⚠️ Pub/Sub backfilling service account '${this.id}' does not exist. It might have already been deleted.`,
-        );
-      } else {
-        throw error;
-      }
-    }
+    return await callDeferred(this, context, import.meta.url);
   }
 
   _supports(context: WorkspaceContext): boolean {
