@@ -8,7 +8,7 @@ import {
   formatPubSubTopicAsEnvironmentVariable,
   getPubSubContainerName,
 } from '../../emulators/index.js';
-import { GcloudEmulatorService } from '../../services/index.js';
+import { GcloudEmulatorService } from '../../services/gcloud-emulator.js';
 import type { EmulatorStartForPubSub } from './start-pubsub.js';
 
 export default async function call(

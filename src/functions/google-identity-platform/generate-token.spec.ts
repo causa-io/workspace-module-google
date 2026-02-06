@@ -48,7 +48,7 @@ describe('GoogleIdentityPlatformGenerateToken', () => {
         `🔑 ${JSON.stringify({ user, ...claims })}`,
     );
 
-    const { FirebaseAppService } = await import('../../services/index.js');
+    const { FirebaseAppService } = await import('../../services/firebase-app.js');
     jest
       .spyOn(context.service(FirebaseAppService), 'getApp')
       .mockResolvedValue(firebaseAppMock as any);

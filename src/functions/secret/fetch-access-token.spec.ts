@@ -2,7 +2,7 @@ import { SecretBackendNotFoundError, WorkspaceContext } from '@causa/workspace';
 import { createContext } from '@causa/workspace/testing';
 import { jest } from '@jest/globals';
 import 'jest-extended';
-import { GoogleApisService } from '../../services/index.js';
+import { GoogleApisService } from '../../services/google-apis.js';
 import {
   AuthClientResponseError,
   SecretFetchForGoogleAccessToken,

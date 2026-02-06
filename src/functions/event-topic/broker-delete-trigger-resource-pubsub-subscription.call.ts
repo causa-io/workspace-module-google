@@ -1,6 +1,6 @@
 import type { WorkspaceContext } from '@causa/workspace';
 import { grpc } from 'google-gax';
-import { PubSubService } from '../../services/index.js';
+import { PubSubService } from '../../services/pubsub.js';
 import type { EventTopicBrokerDeleteTriggerResourceForPubSubSubscription } from './broker-delete-trigger-resource-pubsub-subscription.js';
 
 export default async function call(

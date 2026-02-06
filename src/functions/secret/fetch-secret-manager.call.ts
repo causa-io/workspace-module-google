@@ -2,7 +2,7 @@ import {
   InvalidSecretDefinitionError,
   type WorkspaceContext,
 } from '@causa/workspace';
-import { GoogleSecretManagerService } from '../../services/index.js';
+import { GoogleSecretManagerService } from '../../services/secret-manager.js';
 import {
   type SecretFetchForGoogleSecretManager,
   UndefinedDefaultGcpProjectError,

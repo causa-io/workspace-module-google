@@ -1,6 +1,6 @@
 import type { WorkspaceContext } from '@causa/workspace';
 import type { GoogleConfiguration } from '../../configurations/index.js';
-import { CloudRunPubSubTriggerService } from '../../services/index.js';
+import { CloudRunPubSubTriggerService } from '../../services/cloud-run-pubsub-trigger.js';
 import type { EventTopicBrokerCreateTriggerForCloudRun } from './broker-create-trigger-cloud-run.js';
 
 /**

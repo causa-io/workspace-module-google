@@ -4,7 +4,7 @@ import { NoImplementationFoundError } from '@causa/workspace/function-registry';
 import { createContext } from '@causa/workspace/testing';
 import { jest } from '@jest/globals';
 import 'jest-extended';
-import { IamService } from '../../services/index.js';
+import { IamService } from '../../services/iam.js';
 import { EventTopicBrokerDeleteTriggerResourceForServiceAccount } from './broker-delete-trigger-resource-service-account.js';
 
 describe('EventTopicBrokerDeleteTriggerResourceForServiceAccount', () => {

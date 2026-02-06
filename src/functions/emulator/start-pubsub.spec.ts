@@ -14,7 +14,7 @@ import { PubSub } from '@google-cloud/pubsub';
 import { jest } from '@jest/globals';
 import 'jest-extended';
 import { PUBSUB_PORT } from '../../emulators/index.js';
-import { GcloudEmulatorService } from '../../services/index.js';
+import { GcloudEmulatorService } from '../../services/gcloud-emulator.js';
 import { EmulatorStartForPubSub } from './start-pubsub.js';
 import { EmulatorStopForPubSub } from './stop-pubsub.js';
 

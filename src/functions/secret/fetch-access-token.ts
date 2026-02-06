@@ -1,5 +1,5 @@
 import { SecretFetch, WorkspaceContext } from '@causa/workspace';
-import { GoogleApisService } from '../../services/index.js';
+import { GoogleApisService } from '../../services/google-apis.js';
 
 /**
  * An error thrown when the auth client does not return a token.

@@ -1,6 +1,6 @@
 import type { WorkspaceContext } from '@causa/workspace';
 import type { GoogleConfiguration } from '../../configurations/index.js';
-import { PubSubService } from '../../services/index.js';
+import { PubSubService } from '../../services/pubsub.js';
 import type { EventTopicBrokerCreateTopicForPubSub } from './broker-create-topic-pubsub.js';
 
 export default async function call(

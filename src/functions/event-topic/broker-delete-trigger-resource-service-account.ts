@@ -3,7 +3,7 @@ import {
   EventTopicBrokerDeleteTriggerResource,
   type EventsConfiguration,
 } from '@causa/workspace-core';
-import { IamService } from '../../services/index.js';
+import { IamService } from '../../services/iam.js';
 
 /**
  * Implements {@link EventTopicBrokerDeleteTriggerResource} for GCP service accounts.

@@ -1,5 +1,5 @@
 import type { WorkspaceContext } from '@causa/workspace';
-import { CloudRunService } from '../../services/index.js';
+import { CloudRunService } from '../../services/cloud-run.js';
 import type { EventTopicBrokerDeleteTriggerResourceForCloudRunInvokerRole } from './broker-delete-trigger-resource-cloud-run-invoker-role.js';
 
 /**

@@ -1,7 +1,7 @@
 import type { WorkspaceContext } from '@causa/workspace';
 import { ArtefactAlreadyExistsError } from '@causa/workspace-core';
 import { rm } from 'fs/promises';
-import { CloudStorageService } from '../../services/index.js';
+import { CloudStorageService } from '../../services/storage.js';
 import type { ProjectPushArtefactForCloudFunctions } from './push-artefact-cloud-functions.js';
 
 export default async function call(

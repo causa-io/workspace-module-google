@@ -5,7 +5,7 @@ import { createContext } from '@causa/workspace/testing';
 import { jest } from '@jest/globals';
 import 'jest-extended';
 import { fileURLToPath } from 'url';
-import { FirebaseEmulatorService } from '../../services/index.js';
+import { FirebaseEmulatorService } from '../../services/firebase-emulator.js';
 import { EmulatorStartForIdentityPlatform } from './start-identity-platform.js';
 
 describe('EmulatorStartForIdentityPlatform', () => {

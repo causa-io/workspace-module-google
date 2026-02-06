@@ -1,6 +1,6 @@
 import type { WorkspaceContext } from '@causa/workspace';
 import { getAuth, signInWithCustomToken } from 'firebase/auth';
-import { FirebaseAppService } from '../../services/index.js';
+import { FirebaseAppService } from '../../services/firebase-app.js';
 import { GoogleIdentityPlatformGenerateCustomToken } from './generate-custom-token.js';
 import type { GoogleIdentityPlatformGenerateToken } from './generate-token.js';
 

@@ -1,6 +1,6 @@
 import type { WorkspaceContext } from '@causa/workspace';
 import { getAppCheck } from 'firebase-admin/app-check';
-import { FirebaseAppService } from '../../services/index.js';
+import { FirebaseAppService } from '../../services/firebase-app.js';
 import type { GoogleAppCheckGenerateToken } from './generate-token.js';
 
 /**

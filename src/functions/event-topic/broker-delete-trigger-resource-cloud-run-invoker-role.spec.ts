@@ -4,7 +4,7 @@ import { NoImplementationFoundError } from '@causa/workspace/function-registry';
 import { createContext } from '@causa/workspace/testing';
 import { jest } from '@jest/globals';
 import 'jest-extended';
-import { CloudRunService } from '../../services/index.js';
+import { CloudRunService } from '../../services/cloud-run.js';
 import { EventTopicBrokerDeleteTriggerResourceForCloudRunInvokerRole } from './broker-delete-trigger-resource-cloud-run-invoker-role.js';
 
 describe('EventTopicBrokerDeleteTriggerResourceForCloudRunInvokerRole', () => {
