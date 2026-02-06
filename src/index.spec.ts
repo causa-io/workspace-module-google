@@ -3,12 +3,13 @@ import module from 'module';
 const require = module.createRequire(import.meta.url);
 
 const heavyModules = [
-  'firebase-admin/lib/app-check',
-  '@firebase/auth',
-  'firebase-admin/lib/auth',
-  '@google-cloud/service-usage',
-  '@google-cloud/spanner',
-  '@firebase/app',
+  '@firebase',
+  '@google-cloud',
+  'firebase',
+  'firebase-admin',
+  'google-auth-library',
+  'google-gax',
+  'googleapis',
 ];
 
 describe('registerFunctions', () => {
