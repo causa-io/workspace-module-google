@@ -3,7 +3,7 @@ import {
   type TypeScriptDecorator,
   TypeScriptWithDecoratorsRenderer,
 } from '@causa/workspace-typescript';
-import { Name, panic } from 'quicktype-core';
+import type { Name } from 'quicktype-core';
 import type { SourcelikeArray } from 'quicktype-core/dist/Source.js';
 import { schemaMatchesGlobPatterns } from './utils.js';
 
@@ -39,19 +39,19 @@ export class GoogleFirestoreRenderer extends TypeScriptWithDecoratorsRenderer {
 
     const debugName = context.classType.getCombinedName();
     if (typeof collectionAttribute !== 'object') {
-      panic(
+      throw new Error(
         `Invalid '${GOOGLE_FIRESTORE_COLLECTION_ATTRIBUTE}' attribute on '${debugName}'. Expected an object.`,
       );
     }
 
     const { name, path, hasSoftDelete } = collectionAttribute;
     if (typeof name !== 'string') {
-      panic(
+      throw new Error(
         `Invalid '${GOOGLE_FIRESTORE_COLLECTION_ATTRIBUTE}' attribute on '${debugName}'. Expected an object with a 'name' string property.`,
       );
     }
     if (!Array.isArray(path)) {
-      panic(
+      throw new Error(
         `Invalid '${GOOGLE_FIRESTORE_COLLECTION_ATTRIBUTE}' attribute on '${debugName}'. Expected an object with a 'path' array property.`,
       );
     }
@@ -73,7 +73,7 @@ export class GoogleFirestoreRenderer extends TypeScriptWithDecoratorsRenderer {
     });
     for (const propertyName of requiredProperties) {
       if (!propertyReferences.has(propertyName)) {
-        panic(
+        throw new Error(
           `Property '${propertyName}' referenced in 'path' not found in '${debugName}'.`,
         );
       }
@@ -92,13 +92,15 @@ export class GoogleFirestoreRenderer extends TypeScriptWithDecoratorsRenderer {
         const propertyName = element.property;
         const generatedName = propertyReferences.get(propertyName);
         if (!generatedName) {
-          panic(`Property '${propertyName}' not found in property references.`);
+          throw new Error(
+            `Property '${propertyName}' not found in property references.`,
+          );
         }
 
         return ['doc.', generatedName];
       }
 
-      panic(
+      throw new Error(
         `Invalid path element in '${GOOGLE_FIRESTORE_COLLECTION_ATTRIBUTE}' attribute on '${debugName}'.`,
       );
     });

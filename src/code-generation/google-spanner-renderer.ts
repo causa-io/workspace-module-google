@@ -6,7 +6,6 @@ import {
   getSingleType,
   typeScriptSourceForObject,
 } from '@causa/workspace-typescript';
-import { panic } from 'quicktype-core';
 import { schemaMatchesGlobPatterns } from './utils.js';
 
 /**
@@ -59,12 +58,12 @@ export class GoogleSpannerRenderer extends TypeScriptWithDecoratorsRenderer {
       tableAttribute.primaryKey.length === 0 ||
       tableAttribute.primaryKey.some((k: any) => typeof k !== 'string')
     ) {
-      panic(
+      throw new Error(
         `Invalid '${GOOGLE_SPANNER_TABLE_ATTRIBUTE}' attribute on '${context.classType.getCombinedName()}'. Expected an object with a 'primaryKey' array.`,
       );
     }
     if ('name' in tableAttribute && typeof tableAttribute.name !== 'string') {
-      panic(
+      throw new Error(
         `Invalid 'name' in '${GOOGLE_SPANNER_TABLE_ATTRIBUTE}' attribute on '${context.classType.getCombinedName()}'. Expected a string.`,
       );
     }
@@ -104,7 +103,7 @@ export class GoogleSpannerRenderer extends TypeScriptWithDecoratorsRenderer {
 
     const { name: overriddenName, tsOptions } = attributes;
     if (tsOptions && typeof tsOptions !== 'object') {
-      panic(
+      throw new Error(
         `Invalid 'tsOptions' in '${GOOGLE_SPANNER_COLUMN_ATTRIBUTE}' attribute. Expected an object.`,
       );
     }
@@ -112,7 +111,7 @@ export class GoogleSpannerRenderer extends TypeScriptWithDecoratorsRenderer {
 
     if (overriddenName) {
       if (typeof overriddenName !== 'string') {
-        panic(
+        throw new Error(
           `Invalid 'name' in '${GOOGLE_SPANNER_COLUMN_ATTRIBUTE}' attribute. Expected a string.`,
         );
       }
