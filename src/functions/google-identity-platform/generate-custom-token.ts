@@ -1,8 +1,7 @@
 import { WorkspaceContext, WorkspaceFunction } from '@causa/workspace';
 import { AllowMissing } from '@causa/workspace/validation';
 import { IsObject, IsString } from 'class-validator';
-import { getAuth } from 'firebase-admin/auth';
-import { FirebaseAppService } from '../../services/index.js';
+import { callDeferred } from '../utils.js';
 
 /**
  * Generates a custom token that can be used to sign in to Identity Platform as a given user.
@@ -28,11 +27,7 @@ export class GoogleIdentityPlatformGenerateCustomToken extends WorkspaceFunction
   readonly claims?: Record<string, any>;
 
   async _call(context: WorkspaceContext): Promise<string> {
-    const adminApp = await context
-      .service(FirebaseAppService)
-      .getAdminAppForAdminServiceAccount();
-
-    return await getAuth(adminApp).createCustomToken(this.user, this.claims);
+    return await callDeferred(this, context, import.meta.url);
   }
 
   _supports(): boolean {

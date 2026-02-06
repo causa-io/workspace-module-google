@@ -2,7 +2,11 @@ import module from 'module';
 
 const require = module.createRequire(import.meta.url);
 
-const heavyModules = ['firebase-admin/lib/app-check', '@firebase/auth'];
+const heavyModules = [
+  'firebase-admin/lib/app-check',
+  '@firebase/auth',
+  'firebase-admin/lib/auth',
+];
 
 describe('registerFunctions', () => {
   function getLoadedModules(): string[] {
