@@ -6,6 +6,7 @@ const heavyModules = [
   'firebase-admin/lib/app-check',
   '@firebase/auth',
   'firebase-admin/lib/auth',
+  '@google-cloud/service-usage',
 ];
 
 describe('registerFunctions', () => {

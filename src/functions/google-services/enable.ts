@@ -2,15 +2,10 @@ import { CliCommand } from '@causa/cli';
 import { WorkspaceContext, WorkspaceFunction } from '@causa/workspace';
 import type { InfrastructureProcessor } from '@causa/workspace-core';
 import { AllowMissing } from '@causa/workspace/validation';
-import { ServiceUsageClient } from '@google-cloud/service-usage';
 import { IsBoolean } from 'class-validator';
 import { googleCommandDefinition } from '../../cli/index.js';
 import type { GoogleConfiguration } from '../../configurations/index.js';
-
-/**
- * The maximum number of GCP services that can be enabled at the same time.
- */
-const MAX_SERVICE_BATCH = 20;
+import { callDeferred } from '../utils.js';
 
 /**
  * The return value of {@link GoogleServicesEnable}.
@@ -51,40 +46,7 @@ export class GoogleServicesEnable
   readonly tearDown?: boolean;
 
   async _call(context: WorkspaceContext): Promise<GoogleServicesEnableResult> {
-    if (this.tearDown) {
-      return { configuration: {}, services: [] };
-    }
-
-    const googleConf = context.asConfiguration<GoogleConfiguration>();
-    const gcpProject = googleConf.getOrThrow('google.project');
-    const services = googleConf.get('google.services');
-    if (!services) {
-      // Although not very useful, this ensures the services configuration is set after the processor has run.
-      return { configuration: { google: { services: [] } }, services: [] };
-    }
-
-    // There is little chance the client would be reused, so it is not cached or exposed as a service.
-    const serviceUsageClient = new ServiceUsageClient();
-    const servicesToEnable = [...services];
-    const parent = `projects/${gcpProject}`;
-    while (servicesToEnable.length > 0) {
-      const serviceIds = servicesToEnable.splice(0, MAX_SERVICE_BATCH);
-      context.logger.info(
-        `➕ Enabling GCP service(s) ${serviceIds
-          .map((s) => `'${s}'`)
-          .join(', ')} in project '${gcpProject}'.`,
-      );
-
-      const [operation] = await serviceUsageClient.batchEnableServices({
-        parent,
-        serviceIds,
-      });
-      await operation.promise();
-    }
-
-    // If `google.services` was already set, returning it would duplicate the list due to the configuration merging
-    // strategy (concatenating arrays).
-    return { configuration: {}, services };
+    return await callDeferred(this, context, import.meta.url);
   }
 
   _supports(): boolean {
