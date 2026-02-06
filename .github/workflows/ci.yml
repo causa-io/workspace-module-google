@@ -13,18 +13,18 @@ jobs:
 
     steps:
       - name: ⬇️ Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: 🔨 Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 24
 
       - name: 🔨 Install Causa
         run: npm install -g @causa/cli
 
       - name: 🔨 Restore Causa modules
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             .causa/package*
@@ -52,20 +52,23 @@ jobs:
     needs: test
     if: startsWith(github.ref, 'refs/tags/')
 
+    permissions:
+      id-token: write
+
     steps:
       - name: ⬇️ Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: 🔨 Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 24
 
       - name: 🔨 Install Causa
         run: npm install -g @causa/cli
 
       - name: 🔨 Restore Causa modules
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             .causa/package*
@@ -77,5 +80,3 @@ jobs:
 
       - name: 🚀 Publish
         run: cs publish -t semantic
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
