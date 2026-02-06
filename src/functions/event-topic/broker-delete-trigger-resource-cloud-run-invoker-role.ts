@@ -3,7 +3,7 @@ import {
   EventTopicBrokerDeleteTriggerResource,
   type EventsConfiguration,
 } from '@causa/workspace-core';
-import { CloudRunService } from '../../services/index.js';
+import { callDeferred } from '../utils.js';
 
 /**
  * The regular expression that matches a resource ID representing a Cloud Run invoker role for a given service account.
@@ -18,19 +18,7 @@ const CLOUD_RUN_INVOKER_ID_REGEX =
  */
 export class EventTopicBrokerDeleteTriggerResourceForCloudRunInvokerRole extends EventTopicBrokerDeleteTriggerResource {
   async _call(context: WorkspaceContext): Promise<void> {
-    const match = this.id.match(CLOUD_RUN_INVOKER_ID_REGEX);
-    if (!match?.groups) {
-      throw new Error('Invalid Cloud Run invoker binding resource ID.');
-    }
-
-    const { serviceId, pubSubServiceAccount } = match.groups;
-    context.logger.info(
-      `🛂 Removing invoker role on Cloud Run service '${serviceId}' for Pub/Sub service account '${pubSubServiceAccount}'.`,
-    );
-
-    await context
-      .service(CloudRunService)
-      .removeInvokerBinding(serviceId, pubSubServiceAccount);
+    return await callDeferred(this, context, import.meta.url);
   }
 
   _supports(context: WorkspaceContext): boolean {
