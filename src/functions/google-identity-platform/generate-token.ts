@@ -1,10 +1,13 @@
 import { CliArgument, CliCommand, CliOption } from '@causa/cli';
-import { WorkspaceContext, WorkspaceFunction } from '@causa/workspace';
+import {
+  callDeferred,
+  WorkspaceContext,
+  WorkspaceFunction,
+} from '@causa/workspace';
 import { AllowMissing } from '@causa/workspace/validation';
 import { Transform } from 'class-transformer';
 import { IsBoolean, IsObject, IsString } from 'class-validator';
 import { identityPlatformCommandDefinition } from '../../cli/index.js';
-import { callDeferred } from '../utils.js';
 
 /**
  * Generates an ID token for an Identity Platform end user.

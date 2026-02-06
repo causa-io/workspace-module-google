@@ -1,9 +1,8 @@
-import { WorkspaceContext } from '@causa/workspace';
+import { callDeferred, WorkspaceContext } from '@causa/workspace';
 import {
   ProjectPushArtefact,
   type ServerlessFunctionsConfiguration,
 } from '@causa/workspace-core';
-import { callDeferred } from '../utils.js';
 
 /**
  * Implements the {@link ProjectPushArtefact} function for Cloud Functions projects.

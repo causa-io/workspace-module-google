@@ -1,9 +1,12 @@
 import { CliCommand, CliOption } from '@causa/cli';
-import { WorkspaceContext, WorkspaceFunction } from '@causa/workspace';
+import {
+  callDeferred,
+  WorkspaceContext,
+  WorkspaceFunction,
+} from '@causa/workspace';
 import { AllowMissing } from '@causa/workspace/validation';
 import { IsString } from 'class-validator';
 import { appCheckCommandDefinition } from '../../cli/index.js';
-import { callDeferred } from '../utils.js';
 
 /**
  * Generates a new AppCheck token.

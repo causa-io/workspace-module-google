@@ -1,11 +1,14 @@
 import { CliCommand } from '@causa/cli';
-import { WorkspaceContext, WorkspaceFunction } from '@causa/workspace';
+import {
+  callDeferred,
+  WorkspaceContext,
+  WorkspaceFunction,
+} from '@causa/workspace';
 import type { InfrastructureProcessor } from '@causa/workspace-core';
 import { AllowMissing } from '@causa/workspace/validation';
 import { IsBoolean } from 'class-validator';
 import { googleCommandDefinition } from '../../cli/index.js';
 import type { GoogleConfiguration } from '../../configurations/index.js';
-import { callDeferred } from '../utils.js';
 
 /**
  * The return value of {@link GoogleServicesEnable}.

@@ -1,9 +1,8 @@
-import { WorkspaceContext } from '@causa/workspace';
+import { callDeferred, WorkspaceContext } from '@causa/workspace';
 import {
   EventTopicBrokerCreateTrigger,
   type EventsConfiguration,
 } from '@causa/workspace-core';
-import { callDeferred } from '../utils.js';
 
 /**
  * The regular expression used to match Cloud Run trigger IDs, consisting of the service ID and the path to the trigger.

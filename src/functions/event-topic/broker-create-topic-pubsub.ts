@@ -1,9 +1,8 @@
-import { WorkspaceContext } from '@causa/workspace';
+import { callDeferred, WorkspaceContext } from '@causa/workspace';
 import {
   EventTopicBrokerCreateTopic,
   type EventsConfiguration,
 } from '@causa/workspace-core';
-import { callDeferred } from '../utils.js';
 
 /**
  * Implements {@link EventTopicBrokerCreateTopic} for Pub/Sub.

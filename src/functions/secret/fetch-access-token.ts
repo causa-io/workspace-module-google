@@ -1,5 +1,4 @@
-import { SecretFetch, WorkspaceContext } from '@causa/workspace';
-import { callDeferred } from '../utils.js';
+import { callDeferred, SecretFetch, WorkspaceContext } from '@causa/workspace';
 
 /**
  * An error thrown when the auth client does not return a token.

@@ -1,5 +1,4 @@
-import { SecretFetch, WorkspaceContext } from '@causa/workspace';
-import { callDeferred } from '../utils.js';
+import { callDeferred, SecretFetch, WorkspaceContext } from '@causa/workspace';
 
 /**
  * An error thrown when the default GCP project is needed to look up a secret but it has not been defined.

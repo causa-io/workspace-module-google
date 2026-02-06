@@ -1,7 +1,6 @@
-import { WorkspaceContext } from '@causa/workspace';
+import { callDeferred, WorkspaceContext } from '@causa/workspace';
 import { EmulatorStart, type EmulatorStartResult } from '@causa/workspace-core';
 import { SPANNER_EMULATOR_NAME } from '../../emulators/index.js';
-import { callDeferred } from '../utils.js';
 
 /**
  * Implements {@link EmulatorStart} for the Spanner emulator.

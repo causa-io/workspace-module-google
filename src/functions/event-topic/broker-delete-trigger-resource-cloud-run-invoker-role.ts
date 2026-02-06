@@ -1,9 +1,8 @@
-import { WorkspaceContext } from '@causa/workspace';
+import { callDeferred, WorkspaceContext } from '@causa/workspace';
 import {
   EventTopicBrokerDeleteTriggerResource,
   type EventsConfiguration,
 } from '@causa/workspace-core';
-import { callDeferred } from '../utils.js';
 
 /**
  * The regular expression that matches a resource ID representing a Cloud Run invoker role for a given service account.

@@ -1,7 +1,10 @@
-import { WorkspaceContext, WorkspaceFunction } from '@causa/workspace';
+import {
+  callDeferred,
+  WorkspaceContext,
+  WorkspaceFunction,
+} from '@causa/workspace';
 import { AllowMissing } from '@causa/workspace/validation';
 import { IsObject, IsString } from 'class-validator';
-import { callDeferred } from '../utils.js';
 
 /**
  * Generates a custom token that can be used to sign in to Identity Platform as a given user.
