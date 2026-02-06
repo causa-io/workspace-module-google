@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.12.2 (2026-02-06)
+
 Chore:
 
 - Upgrade dependencies.
