@@ -17,7 +17,7 @@ causa:
 javascript:
   dependencies:
     check:
-      allowlist: [GHSA-37qj-frw5-hhjh]
+      allowlist: []
     update:
       packageTargets:
         '@types/node': minor
