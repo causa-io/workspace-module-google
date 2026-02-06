@@ -7,6 +7,7 @@ const heavyModules = [
   '@firebase/auth',
   'firebase-admin/lib/auth',
   '@google-cloud/service-usage',
+  '@google-cloud/spanner',
 ];
 
 describe('registerFunctions', () => {
