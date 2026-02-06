@@ -10,10 +10,7 @@ export default async function call(
   context.logger.info(`📫 Deleting Pub/Sub subscription '${this.id}'.`);
 
   try {
-    await context
-      .service(PubSubService)
-      .pubSub.subscription(this.id)
-      .delete();
+    await context.service(PubSubService).pubSub.subscription(this.id).delete();
   } catch (error: any) {
     if (error.code === grpc.status.NOT_FOUND) {
       context.logger.warn(

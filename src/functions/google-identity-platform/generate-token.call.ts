@@ -8,9 +8,7 @@ export default async function call(
   this: GoogleIdentityPlatformGenerateToken,
   context: WorkspaceContext,
 ): Promise<string> {
-  context.logger.info(
-    `🛂 Signing in user '${this.user}' with a custom token.`,
-  );
+  context.logger.info(`🛂 Signing in user '${this.user}' with a custom token.`);
   const customToken = await context.call(
     GoogleIdentityPlatformGenerateCustomToken,
     { user: this.user, claims: this.claims },

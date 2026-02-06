@@ -23,8 +23,7 @@ export default async function call(
   const projectId =
     match.groups.projectId ?? googleConf.getOrThrow('google.project');
   const location =
-    match.groups.location ??
-    googleConf.getOrThrow('google.cloudRun.location');
+    match.groups.location ?? googleConf.getOrThrow('google.cloudRun.location');
   const name = match.groups.name;
   const path = match.groups.path;
   if (!name || !path) {

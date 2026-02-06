@@ -1,5 +1,8 @@
 import type { WorkspaceContext } from '@causa/workspace';
-import { type EmulatorStartResult, EventTopicList } from '@causa/workspace-core';
+import {
+  type EmulatorStartResult,
+  EventTopicList,
+} from '@causa/workspace-core';
 import { PubSub } from '@google-cloud/pubsub';
 import { getLocalGcpProject } from '../../configurations/utils.js';
 import {
