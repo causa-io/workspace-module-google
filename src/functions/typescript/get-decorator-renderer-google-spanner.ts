@@ -1,8 +1,6 @@
 import { WorkspaceContext } from '@causa/workspace';
-import {
-  TypeScriptGetDecoratorRenderer,
-  TypeScriptWithDecoratorsRenderer,
-} from '@causa/workspace-typescript';
+import { TypeScriptGetDecoratorRenderer } from '@causa/workspace-typescript';
+import type { TypeScriptWithDecoratorsRenderer } from '@causa/workspace-typescript/code-generation';
 import { GoogleSpannerRenderer } from '../../code-generation/index.js';
 
 /**

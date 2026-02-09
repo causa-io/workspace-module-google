@@ -1,10 +1,9 @@
 import { WorkspaceContext } from '@causa/workspace';
+import { EmulatorStart, EmulatorStop } from '@causa/workspace-core';
 import {
   DockerEmulatorService,
   DockerService,
-  EmulatorStart,
-  EmulatorStop,
-} from '@causa/workspace-core';
+} from '@causa/workspace-core/services';
 import {
   FunctionRegistry,
   NoImplementationFoundError,

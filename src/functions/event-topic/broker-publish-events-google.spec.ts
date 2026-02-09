@@ -1,8 +1,6 @@
 import { WorkspaceContext } from '@causa/workspace';
-import {
-  EventTopicBrokerPublishEvents,
-  JsonFilesEventSource,
-} from '@causa/workspace-core';
+import { EventTopicBrokerPublishEvents } from '@causa/workspace-core';
+import { JsonFilesEventSource } from '@causa/workspace-core/backfill';
 import { NoImplementationFoundError } from '@causa/workspace/function-registry';
 import { createContext } from '@causa/workspace/testing';
 import { jest } from '@jest/globals';

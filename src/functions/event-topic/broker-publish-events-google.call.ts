@@ -2,7 +2,7 @@ import type { WorkspaceContext } from '@causa/workspace';
 import {
   type BackfillEventsSource,
   JsonFilesEventSource,
-} from '@causa/workspace-core';
+} from '@causa/workspace-core/backfill';
 import {
   BigQueryEventsSource,
   PubSubBackfillEventPublisher,

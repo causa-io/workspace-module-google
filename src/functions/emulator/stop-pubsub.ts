@@ -1,5 +1,6 @@
 import { WorkspaceContext } from '@causa/workspace';
-import { DockerEmulatorService, EmulatorStop } from '@causa/workspace-core';
+import { EmulatorStop } from '@causa/workspace-core';
+import { DockerEmulatorService } from '@causa/workspace-core/services';
 import {
   PUBSUB_EMULATOR_NAME,
   getPubSubContainerName,

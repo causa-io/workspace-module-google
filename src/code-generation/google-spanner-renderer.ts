@@ -5,7 +5,7 @@ import {
   TypeScriptWithDecoratorsRenderer,
   getSingleType,
   typeScriptSourceForObject,
-} from '@causa/workspace-typescript';
+} from '@causa/workspace-typescript/code-generation';
 import { schemaMatchesGlobPatterns } from './utils.js';
 
 /**

@@ -3,7 +3,7 @@ import {
   type DockerContainerMount,
   type DockerContainerPublish,
   DockerEmulatorService,
-} from '@causa/workspace-core';
+} from '@causa/workspace-core/services';
 import {
   type GoogleConfiguration,
   getLocalGcpProject,

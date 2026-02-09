@@ -1,5 +1,5 @@
 import { WorkspaceContext } from '@causa/workspace';
-import type { BackfillEvent } from '@causa/workspace-core';
+import type { BackfillEvent } from '@causa/workspace-core/backfill';
 import { createContext } from '@causa/workspace/testing';
 import { BigQuery } from '@google-cloud/bigquery';
 import { jest } from '@jest/globals';

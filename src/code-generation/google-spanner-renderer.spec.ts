@@ -2,7 +2,7 @@ import type { WorkspaceContext } from '@causa/workspace';
 import {
   TypeScriptModelClassTargetLanguage,
   TypeScriptWithDecoratorsTargetLanguage,
-} from '@causa/workspace-typescript';
+} from '@causa/workspace-typescript/code-generation';
 import { createContext } from '@causa/workspace/testing';
 import { mkdtemp, rm } from 'fs/promises';
 import { tmpdir } from 'os';

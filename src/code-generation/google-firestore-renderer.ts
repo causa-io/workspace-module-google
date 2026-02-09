@@ -2,7 +2,7 @@ import {
   type ClassContext,
   type TypeScriptDecorator,
   TypeScriptWithDecoratorsRenderer,
-} from '@causa/workspace-typescript';
+} from '@causa/workspace-typescript/code-generation';
 import type { Name } from 'quicktype-core';
 import type { SourcelikeArray } from 'quicktype-core/dist/Source.js';
 import { schemaMatchesGlobPatterns } from './utils.js';

@@ -1,8 +1,6 @@
 import type { WorkspaceContext } from '@causa/workspace';
-import {
-  DockerEmulatorService,
-  type EmulatorStartResult,
-} from '@causa/workspace-core';
+import type { EmulatorStartResult } from '@causa/workspace-core';
+import { DockerEmulatorService } from '@causa/workspace-core/services';
 import { Instance, Spanner } from '@google-cloud/spanner';
 // The Spanner client depends on `google-gax` rather than `@grpc/grpc-js` directly. By ensuring `google-gax` is kept in
 // sync with the version required by Spanner, and importing `grpc` from `google-gax`, the correct `grpc.credentials`
