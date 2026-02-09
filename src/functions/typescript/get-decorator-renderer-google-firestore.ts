@@ -1,13 +1,16 @@
 import { WorkspaceContext } from '@causa/workspace';
-import { TypeScriptGetDecoratorRenderer } from '@causa/workspace-typescript';
-import type { TypeScriptWithDecoratorsRenderer } from '@causa/workspace-typescript/code-generation';
-import { GoogleFirestoreRenderer } from '../../code-generation/index.js';
+import {
+  TypeScriptGetDecoratorRenderer,
+  type TypeScriptWithDecoratorsRendererType,
+} from '@causa/workspace-typescript';
 
 /**
- * Implements {@link TypeScriptGetDecoratorRenderer} for the {@link GoogleFirestoreRenderer}.
+ * Implements {@link TypeScriptGetDecoratorRenderer} for the `GoogleFirestoreRenderer`.
  */
 export class TypeScriptGetDecoratorRendererForGoogleFirestore extends TypeScriptGetDecoratorRenderer {
-  _call(): new (...args: any[]) => TypeScriptWithDecoratorsRenderer {
+  async _call(): Promise<TypeScriptWithDecoratorsRendererType> {
+    const { GoogleFirestoreRenderer } =
+      await import('../../code-generation/index.js');
     return GoogleFirestoreRenderer;
   }
 

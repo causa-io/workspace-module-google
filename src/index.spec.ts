@@ -10,6 +10,7 @@ const heavyModules = [
   'google-auth-library',
   'google-gax',
   'googleapis',
+  'quicktype-core',
 ];
 
 describe('registerFunctions', () => {

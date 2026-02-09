@@ -45,7 +45,7 @@ describe('TypeScriptGetDecoratorRendererForGoogleFirestore', () => {
     ).toThrow(NoImplementationFoundError);
   });
 
-  it('should return the renderer', () => {
+  it('should return the renderer', async () => {
     const { context } = createContext({
       configuration: {
         project: {
@@ -57,7 +57,7 @@ describe('TypeScriptGetDecoratorRendererForGoogleFirestore', () => {
       functions: [TypeScriptGetDecoratorRendererForGoogleFirestore],
     });
 
-    const actualRenderer = context.call(TypeScriptGetDecoratorRenderer, {
+    const actualRenderer = await context.call(TypeScriptGetDecoratorRenderer, {
       generator: 'typescriptModelClass',
       configuration: {},
     });
