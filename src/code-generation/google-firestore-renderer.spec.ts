@@ -2,12 +2,11 @@ import type { WorkspaceContext } from '@causa/workspace';
 import {
   TypeScriptModelClassTargetLanguage,
   TypeScriptWithDecoratorsTargetLanguage,
-} from '@causa/workspace-typescript';
+} from '@causa/workspace-typescript/code-generation';
 import { createContext } from '@causa/workspace/testing';
 import { mkdtemp, rm } from 'fs/promises';
 import { tmpdir } from 'os';
 import { join } from 'path';
-import { QuickTypeError } from 'quicktype-core';
 import { GoogleFirestoreRenderer } from './google-firestore-renderer.js';
 import { generateFromSchema } from './utils.test.js';
 
@@ -104,12 +103,8 @@ describe('GoogleFirestoreRenderer', () => {
 
     const actualPromise = generateFromSchema(language, schema, outputFile);
 
-    await expect(actualPromise).rejects.toThrow(QuickTypeError);
-    await expect(actualPromise).rejects.toHaveProperty(
-      'properties.message',
-      expect.stringContaining(
-        `Expected an object with a 'name' string property`,
-      ),
+    await expect(actualPromise).rejects.toThrow(
+      `Expected an object with a 'name' string property`,
     );
   });
 
@@ -123,12 +118,8 @@ describe('GoogleFirestoreRenderer', () => {
 
     const actualPromise = generateFromSchema(language, schema, outputFile);
 
-    await expect(actualPromise).rejects.toThrow(QuickTypeError);
-    await expect(actualPromise).rejects.toHaveProperty(
-      'properties.message',
-      expect.stringContaining(
-        `Expected an object with a 'path' array property`,
-      ),
+    await expect(actualPromise).rejects.toThrow(
+      `Expected an object with a 'path' array property`,
     );
   });
 
@@ -147,12 +138,8 @@ describe('GoogleFirestoreRenderer', () => {
 
     const actualPromise = generateFromSchema(language, schema, outputFile);
 
-    await expect(actualPromise).rejects.toThrow(QuickTypeError);
-    await expect(actualPromise).rejects.toHaveProperty(
-      'properties.message',
-      expect.stringContaining(
-        `Property 'nonExistent' referenced in 'path' not found`,
-      ),
+    await expect(actualPromise).rejects.toThrow(
+      `Property 'nonExistent' referenced in 'path' not found`,
     );
   });
 

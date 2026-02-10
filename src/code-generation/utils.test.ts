@@ -1,5 +1,5 @@
-import { causaJsonSchemaAttributeProducer } from '@causa/workspace-core';
-import { TypeScriptWithDecoratorsTargetLanguage } from '@causa/workspace-typescript';
+import { causaJsonSchemaAttributeProducer } from '@causa/workspace-core/code-generation';
+import { TypeScriptWithDecoratorsTargetLanguage } from '@causa/workspace-typescript/code-generation';
 import { readFile } from 'fs/promises';
 import {
   FetchingJSONSchemaStore,

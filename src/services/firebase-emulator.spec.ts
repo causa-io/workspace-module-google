@@ -1,5 +1,5 @@
 import { WorkspaceContext } from '@causa/workspace';
-import { DockerEmulatorService } from '@causa/workspace-core';
+import { DockerEmulatorService } from '@causa/workspace-core/services';
 import { createContext } from '@causa/workspace/testing';
 import { jest } from '@jest/globals';
 import 'jest-extended';

@@ -1,11 +1,8 @@
-import { WorkspaceContext } from '@causa/workspace';
+import { callDeferred, WorkspaceContext } from '@causa/workspace';
 import {
-  ArtefactAlreadyExistsError,
   ProjectPushArtefact,
   type ServerlessFunctionsConfiguration,
 } from '@causa/workspace-core';
-import { rm } from 'fs/promises';
-import { CloudStorageService } from '../../services/index.js';
 
 /**
  * Implements the {@link ProjectPushArtefact} function for Cloud Functions projects.
@@ -14,29 +11,7 @@ import { CloudStorageService } from '../../services/index.js';
  */
 export class ProjectPushArtefactForCloudFunctions extends ProjectPushArtefact {
   async _call(context: WorkspaceContext): Promise<string> {
-    context.logger.info(`🚚 Pushing Cloud Functions archive to Cloud Storage.`);
-
-    const storageService = context.service(CloudStorageService);
-
-    const destination = storageService.getFileFromGsUri(this.destination);
-
-    if (!this.overwrite) {
-      const [exists] = await destination.exists();
-      if (exists) {
-        throw new ArtefactAlreadyExistsError(this.destination);
-      }
-    }
-
-    await destination.bucket.upload(this.artefact, { destination });
-
-    context.logger.info(
-      `🚚 Successfully pushed archive to '${this.destination}'.`,
-    );
-
-    context.logger.debug(`🔥 Removing local artefact '${this.artefact}'.`);
-    await rm(this.artefact);
-
-    return this.destination;
+    return await callDeferred(this, context, import.meta.url);
   }
 
   _supports(context: WorkspaceContext): boolean {

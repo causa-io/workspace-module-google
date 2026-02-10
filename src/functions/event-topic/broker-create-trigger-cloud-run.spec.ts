@@ -4,7 +4,7 @@ import { NoImplementationFoundError } from '@causa/workspace/function-registry';
 import { createContext } from '@causa/workspace/testing';
 import { jest } from '@jest/globals';
 import 'jest-extended';
-import { CloudRunPubSubTriggerService } from '../../services/index.js';
+import { CloudRunPubSubTriggerService } from '../../services/cloud-run-pubsub-trigger.js';
 import { EventTopicBrokerCreateTriggerForCloudRun } from './broker-create-trigger-cloud-run.js';
 
 describe('EventTopicBrokerCreateTriggerForCloudRun', () => {

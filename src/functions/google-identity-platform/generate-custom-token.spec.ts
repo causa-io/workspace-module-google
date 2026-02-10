@@ -2,7 +2,7 @@ import { WorkspaceContext } from '@causa/workspace';
 import { createContext } from '@causa/workspace/testing';
 import { jest } from '@jest/globals';
 import 'jest-extended';
-import { FirebaseAppService } from '../../services/index.js';
+import { FirebaseAppService } from '../../services/firebase-app.js';
 import type { GoogleIdentityPlatformGenerateCustomToken as GoogleIdentityPlatformGenerateCustomTokenType } from './generate-custom-token.js';
 
 const firebaseAdminAppMock = {};

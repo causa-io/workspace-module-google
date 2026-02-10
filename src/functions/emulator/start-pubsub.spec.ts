@@ -1,10 +1,10 @@
 import { WorkspaceContext } from '@causa/workspace';
 import {
-  DockerService,
   EmulatorStart,
   EmulatorStop,
   EventTopicList,
 } from '@causa/workspace-core';
+import { DockerService } from '@causa/workspace-core/services';
 import {
   FunctionRegistry,
   NoImplementationFoundError,
@@ -14,7 +14,7 @@ import { PubSub } from '@google-cloud/pubsub';
 import { jest } from '@jest/globals';
 import 'jest-extended';
 import { PUBSUB_PORT } from '../../emulators/index.js';
-import { GcloudEmulatorService } from '../../services/index.js';
+import { GcloudEmulatorService } from '../../services/gcloud-emulator.js';
 import { EmulatorStartForPubSub } from './start-pubsub.js';
 import { EmulatorStopForPubSub } from './stop-pubsub.js';
 

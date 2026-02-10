@@ -2,7 +2,7 @@ import { WorkspaceContext } from '@causa/workspace';
 import type {
   BackfillEvent,
   BackfillEventsSource,
-} from '@causa/workspace-core';
+} from '@causa/workspace-core/backfill';
 import { BigQuery, Job, type Query } from '@google-cloud/bigquery';
 import type { Logger } from 'pino';
 import { BigQueryService } from '../services/index.js';

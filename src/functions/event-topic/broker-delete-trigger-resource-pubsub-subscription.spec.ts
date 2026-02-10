@@ -4,7 +4,7 @@ import { NoImplementationFoundError } from '@causa/workspace/function-registry';
 import { createContext } from '@causa/workspace/testing';
 import { jest } from '@jest/globals';
 import 'jest-extended';
-import { PubSubService } from '../../services/index.js';
+import { PubSubService } from '../../services/pubsub.js';
 import { EventTopicBrokerDeleteTriggerResourceForPubSubSubscription } from './broker-delete-trigger-resource-pubsub-subscription.js';
 
 describe('EventTopicBrokerDeleteTriggerResourceForPubSubSubscription', () => {

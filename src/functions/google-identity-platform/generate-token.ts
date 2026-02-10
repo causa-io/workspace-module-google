@@ -1,12 +1,13 @@
 import { CliArgument, CliCommand, CliOption } from '@causa/cli';
-import { WorkspaceContext, WorkspaceFunction } from '@causa/workspace';
+import {
+  callDeferred,
+  WorkspaceContext,
+  WorkspaceFunction,
+} from '@causa/workspace';
 import { AllowMissing } from '@causa/workspace/validation';
 import { Transform } from 'class-transformer';
 import { IsBoolean, IsObject, IsString } from 'class-validator';
-import { getAuth, signInWithCustomToken } from 'firebase/auth';
 import { identityPlatformCommandDefinition } from '../../cli/index.js';
-import { FirebaseAppService } from '../../services/index.js';
-import { GoogleIdentityPlatformGenerateCustomToken } from './generate-custom-token.js';
 
 /**
  * Generates an ID token for an Identity Platform end user.
@@ -63,21 +64,7 @@ export class GoogleIdentityPlatformGenerateToken extends WorkspaceFunction<
   readonly refreshToken?: boolean;
 
   async _call(context: WorkspaceContext): Promise<string> {
-    context.logger.info(
-      `🛂 Signing in user '${this.user}' with a custom token.`,
-    );
-    const customToken = await context.call(
-      GoogleIdentityPlatformGenerateCustomToken,
-      { user: this.user, claims: this.claims },
-    );
-
-    const app = await context.service(FirebaseAppService).getApp();
-    const auth = getAuth(app);
-    const credentials = await signInWithCustomToken(auth, customToken);
-
-    return this.refreshToken
-      ? credentials.user.refreshToken
-      : await credentials.user.getIdToken();
+    return await callDeferred(this, context, import.meta.url);
   }
 
   _supports(): boolean {

@@ -1,5 +1,5 @@
-import type { ClassContext } from '@causa/workspace-typescript';
-import { TypeScriptWithDecoratorsRenderer } from '@causa/workspace-typescript';
+import type { ClassContext } from '@causa/workspace-typescript/code-generation';
+import { TypeScriptWithDecoratorsRenderer } from '@causa/workspace-typescript/code-generation';
 import micromatch from 'micromatch';
 import { join } from 'path';
 

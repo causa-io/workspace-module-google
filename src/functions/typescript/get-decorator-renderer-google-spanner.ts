@@ -1,15 +1,16 @@
 import { WorkspaceContext } from '@causa/workspace';
 import {
   TypeScriptGetDecoratorRenderer,
-  TypeScriptWithDecoratorsRenderer,
+  type TypeScriptWithDecoratorsRendererType,
 } from '@causa/workspace-typescript';
-import { GoogleSpannerRenderer } from '../../code-generation/index.js';
 
 /**
- * Implements {@link TypeScriptGetDecoratorRenderer} for the {@link GoogleSpannerRenderer}.
+ * Implements {@link TypeScriptGetDecoratorRenderer} for the `GoogleSpannerRenderer`.
  */
 export class TypeScriptGetDecoratorRendererForGoogleSpanner extends TypeScriptGetDecoratorRenderer {
-  _call(): new (...args: any[]) => TypeScriptWithDecoratorsRenderer {
+  async _call(): Promise<TypeScriptWithDecoratorsRendererType> {
+    const { GoogleSpannerRenderer } =
+      await import('../../code-generation/index.js');
     return GoogleSpannerRenderer;
   }
 

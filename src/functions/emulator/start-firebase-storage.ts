@@ -7,7 +7,7 @@ import {
   FIREBASE_STORAGE_PORT,
   getFirebaseStorageContainerName,
 } from '../../emulators/index.js';
-import { FirebaseEmulatorService } from '../../services/index.js';
+import { FirebaseEmulatorService } from '../../services/firebase-emulator.js';
 import { GoogleFirebaseStorageMergeRules } from '../google-firebase-storage/index.js';
 
 /**

@@ -1,10 +1,8 @@
-import { WorkspaceContext } from '@causa/workspace';
+import { callDeferred, WorkspaceContext } from '@causa/workspace';
 import {
   EventTopicBrokerDeleteTriggerResource,
   type EventsConfiguration,
 } from '@causa/workspace-core';
-import { grpc } from 'google-gax';
-import { PubSubService } from '../../services/index.js';
 
 /**
  * Implements {@link EventTopicBrokerDeleteTriggerResource} for Pub/Sub subscriptions.
@@ -12,22 +10,7 @@ import { PubSubService } from '../../services/index.js';
  */
 export class EventTopicBrokerDeleteTriggerResourceForPubSubSubscription extends EventTopicBrokerDeleteTriggerResource {
   async _call(context: WorkspaceContext): Promise<void> {
-    context.logger.info(`📫 Deleting Pub/Sub subscription '${this.id}'.`);
-
-    try {
-      await context
-        .service(PubSubService)
-        .pubSub.subscription(this.id)
-        .delete();
-    } catch (error: any) {
-      if (error.code === grpc.status.NOT_FOUND) {
-        context.logger.warn(
-          `⚠️ Pub/Sub subscription '${this.id}' does not exist. It might have already been deleted.`,
-        );
-      } else {
-        throw error;
-      }
-    }
+    return await callDeferred(this, context, import.meta.url);
   }
 
   _supports(context: WorkspaceContext): boolean {

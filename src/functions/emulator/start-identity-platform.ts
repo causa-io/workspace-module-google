@@ -6,7 +6,7 @@ import {
   IDENTITY_PLATFORM_EMULATOR_NAME,
   getIdentityPlatformContainerName,
 } from '../../emulators/index.js';
-import { FirebaseEmulatorService } from '../../services/index.js';
+import { FirebaseEmulatorService } from '../../services/firebase-emulator.js';
 
 /**
  * The Firebase configuration file enabling only the Auth emulator.

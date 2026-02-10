@@ -2,12 +2,11 @@ import type { WorkspaceContext } from '@causa/workspace';
 import {
   TypeScriptModelClassTargetLanguage,
   TypeScriptWithDecoratorsTargetLanguage,
-} from '@causa/workspace-typescript';
+} from '@causa/workspace-typescript/code-generation';
 import { createContext } from '@causa/workspace/testing';
 import { mkdtemp, rm } from 'fs/promises';
 import { tmpdir } from 'os';
 import { join } from 'path';
-import { QuickTypeError } from 'quicktype-core';
 import { GoogleSpannerRenderer } from './google-spanner-renderer.js';
 import { generateFromSchema } from './utils.test.js';
 
@@ -112,10 +111,8 @@ describe('GoogleSpannerRenderer', () => {
 
     const actualPromise = generateFromSchema(language, schema, outputFile);
 
-    await expect(actualPromise).rejects.toThrow(QuickTypeError);
-    await expect(actualPromise).rejects.toHaveProperty(
-      'properties.message',
-      expect.stringContaining(`Invalid 'googleSpannerTable' attribute`),
+    await expect(actualPromise).rejects.toThrow(
+      `Invalid 'googleSpannerTable' attribute`,
     );
   });
 

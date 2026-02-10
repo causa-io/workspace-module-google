@@ -2,7 +2,7 @@ import { WorkspaceContext } from '@causa/workspace';
 import {
   type BackfillEvent,
   BackfillEventPublisher,
-} from '@causa/workspace-core';
+} from '@causa/workspace-core/backfill';
 import type { PublishOptions } from '@google-cloud/pubsub';
 import { FlowControlledPublisher } from '@google-cloud/pubsub/build/src/publisher/flow-publisher.js';
 import { PubSubService } from '../services/index.js';

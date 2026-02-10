@@ -2,7 +2,7 @@ import { WorkspaceContext } from '@causa/workspace';
 import {
   type DockerContainerPublish,
   DockerEmulatorService,
-} from '@causa/workspace-core';
+} from '@causa/workspace-core/services';
 import {
   type GoogleConfiguration,
   getLocalGcpProject,

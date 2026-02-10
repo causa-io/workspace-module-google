@@ -1,5 +1,4 @@
-import { SecretFetch, WorkspaceContext } from '@causa/workspace';
-import { GoogleApisService } from '../../services/index.js';
+import { callDeferred, SecretFetch, WorkspaceContext } from '@causa/workspace';
 
 /**
  * An error thrown when the auth client does not return a token.
@@ -21,14 +20,7 @@ export class AuthClientResponseError extends Error {
  */
 export class SecretFetchForGoogleAccessToken extends SecretFetch {
   async _call(context: WorkspaceContext): Promise<string> {
-    const authClient = await context.service(GoogleApisService).getAuthClient();
-    const { token } = await authClient.getAccessToken();
-
-    if (!token) {
-      throw new AuthClientResponseError();
-    }
-
-    return token;
+    return await callDeferred(this, context, import.meta.url);
   }
 
   _supports(): boolean {

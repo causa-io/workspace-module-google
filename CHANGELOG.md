@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+Breaking changes:
+
+- Move services as a separate export.
+
+Chores:
+
+- Defer loading of heavy dependencies (Google-related) during function registration.
+
 ## v0.12.2 (2026-02-06)
 
 Chore:

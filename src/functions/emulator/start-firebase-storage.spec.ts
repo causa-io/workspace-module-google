@@ -8,7 +8,7 @@ import { createContext, registerMockFunction } from '@causa/workspace/testing';
 import { jest } from '@jest/globals';
 import 'jest-extended';
 import { fileURLToPath } from 'url';
-import { FirebaseEmulatorService } from '../../services/index.js';
+import { FirebaseEmulatorService } from '../../services/firebase-emulator.js';
 import { GoogleFirebaseStorageMergeRules } from '../google-firebase-storage/index.js';
 import { EmulatorStartForFirebaseStorage } from './start-firebase-storage.js';
 
