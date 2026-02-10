@@ -1,4 +1,5 @@
 import type { ModuleRegistrationContext } from '@causa/workspace';
+import { CausaListConfigurationSchemasForGoogle } from './causa/index.js';
 import {
   EmulatorStartForFirebaseStorage,
   EmulatorStartForFirestore,
@@ -50,6 +51,7 @@ import {
 
 export function registerFunctions(context: ModuleRegistrationContext) {
   context.registerFunctionImplementations(
+    CausaListConfigurationSchemasForGoogle,
     EmulatorStartForFirebaseStorage,
     EmulatorStartForFirestore,
     EmulatorStartForIdentityPlatform,

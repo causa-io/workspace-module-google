@@ -26,12 +26,13 @@
   "scripts": {
     "prebuild": "rimraf ./dist",
     "build": "tsc -p tsconfig.build.json",
-    "postbuild": "copyfiles -u 1 src/**/assets/**/* dist/",
+    "postbuild": "copyfiles -u 1 src/**/assets/**/* dist/ && node transform-schemas.mjs",
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "eslint \"src/**/*.ts\"",
     "test": "NODE_OPTIONS=\"--experimental-vm-modules --no-warnings=ExperimentalWarning\" jest",
     "test:cov": "npm run test -- --coverage",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "generateConfigurationSchemas": "cs model genCode && perl -pi -e 's|\\@causa/runtime|\\@causa/workspace/validation|g' src/configurations/generated.ts"
   },
   "dependencies": {
     "@causa/cli": ">= 0.6.5 < 1.0.0",

@@ -14,6 +14,15 @@ causa:
     '@causa/workspace-core': '>= 0.25.2'
     '@causa/workspace-typescript': '>= 0.15.2'
 
+model:
+  schema: jsonschema
+
+  codeGenerators:
+    - generator: typescriptModelClass
+      globs: [./src/configurations/schemas/*.yaml]
+      nestedSchemas: []
+      output: src/configurations/generated.ts
+
 javascript:
   dependencies:
     check:
