@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.13.0-rc.2 (2026-02-10)
+
 Fixes:
 
 - Redefine base service container trigger properties to ensure proper schema matching.
