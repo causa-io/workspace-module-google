@@ -1,0 +1,426 @@
+# yaml-language-server: $schema=https://json-schema.org/draft-07/schema
+
+title: GoogleConfiguration
+type: object
+description: The schema for Google / GCP configuration.
+properties:
+  google:
+    title: Google
+    type: object
+    description: Configuration for everything Google / GCP-related.
+    properties:
+      project:
+        type: string
+        description: The ID of the default GCP project used when performing operations.
+
+      region:
+        type: string
+        description: The GCP region in which resource should be created and managed.
+
+      localProject:
+        type: string
+        description: |-
+          The ID of a local GCP project (which does not exist on GCP).
+          This is for example used by emulators. It should usually start with `demo-` to be compatible with some emulators.
+
+      services:
+        type: array
+        items:
+          type: string
+        description: |-
+          The list of GCP services on which the project depends.
+          This is useful to automatically enable those services in the GCP project.
+
+      gcloud:
+        title: GoogleGcloud
+        type: object
+        description: |-
+          Configuration for the `gcloud` command.
+          This applies to Dockerized calls to `gcloud` using the official `gcloud` Docker image.
+        properties:
+          version:
+            type: string
+            description: The version of the `gcloud` command.
+
+      firebase:
+        title: GoogleFirebase
+        type: object
+        description: Configuration for the Firebase project.
+        properties:
+          adminServiceAccount:
+            type: string
+            description: |-
+              An existing service account that can be used to sign Identity Platform custom token.
+              Generating custom tokens by signing them using end-user credentials does not work with Identity Platform.
+              A good choice is usually the service account automatically created by Firebase:
+              `firebase-adminsdk-<random ID>@<GCP project>.iam.gserviceaccount.com`
+              If this is not set and is needed by an operation, an attempt will be made to find this service account in the
+              current `google.project`.
+
+          apiKey:
+            type: string
+            description: |-
+              The Firebase API key used by clients. Used to perform requests to Firebase as an end user.
+              This can be found in the GCP or Firebase Console.
+              If this is not set and is needed by an operation, an attempt will be made to find the key automatically using
+              the API.
+
+          appId:
+            type: string
+            description: |-
+              The Firebase app ID used by clients.
+              This can be found in the Firebase Console. Each platform (Android, iOS, Web) has its own app ID.
+              If this is not set and is needed by an operation, an attempt will be made to find the first eligible app ID
+              using the Firebase API.
+
+          authDomain:
+            type: string
+            description: |-
+              The domain name for the project.
+              If not set, this default to `<GCP project>.firebaseapp.com`.
+
+          tools:
+            title: GoogleFirebaseTools
+            type: object
+            description: |-
+              Configuration for Firebase tools (the CLI).
+              This applies to Dockerized calls to the `firebase` CLI.
+            properties:
+              version:
+                type: string
+                description: The version of the CLI to use.
+
+      secretManager:
+        title: GoogleSecretManager
+        type: object
+        description: Configuration for the Secret Manager service.
+        properties:
+          project:
+            type: string
+            description: The ID of the default GCP project referenced when fetching secrets.
+
+      firebaseStorage:
+        title: GoogleFirebaseStorage
+        type: object
+        description: Configuration for the Firebase Storage service.
+        properties:
+          emulator:
+            title: GoogleFirebaseStorageEmulator
+            type: object
+            description: Configuration for the emulator.
+            properties:
+              containerName:
+                type: string
+                description: The name of the local Docker container running the emulator.
+
+          securityRuleFiles:
+            type: array
+            items:
+              type: string
+            description: A list of glob patterns to find files in the workspace defining Firebase Storage security rules.
+
+          securityRuleFile:
+            type: string
+            description: The file path, relative to the workspace root, where the merged security rules file is written.
+
+      identityPlatform:
+        title: GoogleIdentityPlatform
+        type: object
+        description: Configuration for the Identity Platform (formerly Firebase Auth) service.
+        properties:
+          emulator:
+            title: GoogleIdentityPlatformEmulator
+            type: object
+            description: Configuration for the emulator.
+            properties:
+              containerName:
+                type: string
+                description: The name of the local Docker container running the emulator.
+
+      firestore:
+        title: GoogleFirestore
+        type: object
+        description: Configuration for the Firestore service.
+        properties:
+          emulator:
+            title: GoogleFirestoreEmulator
+            type: object
+            description: Configuration for the emulator.
+            properties:
+              containerName:
+                type: string
+                description: The name of the local Docker container running the emulator.
+
+          securityRuleFiles:
+            type: array
+            items:
+              type: string
+            description: A list of glob patterns to find files in the workspace defining Firestore security rules.
+
+          securityRuleFile:
+            type: string
+            description: The file path, relative to the workspace root, where the merged security rules file is written.
+
+      pubSub:
+        title: GooglePubSub
+        type: object
+        description: Configuration for the Pub/Sub service.
+        properties:
+          emulator:
+            title: GooglePubSubEmulator
+            type: object
+            description: Configuration for the emulator.
+            properties:
+              containerName:
+                type: string
+                description: The name of the local Docker container running the emulator.
+
+          topicConfigurationsDirectory:
+            type: string
+            description: The directory where the topic configuration files are written by the `GooglePubSubWriteTopics` processor.
+
+          minimumBackoff:
+            type: string
+            description: The default minimum backoff for Pub/Sub push subscription retry policy.
+
+          maximumBackoff:
+            type: string
+            description: The default maximum backoff for Pub/Sub push subscription retry policy.
+
+          bigQueryStorage:
+            title: GooglePubSubBigQueryStorage
+            type: object
+            description: Configuration for the storage of Pub/Sub events in BigQuery.
+            properties:
+              rawEventsDatasetId:
+                type: string
+                description: The ID of the BigQuery dataset where raw Pub/Sub events should be stored.
+
+              location:
+                type: string
+                description: |-
+                  The BigQuery location for the datasets.
+                  See https://cloud.google.com/bigquery/docs/locations for more details.
+
+      spanner:
+        title: GoogleSpanner
+        type: object
+        description: Configuration for the Spanner service.
+        properties:
+          emulator:
+            title: GoogleSpannerEmulator
+            type: object
+            description: Configuration for the emulator.
+            properties:
+              containerName:
+                type: string
+                description: The name of the local Docker container running the emulator.
+
+              version:
+                type: string
+                description: The version of the Spanner emulator Docker image to use.
+
+              instanceName:
+                type: string
+                description: The name of the Spanner instance that will automatically be created in the emulator.
+
+          instance:
+            title: GoogleSpannerInstance
+            type: object
+            description: Configuration for the Spanner instance.
+            properties:
+              name:
+                type: string
+                description: The name of the Spanner instance.
+
+              configuration:
+                type: string
+                description: |-
+                  The instance geographic configuration.
+                  See https://cloud.google.com/spanner/docs/instance-configurations for more details.
+
+              processingUnits:
+                type: number
+                description: |-
+                  The compute capacity of the instance.
+                  See https://cloud.google.com/spanner/docs/compute-capacity for more details.
+
+              autoscaling:
+                title: GoogleSpannerInstanceAutoscaling
+                type: object
+                description: Autoscaling configuration for the Spanner instance.
+                properties:
+                  maxProcessingUnits:
+                    type: number
+                    description: The maximum number of processing units for autoscaling.
+
+                  minProcessingUnits:
+                    type: number
+                    description: The minimum number of processing units for autoscaling.
+
+                  highPriorityCpuUtilizationTarget:
+                    type: number
+                    description: The target high-priority CPU utilization percentage for autoscaling.
+
+                  storageUtilizationTarget:
+                    type: number
+                    description: The target storage utilization percentage for autoscaling.
+
+              edition:
+                type: string
+                description: The edition of the Spanner instance (e.g. STANDARD, ENTERPRISE).
+
+          ddls:
+            title: GoogleSpannerDdls
+            type: object
+            description: Defines how DDLs are found for the Spanner databases in the workspace.
+            properties:
+              format:
+                type: string
+                description: The format string using groups from the regular expression used to make the database names.
+
+              globs:
+                type: array
+                items:
+                  type: string
+                description: A list of glob patterns used to find SQL files containing DDL statements for the Spanner databases.
+
+              regularExpression:
+                type: string
+                description: The regular expression used to extract groups from the SQL file paths.
+
+          databaseConfigurationsDirectory:
+            type: string
+            description: The directory where the database configuration files are written by the `GoogleSpannerWriteDatabases` processor.
+
+          versionRetentionPeriod:
+            type: string
+            description: The default version retention period for Spanner databases.
+
+          databaseDdlTimeout:
+            type: string
+            description: The timeout for Spanner database DDL operations.
+
+      cloudFunctions:
+        title: GoogleCloudFunctions
+        type: object
+        description: Configuration for Cloud Functions.
+        properties:
+          artefactStorage:
+            title: GoogleCloudFunctionsArtefactStorage
+            type: object
+            description: The Cloud Storage configuration where Cloud Functions archives should be uploaded.
+            properties:
+              bucket:
+                type: string
+                description: The name of the Cloud Storage bucket.
+
+              prefix:
+                type: string
+                description: An optional prefix within the Cloud Storage bucket.
+
+      cloudRun:
+        title: GoogleCloudRun
+        type: object
+        description: Configuration for Cloud Run containers.
+        properties:
+          dockerRepository:
+            type: string
+            description: The Docker repository where Cloud Run containers should be uploaded.
+
+          location:
+            type: string
+            description: The location where Cloud Run services should be deployed.
+
+          secretEnvironmentVariables:
+            type: object
+            description: |-
+              A map where keys are the name of environment variables, and values are secret versions IDs (e.g.
+              `projects/my-project/secrets/my-secret/versions/1`).
+            additionalProperties:
+              $ref: '#/$defs/_TemplateString'
+
+          cpuAlwaysAllocated:
+            type: boolean
+            description: Whether the container is running between requests and can perform background operations.
+
+          startupCpuBoost:
+            type: boolean
+            description: Whether to enable CPU boost during instance startup.
+
+          timeout:
+            type: number
+            description: The max duration the instance is allowed for responding to a request, in seconds.
+
+          requestConcurrency:
+            type: number
+            description: The maximum allowed in-flight (concurrent) requests per container.
+
+          ingress:
+            title: GoogleCloudRunIngress
+            type: string
+            enum:
+              - all
+              - internal
+              - internal-and-cloud-load-balancing
+            description: |-
+              The type of allowed ingress that can reach the container.
+              See https://cloud.google.com/run/docs/securing/ingress#settings for more details.
+
+          vpcAccessConnector:
+            type: string
+            description: The name of the VPC access connector through which egress traffic should be routed.
+
+          vpcAccessConnectorEgressSettings:
+            title: GoogleCloudRunVpcAccessConnectorEgressSettings
+            type: string
+            enum:
+              - all-traffic
+              - private-ranges-only
+            description: |-
+              The setting for egress traffic that goes through the VPC access connector.
+              See https://cloud.google.com/run/docs/configuring/connecting-vpc#manage for more details.
+
+      scheduler:
+        title: GoogleScheduler
+        type: object
+        description: Default configuration for Cloud Scheduler jobs.
+        properties:
+          retryCount:
+            type: number
+            description: The default number of retry attempts for Cloud Scheduler jobs.
+
+          maxRetryDuration:
+            type: string
+            description: The default maximum duration for retrying a failed Cloud Scheduler job.
+
+          minBackoffDuration:
+            type: string
+            description: The default minimum backoff duration for Cloud Scheduler job retries.
+
+          maxBackoffDuration:
+            type: string
+            description: The default maximum backoff duration for Cloud Scheduler job retries.
+
+          maxDoublings:
+            type: number
+            description: The default maximum number of times the backoff duration is doubled for Cloud Scheduler job retries.
+
+          attemptDeadline:
+            type: string
+            description: The default deadline for Cloud Scheduler job attempts.
+
+      loadBalancing:
+        title: GoogleLoadBalancing
+        type: object
+        description: Configuration for Google Cloud load balancing.
+        properties:
+          customRequestHeaders:
+            type: array
+            items:
+              type: string
+            description: A list of custom request headers to add to load-balanced requests.
+
+$defs:
+  _TemplateString:
+    type: string
