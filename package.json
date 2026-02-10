@@ -30,7 +30,8 @@
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "eslint \"src/**/*.ts\"",
     "test": "NODE_OPTIONS=\"--experimental-vm-modules --no-warnings=ExperimentalWarning\" jest",
-    "test:cov": "npm run test -- --coverage"
+    "test:cov": "npm run test -- --coverage",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@causa/cli": ">= 0.6.5 < 1.0.0",
