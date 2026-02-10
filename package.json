@@ -33,10 +33,10 @@
     "test:cov": "npm run test -- --coverage"
   },
   "dependencies": {
-    "@causa/cli": ">= 0.6.4 < 1.0.0",
-    "@causa/workspace": ">= 0.19.2 < 1.0.0",
-    "@causa/workspace-core": ">= 0.26.0 < 1.0.0",
-    "@causa/workspace-typescript": ">= 0.16.0 < 1.0.0",
+    "@causa/cli": ">= 0.6.5 < 1.0.0",
+    "@causa/workspace": ">= 0.22.0 < 1.0.0",
+    "@causa/workspace-core": ">= 0.27.0-rc.1 < 1.0.0",
+    "@causa/workspace-typescript": ">= 0.17.0-rc.1 < 1.0.0",
     "@google-cloud/apikeys": "^2.2.1",
     "@google-cloud/bigquery": "^8.1.1",
     "@google-cloud/iam-credentials": "^4.2.1",
@@ -55,7 +55,7 @@
     "google-gax": "5.0.6",
     "googleapis": "^171.4.0",
     "micromatch": "^4.0.8",
-    "pino": "^10.3.0",
+    "pino": "^10.3.1",
     "quicktype-core": "^23.2.6"
   },
   "devDependencies": {
@@ -64,7 +64,7 @@
     "@tsconfig/node20": "^20.1.9",
     "@types/jest": "^30.0.0",
     "@types/micromatch": "^4.0.10",
-    "@types/node": "^22.19.9",
+    "@types/node": "^22.19.10",
     "copyfiles": "^2.4.1",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
@@ -74,6 +74,6 @@
     "rimraf": "^6.1.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.54.0"
+    "typescript-eslint": "^8.55.0"
   }
 }
