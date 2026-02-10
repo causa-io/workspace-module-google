@@ -1100,10 +1100,38 @@ export class ServiceContainerGoogleTrigger {
   readonly 'google.pubSub'?: ServiceContainerGooglePubSubTriggerOptions;
 
   /**
+   * The ID of the topic triggering the endpoint.
+   */
+  @AllowMissing()
+  @IsString()
+  readonly topic?: string;
+
+  /**
    * Google Cloud Scheduler-specific options for the trigger.
    */
   @AllowMissing()
   readonly 'google.scheduler'?: ServiceContainerGoogleSchedulerTriggerOptions;
+
+  /**
+   * The cron schedule expression for cron triggers.
+   */
+  @AllowMissing()
+  @IsString()
+  readonly schedule?: string;
+
+  /**
+   * The timezone for the cron schedule.
+   */
+  @AllowMissing()
+  @IsString()
+  readonly timezone?: string;
+
+  /**
+   * The name of the queue for task triggers.
+   */
+  @AllowMissing()
+  @IsString()
+  readonly queue?: string;
 
   /**
    * The retry policy for the Cloud Tasks queue.
