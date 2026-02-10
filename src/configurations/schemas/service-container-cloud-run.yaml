@@ -32,6 +32,10 @@ properties:
                     - event
                   description: The type of trigger.
 
+                topic:
+                  type: string
+                  description: The ID of the topic triggering the endpoint.
+
                 google.pubSub:
                   title: ServiceContainerGooglePubSubTriggerOptions
                   type: object
@@ -51,6 +55,7 @@ properties:
 
               required:
                 - type
+                - topic
 
             - title: ServiceContainerGoogleSchedulerTrigger
               type: object
@@ -63,6 +68,14 @@ properties:
                     - google.scheduler
                     - cron
                   description: The type of trigger.
+
+                schedule:
+                  type: string
+                  description: The cron schedule expression for cron triggers.
+
+                timezone:
+                  type: string
+                  description: The timezone for the cron schedule.
 
                 google.scheduler:
                   title: ServiceContainerGoogleSchedulerTriggerOptions
@@ -95,6 +108,7 @@ properties:
 
               required:
                 - type
+                - schedule
 
             - title: ServiceContainerGoogleTaskTrigger
               type: object
@@ -107,6 +121,10 @@ properties:
                     - google.tasks
                     - task
                   description: The type of trigger.
+
+                queue:
+                  type: string
+                  description: The name of the queue for task triggers.
 
                 retryPolicy:
                   title: ServiceContainerGoogleTaskTriggerRetryPolicy
@@ -135,6 +153,7 @@ properties:
 
               required:
                 - type
+                - queue
 
             - title: ServiceContainerGoogleEventarcTrigger
               type: object
