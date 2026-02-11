@@ -7,6 +7,16 @@ properties:
   serviceContainer:
     type: object
     properties:
+      platform:
+        anyOf:
+          - type: string
+
+          - title: GoogleCloudRunPlatform
+            type: string
+            enum:
+              - google.cloudRun
+            description: Google Cloud Run platform.
+
       triggers:
         type: object
         description: A map of triggers that call the service's endpoints when they occur.

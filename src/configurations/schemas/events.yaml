@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://json-schema.org/draft-07/schema
+
+title: GoogleEventsConfiguration
+type: object
+description: Google-specific refinement of the events configuration.
+properties:
+  events:
+    type: object
+    properties:
+      broker:
+        anyOf:
+          - type: string
+
+          - title: GooglePubSubBroker
+            type: string
+            enum:
+              - google.pubSub
+            description: Google Pub/Sub message broker.

@@ -15,8 +15,12 @@ describe('CausaListConfigurationSchemasForGoogle', () => {
 
     const actualBaseNames = actualSchemas.map((s) => basename(s));
     expect(actualBaseNames).toIncludeSameMembers([
+      'events.yaml',
       'google.yaml',
-      'service-container-cloud-run.yaml',
+      'infrastructure.yaml',
+      'secrets.yaml',
+      'serverless-functions.yaml',
+      'service-container.yaml',
     ]);
   });
 });
