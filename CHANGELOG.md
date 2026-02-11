@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## v0.13.0 (2026-02-11)
+
+Same as release candidates.
+
 ## v0.13.0-rc.2 (2026-02-10)
 
 Fixes:
@@ -13,6 +17,10 @@ Fixes:
 Breaking changes:
 
 - Move services as a separate export.
+
+Features:
+
+- Define JSONSchemas for configurations and provide them with `CausaListConfigurationSchemas`.
 
 Chores:
 
