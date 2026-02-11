@@ -10,6 +10,30 @@ import {
   IsString,
 } from 'class-validator';
 
+export class Events {
+  constructor(init: Events) {
+    Object.assign(this, init);
+  }
+
+  @AllowMissing()
+  @IsString()
+  readonly broker?: string;
+  [property: string]: any;
+}
+
+/**
+ * Google-specific refinement of the events configuration.
+ */
+export class GoogleEventsConfiguration {
+  constructor(init: GoogleEventsConfiguration) {
+    Object.assign(this, init);
+  }
+
+  @AllowMissing()
+  readonly events?: Events;
+  [property: string]: any;
+}
+
 /**
  * The Cloud Storage configuration where Cloud Functions archives should be uploaded.
  */
@@ -872,6 +896,117 @@ export class GoogleConfiguration {
   [property: string]: any;
 }
 
+/**
+ * Merges all Firebase Storage security rules from the workspace.
+ * Sets the `google.firebaseStorage.securityRuleFile` configuration value.
+ */
+export class GoogleProcessor {
+  constructor(init: GoogleProcessor) {
+    Object.assign(this, init);
+  }
+
+  @IsString()
+  readonly name!: string;
+  [property: string]: any;
+}
+
+export class Infrastructure {
+  constructor(init: Infrastructure) {
+    Object.assign(this, init);
+  }
+
+  @AllowMissing()
+  @IsArray()
+  readonly processors?: GoogleProcessor[];
+  [property: string]: any;
+}
+
+/**
+ * Google-specific refinement of the infrastructure configuration with known processors.
+ */
+export class GoogleInfrastructureConfiguration {
+  constructor(init: GoogleInfrastructureConfiguration) {
+    Object.assign(this, init);
+  }
+
+  @AllowMissing()
+  readonly infrastructure?: Infrastructure;
+  [property: string]: any;
+}
+
+export class Secrets {
+  constructor(init: Secrets) {
+    Object.assign(this, init);
+  }
+
+  @AllowMissing()
+  @IsString()
+  readonly defaultBackend?: string;
+  [property: string]: any;
+}
+
+export class Causa {
+  constructor(init: Causa) {
+    Object.assign(this, init);
+  }
+
+  @AllowMissing()
+  readonly secrets?: Secrets;
+  [property: string]: any;
+}
+
+export class Secret {
+  constructor(init: Secret) {
+    Object.assign(this, init);
+  }
+
+  @AllowMissing()
+  @IsString()
+  readonly backend?: string;
+  [property: string]: any;
+}
+
+/**
+ * Google-specific refinement of the secrets configuration.
+ */
+export class GoogleSecretsConfiguration {
+  constructor(init: GoogleSecretsConfiguration) {
+    Object.assign(this, init);
+  }
+
+  @AllowMissing()
+  readonly causa?: Causa;
+
+  @AllowMissing()
+  @IsObject()
+  readonly secrets?: { [key: string]: Secret };
+  [property: string]: any;
+}
+
+export class ServerlessFunctions {
+  constructor(init: ServerlessFunctions) {
+    Object.assign(this, init);
+  }
+
+  @AllowMissing()
+  @IsString()
+  readonly platform?: string;
+  [property: string]: any;
+}
+
+/**
+ * Google-specific refinement of the serverless functions configuration.
+ */
+export class GoogleServerlessFunctionsConfiguration {
+  constructor(init: GoogleServerlessFunctionsConfiguration) {
+    Object.assign(this, init);
+  }
+
+  @AllowMissing()
+  readonly serverlessFunctions?: ServerlessFunctions;
+  [property: string]: any;
+}
+
 export class Outputs {
   constructor(init: Outputs) {
     Object.assign(this, init);
@@ -1154,6 +1289,10 @@ export class ServiceContainer {
 
   @AllowMissing()
   readonly outputs?: Outputs;
+
+  @AllowMissing()
+  @IsString()
+  readonly platform?: string;
 
   /**
    * A map of triggers that call the service's endpoints when they occur.
