@@ -1,6 +1,6 @@
 {
   "name": "@causa/workspace-google",
-  "version": "0.13.0-rc.2",
+  "version": "0.13.0",
   "description": "The Causa workspace module providing many functionalities related to GCP and its services.",
   "repository": {
     "type": "git",
@@ -37,8 +37,8 @@
   "dependencies": {
     "@causa/cli": ">= 0.6.5 < 1.0.0",
     "@causa/workspace": ">= 0.22.1 < 1.0.0",
-    "@causa/workspace-core": ">= 0.27.0-rc.2 < 1.0.0",
-    "@causa/workspace-typescript": ">= 0.17.0-rc.2 < 1.0.0",
+    "@causa/workspace-core": ">= 0.27.0 < 1.0.0",
+    "@causa/workspace-typescript": ">= 0.17.0 < 1.0.0",
     "@google-cloud/apikeys": "^2.2.1",
     "@google-cloud/bigquery": "^8.1.1",
     "@google-cloud/iam-credentials": "^4.2.1",
