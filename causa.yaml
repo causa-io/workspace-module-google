@@ -1,4 +1,4 @@
-version: 1
+# yaml-language-server: $schema=.causa/configuration-schema.yaml
 
 workspace:
   name: causa
@@ -11,8 +11,8 @@ project:
 
 causa:
   modules:
-    '@causa/workspace-core': '>= 0.27.0-rc.2'
-    '@causa/workspace-typescript': '>= 0.17.0-rc.2'
+    '@causa/workspace-core': '>= 0.27.0'
+    '@causa/workspace-typescript': '>= 0.17.0'
 
 model:
   schema: jsonschema

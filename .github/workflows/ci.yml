@@ -19,6 +19,7 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 24
+          cache: npm
 
       - name: 🔨 Install Causa
         run: npm install -g @causa/cli
@@ -63,6 +64,7 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 24
+          cache: npm
 
       - name: 🔨 Install Causa
         run: npm install -g @causa/cli
