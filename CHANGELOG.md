@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+Features:
+
+- Refine configuration schemas with known `events.broker`, `serviceContainer.platform`, `serverlessFunctions.platform`, `infrastructure.processors`, and `secrets` backend values.
+
 ## v0.13.0 (2026-02-11)
 
 Same as release candidates.
