@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+Chore:
+
+- Upgrade dependencies.
+
 ## v0.14.0 (2026-02-11)
 
 Features:
