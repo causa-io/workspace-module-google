@@ -9,7 +9,7 @@
   "license": "ISC",
   "type": "module",
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -63,7 +63,7 @@
   "devDependencies": {
     "@swc/core": "^1.15.24",
     "@swc/jest": "^0.2.39",
-    "@tsconfig/node20": "^20.1.9",
+    "@tsconfig/node22": "^22.0.5",
     "@types/jest": "^30.0.0",
     "@types/micromatch": "^4.0.10",
     "@types/node": "^20.19.39",
