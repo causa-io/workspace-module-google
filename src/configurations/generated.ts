@@ -89,8 +89,8 @@ export enum GoogleCloudRunIngress {
  * See https://cloud.google.com/run/docs/configuring/connecting-vpc#manage for more details.
  */
 export enum GoogleCloudRunVpcAccessConnectorEgressSettings {
-  AllTraffic = 'all-traffic',
-  PrivateRangesOnly = 'private-ranges-only',
+  AllTraffic = 'ALL_TRAFFIC',
+  PrivateRangesOnly = 'PRIVATE_RANGES_ONLY',
 }
 
 /**
@@ -171,7 +171,7 @@ export class GoogleCloudRun {
    * See https://cloud.google.com/run/docs/configuring/connecting-vpc#manage for more details.
    */
   @AllowMissing()
-  @IsIn(['all-traffic', 'private-ranges-only'])
+  @IsIn(['ALL_TRAFFIC', 'PRIVATE_RANGES_ONLY'])
   readonly vpcAccessConnectorEgressSettings?: GoogleCloudRunVpcAccessConnectorEgressSettings;
   [property: string]: any;
 }
@@ -955,14 +955,28 @@ export class Causa {
   [property: string]: any;
 }
 
-export class Secret {
-  constructor(init: Secret) {
+/**
+ * A secret that returns a Google access token for the current user or service account.
+ * This backend does not require any additional configuration.
+ */
+export class GoogleSecretConfiguration {
+  constructor(init: GoogleSecretConfiguration) {
     Object.assign(this, init);
   }
 
   @AllowMissing()
   @IsString()
   readonly backend?: string;
+
+  /**
+   * The reference to the secret in Google Secret Manager.
+   * Supported formats: `<secret-name>`, `projects/<project>/secrets/<secret-name>`, `projects/<project>/secrets/<secret-name>/versions/<version>`.
+   * If the project is not specified, `google.secretManager.project` or `google.project` will be used.
+   * If the version is not specified, `latest` will be used.
+   */
+  @AllowMissing()
+  @IsString()
+  readonly id?: string;
   [property: string]: any;
 }
 
@@ -979,7 +993,7 @@ export class GoogleSecretsConfiguration {
 
   @AllowMissing()
   @IsObject()
-  readonly secrets?: { [key: string]: Secret };
+  readonly secrets?: { [key: string]: GoogleSecretConfiguration };
   [property: string]: any;
 }
 

@@ -375,8 +375,8 @@ properties:
             title: GoogleCloudRunVpcAccessConnectorEgressSettings
             type: string
             enum:
-              - all-traffic
-              - private-ranges-only
+              - ALL_TRAFFIC
+              - PRIVATE_RANGES_ONLY
             description: |-
               The setting for egress traffic that goes through the VPC access connector.
               See https://cloud.google.com/run/docs/configuring/connecting-vpc#manage for more details.
