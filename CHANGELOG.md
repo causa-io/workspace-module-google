@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+Breaking changes:
+
+- Remove support for Node.js 20.
+
+Fixes:
+
+- Define `vpcAccessConnectorEgressSettings` enum values as upper snake case.
+
 ## v0.14.1 (2026-03-16)
 
 Chore:
