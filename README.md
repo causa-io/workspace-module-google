@@ -55,7 +55,10 @@ The following emulators are implemented:
 
 ### Backfilling
 
-Backfilling is supported when `google.pubSub` is set as the `events.broker`. Temporary triggers can be created for Cloud Run services, by referencing them using the format `[[projects/<projectId>/]locations/<location>/]services/<name>/path-to-trigger`.
+Backfilling is supported when `google.pubSub` is set as the `events.broker`. Temporary triggers can be created for Cloud Run services in two ways:
+
+- As a raw URI, using the format `[[projects/<projectId>/]locations/<location>/]services/<name>/path-to-trigger`.
+- As a project-scoped trigger, using the format `<projectPath>#<triggerName>[?<options>]`. The referenced project must be of type `serviceContainer` with `google.cloudRun` as `serviceContainer.platform`. The HTTP path is read from `serviceContainer.triggers[<triggerName>].endpoint` (whose `type` must be `http`), and the `options` query string is forwarded as URL query parameters. The target Cloud Run service name defaults to `project.name`, and can be overridden by setting `google.cloudRun.eventBackfillServiceName`.
 
 When no source is specified, the default is to fetch events to backfill from the BigQuery dataset configured in `google.pubSub.bigQueryStorage`. A custom BigQuery table can also be set as source using the `bq://<projectId>.<datasetId>.<tableId>` format. It should have the `data` and `attributes` columns.
 

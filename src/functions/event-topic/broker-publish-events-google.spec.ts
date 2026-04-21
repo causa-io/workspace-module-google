@@ -1,37 +1,51 @@
 import { WorkspaceContext } from '@causa/workspace';
-import { EventTopicBrokerPublishEvents } from '@causa/workspace-core';
-import { JsonFilesEventSource } from '@causa/workspace-core/backfill';
+import {
+  type BackfillEvent,
+  EventTopicBrokerPublishEvents,
+} from '@causa/workspace-core';
 import { NoImplementationFoundError } from '@causa/workspace/function-registry';
 import { createContext } from '@causa/workspace/testing';
 import { jest } from '@jest/globals';
 import 'jest-extended';
-import {
-  BigQueryEventsSource,
-  PubSubBackfillEventPublisher,
-} from '../../backfilling/index.js';
+import { setTimeout } from 'timers/promises';
+import { PubSubService } from '../../services/index.js';
 import { EventTopicBrokerPublishEventsForGoogle } from './broker-publish-events-google.js';
 
 describe('EventTopicBrokerPublishEventsForGoogle', () => {
   let context: WorkspaceContext;
+  let publisher: { publish: jest.Mock; all: jest.Mock };
+  let publishMock: jest.Mock;
 
   beforeEach(() => {
     ({ context } = createContext({
       configuration: {
         workspace: { name: 'my-workspace' },
         events: { broker: 'google.pubSub' },
-        google: {
-          project: 'my-project',
-          pubSub: {
-            bigQueryStorage: {
-              rawEventsDatasetId: 'my-dataset',
-              location: 'EU',
-            },
-          },
-        },
+        google: { project: 'my-project' },
       },
       functions: [EventTopicBrokerPublishEventsForGoogle],
     }));
+
+    publishMock = jest.fn().mockReturnValue(null);
+    publisher = {
+      publish: publishMock,
+      all: jest.fn().mockResolvedValue([] as never),
+    };
+    jest.spyOn(context.service(PubSubService).pubSub, 'topic').mockReturnValue({
+      flowControlled: () => publisher,
+    } as any);
   });
+
+  function makeSource(numEvents: number): () => AsyncIterable<BackfillEvent> {
+    return async function* () {
+      for (let i = 0; i < numEvents; i++) {
+        yield {
+          data: Buffer.from(`e-${i}`),
+          attributes: { index: `${i}` },
+        };
+      }
+    };
+  }
 
   it('should not support a broker other than google.pubSub', () => {
     ({ context } = createContext({
@@ -46,86 +60,78 @@ describe('EventTopicBrokerPublishEventsForGoogle', () => {
       context.call(EventTopicBrokerPublishEvents, {
         eventTopic: 'my-topic',
         topicId: 'my-topic',
+        source: () => (async function* () {})(),
       }),
     ).toThrow(NoImplementationFoundError);
   });
 
-  it('should throw if the specified source is not supported', async () => {
-    const actualPromise = context.call(EventTopicBrokerPublishEvents, {
-      eventTopic: 'my-topic',
-      topicId: 'my-topic',
-      source: 'nope://💥',
-    });
-
-    await expect(actualPromise).rejects.toThrow(
-      `The event source 'nope://💥' is not supported.`,
-    );
-  });
-
-  it('should backfill events from a JSON source using the PubSubBackfillEventPublisher', async () => {
-    const publishMock = jest
-      .spyOn(PubSubBackfillEventPublisher.prototype, 'publishFromSource')
-      .mockResolvedValue();
-
+  it('should publish every event from the iterable and flush', async () => {
     await context.call(EventTopicBrokerPublishEvents, {
       eventTopic: 'my-topic',
       topicId: 'my-topic',
-      source: 'json://some/path',
+      source: makeSource(3),
     });
 
-    expect(publishMock).toHaveBeenCalledOnce();
-    expect(publishMock.mock.calls[0][0]).toBeInstanceOf(JsonFilesEventSource);
-  });
-
-  it('should backfill events from a BigQuery source using the PubSubBackfillEventPublisher', async () => {
-    const publishMock = jest
-      .spyOn(PubSubBackfillEventPublisher.prototype, 'publishFromSource')
-      .mockResolvedValue();
-
-    await context.call(EventTopicBrokerPublishEvents, {
-      eventTopic: 'my-topic',
-      topicId: 'my-topic',
-      source: 'bq://some/table',
-    });
-
-    expect(publishMock).toHaveBeenCalledOnce();
-    expect(publishMock.mock.calls[0][0]).toBeInstanceOf(BigQueryEventsSource);
-  });
-
-  it('should backfill events from the default BigQuery storage', async () => {
-    const publishMock = jest
-      .spyOn(PubSubBackfillEventPublisher.prototype, 'publishFromSource')
-      .mockResolvedValue();
-
-    await context.call(EventTopicBrokerPublishEvents, {
-      eventTopic: 'my-topic-name',
-      topicId: 'my-topic',
-    });
-
-    expect(publishMock).toHaveBeenCalledOnce();
-    const actualSource = publishMock.mock.calls[0][0] as BigQueryEventsSource;
-    expect(actualSource).toBeInstanceOf(BigQueryEventsSource);
-    expect(actualSource.tableId).toEqual('my-project.my-dataset.my_topic_name');
-    expect(actualSource.filter).toBeUndefined();
-  });
-
-  it('should throw if the default BigQuery storage is not configured', async () => {
-    ({ context } = createContext({
-      configuration: {
-        workspace: { name: 'my-workspace' },
-        events: { broker: 'google.pubSub' },
-        google: { project: 'my-project' },
-      },
-      functions: [EventTopicBrokerPublishEventsForGoogle],
+    expect(publishMock).toHaveBeenCalledTimes(3);
+    const actualMessages = publishMock.mock.calls.map(([message]: any) => ({
+      ...message,
+      data: message.data?.toString(),
     }));
+    expect(actualMessages).toEqual([
+      { data: 'e-0', attributes: { index: '0' }, orderingKey: undefined },
+      { data: 'e-1', attributes: { index: '1' }, orderingKey: undefined },
+      { data: 'e-2', attributes: { index: '2' }, orderingKey: undefined },
+    ]);
+    expect(publisher.all).toHaveBeenCalledOnce();
+  });
 
-    const actualPromise = context.call(EventTopicBrokerPublishEvents, {
+  it('should wait for the publisher to catch up before resuming', async () => {
+    let waitPromiseResolve!: () => void;
+    const waitPromise = new Promise<void>(
+      (resolve) => (waitPromiseResolve = resolve),
+    );
+    publishMock.mockImplementationOnce(() => waitPromise);
+
+    const publishPromise = context.call(EventTopicBrokerPublishEvents, {
       eventTopic: 'my-topic',
       topicId: 'my-topic',
+      source: makeSource(3),
+    });
+    await setTimeout(50);
+
+    expect(publishMock).toHaveBeenCalledExactlyOnceWith({
+      data: expect.any(Buffer),
+      attributes: { index: '0' },
+      orderingKey: undefined,
+    });
+    expect(publisher.all).not.toHaveBeenCalled();
+    waitPromiseResolve();
+
+    await publishPromise;
+    expect(publishMock).toHaveBeenCalledTimes(3);
+    expect(publisher.all).toHaveBeenCalledOnce();
+  });
+
+  it('should forward the ordering key when provided', async () => {
+    const source = (): AsyncIterable<BackfillEvent> =>
+      (async function* () {
+        yield {
+          data: Buffer.from('payload'),
+          attributes: { k: 'v' },
+          key: 'order-key',
+        };
+      })();
+
+    await context.call(EventTopicBrokerPublishEvents, {
+      eventTopic: 'my-topic',
+      topicId: 'my-topic',
+      source,
     });
 
-    await expect(actualPromise).rejects.toThrow(
-      'Cannot use the default event source because BigQuery storage is not configured.',
-    );
+    expect(publishMock).toHaveBeenCalledExactlyOnceWith({
+      data: expect.any(Buffer),
+      attributes: { k: 'v' },
+      orderingKey: 'order-key',
+    });
   });
 });

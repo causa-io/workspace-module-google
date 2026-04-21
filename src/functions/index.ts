@@ -21,6 +21,7 @@ import {
   EventTopicBrokerDeleteTriggerResourceForServiceAccount,
   EventTopicBrokerGetTopicIdForPubSub,
   EventTopicBrokerPublishEventsForGoogle,
+  EventTopicCreateBackfillSourceForBigQuery,
 } from './event-topic/index.js';
 import { GoogleAppCheckGenerateToken } from './google-app-check/index.js';
 import { GoogleFirebaseStorageMergeRules } from './google-firebase-storage/index.js';
@@ -70,6 +71,7 @@ export function registerFunctions(context: ModuleRegistrationContext) {
     EventTopicBrokerDeleteTriggerResourceForServiceAccount,
     EventTopicBrokerGetTopicIdForPubSub,
     EventTopicBrokerPublishEventsForGoogle,
+    EventTopicCreateBackfillSourceForBigQuery,
     GoogleAppCheckGenerateToken,
     GoogleFirebaseStorageMergeRules,
     GoogleFirestoreMergeRules,

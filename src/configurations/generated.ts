@@ -116,6 +116,15 @@ export class GoogleCloudRun {
   readonly dockerRepository?: string;
 
   /**
+   * For `serviceContainer` projects deployed on Cloud Run, the name of the Cloud Run service that receives
+   * events during a backfill targeting a project-scoped trigger. Defaults to the project's name
+   * (`project.name`) when unset.
+   */
+  @AllowMissing()
+  @IsString()
+  readonly eventBackfillServiceName?: string;
+
+  /**
    * The type of allowed ingress that can reach the container.
    * See https://cloud.google.com/run/docs/securing/ingress#settings for more details.
    */
