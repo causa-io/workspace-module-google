@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.16.0 (2026-04-21)
+
 Breaking changes:
 
 - Align with `@causa/workspace-core`'s async-iterable backfilling contract. Drop the `BigQueryEventsSource` and `PubSubBackfillEventPublisher` classes (and the `./backfilling` subpath), replaced by the `EventTopicCreateBackfillSourceForBigQuery` workspace function and inlined Pub/Sub publishing in `EventTopicBrokerPublishEventsForGoogle`.
