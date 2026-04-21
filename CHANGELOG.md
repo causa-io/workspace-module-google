@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+Breaking changes:
+
+- Align with `@causa/workspace-core`'s async-iterable backfilling contract. Drop the `BigQueryEventsSource` and `PubSubBackfillEventPublisher` classes (and the `./backfilling` subpath), replaced by the `EventTopicCreateBackfillSourceForBigQuery` workspace function and inlined Pub/Sub publishing in `EventTopicBrokerPublishEventsForGoogle`.
+- Support the new project-scoped trigger format in `EventTopicBrokerCreateTriggerForCloudRun`, on top of the existing URI string.
+
+Features:
+
+- Add the `google.cloudRun.eventBackfillServiceName` configuration, overriding the Cloud Run service targeted by project-scoped backfill triggers.
+
 ## v0.15.0 (2026-04-13)
 
 Breaking changes:
