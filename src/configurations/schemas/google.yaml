@@ -332,6 +332,13 @@ properties:
             type: string
             description: The location where Cloud Run services should be deployed.
 
+          eventBackfillServiceName:
+            type: string
+            description: |-
+              For `serviceContainer` projects deployed on Cloud Run, the name of the Cloud Run service that receives
+              events during a backfill targeting a project-scoped trigger. Defaults to the project's name
+              (`project.name`) when unset.
+
           secretEnvironmentVariables:
             type: object
             description: |-
