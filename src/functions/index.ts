@@ -25,7 +25,10 @@ import {
 } from './event-topic/index.js';
 import { GoogleAppCheckGenerateToken } from './google-app-check/index.js';
 import { GoogleFirebaseStorageMergeRules } from './google-firebase-storage/index.js';
-import { GoogleFirestoreMergeRules } from './google-firestore/index.js';
+import {
+  DatabaseQueryRecordsForFirestore,
+  GoogleFirestoreMergeRules,
+} from './google-firestore/index.js';
 import {
   GoogleIdentityPlatformGenerateCustomToken,
   GoogleIdentityPlatformGenerateToken,
@@ -54,6 +57,7 @@ import {
 export function registerFunctions(context: ModuleRegistrationContext) {
   context.registerFunctionImplementations(
     CausaListConfigurationSchemasForGoogle,
+    DatabaseQueryRecordsForFirestore,
     DatabaseQueryRecordsForSpanner,
     EmulatorStartForFirebaseStorage,
     EmulatorStartForFirestore,
