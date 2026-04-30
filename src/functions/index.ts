@@ -33,6 +33,7 @@ import {
 import { GooglePubSubWriteTopics } from './google-pubsub/index.js';
 import { GoogleServicesEnable } from './google-services/index.js';
 import {
+  DatabaseQueryRecordsForSpanner,
   GoogleSpannerListDatabases,
   GoogleSpannerWriteDatabases,
 } from './google-spanner/index.js';
@@ -53,6 +54,7 @@ import {
 export function registerFunctions(context: ModuleRegistrationContext) {
   context.registerFunctionImplementations(
     CausaListConfigurationSchemasForGoogle,
+    DatabaseQueryRecordsForSpanner,
     EmulatorStartForFirebaseStorage,
     EmulatorStartForFirestore,
     EmulatorStartForIdentityPlatform,
