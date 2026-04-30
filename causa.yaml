@@ -26,7 +26,7 @@ model:
 javascript:
   dependencies:
     check:
-      allowlist: [GHSA-vpq2-c234-7xj6]
+      allowlist: [GHSA-vpq2-c234-7xj6, GHSA-w5hq-g745-h8pq]
     update:
       packageTargets:
         "@types/node": minor
