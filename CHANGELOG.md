@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+Features:
+
+- Implement `DatabaseQueryRecords` for the `google.spanner` and `google.firestore` engines.
+- Implement `ServiceContainerQueryLogs` for the `google.cloudRun` platform by querying Cloud Logging.
+- Implement `EventTopicQueryEvents` for Pub/Sub topics whose events are stored in BigQuery.
+
 ## v0.16.0 (2026-04-21)
 
 Breaking changes:
