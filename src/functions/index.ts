@@ -49,6 +49,7 @@ import {
   SecretFetchForGoogleAccessToken,
   SecretFetchForGoogleSecretManager,
 } from './secret/index.js';
+import { ServiceContainerQueryLogsForCloudRun } from './service-container/index.js';
 import {
   TypeScriptGetDecoratorRendererForGoogleFirestore,
   TypeScriptGetDecoratorRendererForGoogleSpanner,
@@ -92,6 +93,7 @@ export function registerFunctions(context: ModuleRegistrationContext) {
     ProjectPushArtefactForCloudFunctions,
     SecretFetchForGoogleAccessToken,
     SecretFetchForGoogleSecretManager,
+    ServiceContainerQueryLogsForCloudRun,
     TypeScriptGetDecoratorRendererForGoogleFirestore,
     TypeScriptGetDecoratorRendererForGoogleSpanner,
   );
