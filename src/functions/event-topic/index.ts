@@ -7,3 +7,4 @@ export { EventTopicBrokerDeleteTriggerResourceForServiceAccount } from './broker
 export { EventTopicBrokerGetTopicIdForPubSub } from './broker-get-topic-id-pubsub.js';
 export { EventTopicBrokerPublishEventsForGoogle } from './broker-publish-events-google.js';
 export { EventTopicCreateBackfillSourceForBigQuery } from './create-backfill-source-bigquery.js';
+export { EventTopicQueryEventsForBigQuery } from './query-events-bigquery.js';

@@ -22,6 +22,7 @@ import {
   EventTopicBrokerGetTopicIdForPubSub,
   EventTopicBrokerPublishEventsForGoogle,
   EventTopicCreateBackfillSourceForBigQuery,
+  EventTopicQueryEventsForBigQuery,
 } from './event-topic/index.js';
 import { GoogleAppCheckGenerateToken } from './google-app-check/index.js';
 import { GoogleFirebaseStorageMergeRules } from './google-firebase-storage/index.js';
@@ -79,6 +80,7 @@ export function registerFunctions(context: ModuleRegistrationContext) {
     EventTopicBrokerGetTopicIdForPubSub,
     EventTopicBrokerPublishEventsForGoogle,
     EventTopicCreateBackfillSourceForBigQuery,
+    EventTopicQueryEventsForBigQuery,
     GoogleAppCheckGenerateToken,
     GoogleFirebaseStorageMergeRules,
     GoogleFirestoreMergeRules,
