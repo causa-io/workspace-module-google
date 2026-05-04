@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.17.0 (2026-05-04)
+
 Features:
 
 - Implement `DatabaseQueryRecords` for the `google.spanner` and `google.firestore` engines.
