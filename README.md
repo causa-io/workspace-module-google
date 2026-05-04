@@ -62,6 +62,14 @@ Backfilling is supported when `google.pubSub` is set as the `events.broker`. Tem
 
 When no source is specified, the default is to fetch events to backfill from the BigQuery dataset configured in `google.pubSub.bigQueryStorage`. A custom BigQuery table can also be set as source using the `bq://<projectId>.<datasetId>.<tableId>` format. It should have the `data` and `attributes` columns.
 
+### Querying
+
+This module implements the `DatabaseQueryRecords`, `ServiceContainerQueryLogs`, and `EventTopicQueryEvents` workspace functions, which expose read-only access to data stored in or emitted by deployed services:
+
+- `DatabaseQueryRecords` is supported for the `google.spanner` and `google.firestore` engines. For Spanner, the function takes a database name and a SQL query, runs it on the configured Spanner instance, and returns the matching rows (capped to 100000). For Firestore, the query is the path to a single document, fetched from the default database (or the specified one). The document data is returned as a single-element array. An empty array is returned when the document does not exist.
+- `ServiceContainerQueryLogs` is supported when `serviceContainer.platform` is `google.cloudRun`. It queries Cloud Logging for log entries emitted by the service's Cloud Run revisions. By default, only the last hour of logs and up to 1 000 entries are returned.
+- `EventTopicQueryEvents` is supported when `events.broker` is `google.pubSub`, `events.format` is `json`, and `google.pubSub.bigQueryStorage.rawEventsDatasetId` is set. It reads events from the topic's BigQuery raw events table. Same defaults as for log queries: last hour and up to 1 000 events.
+
 ### Secrets backend
 
 This module implements the `google.secretManager` secret backend, allowing fetching secrets from the Google Secret Manager service. Here are some example of how secrets with the `google.secretManager` backend should be defined:

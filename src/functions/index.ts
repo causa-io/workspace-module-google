@@ -22,10 +22,14 @@ import {
   EventTopicBrokerGetTopicIdForPubSub,
   EventTopicBrokerPublishEventsForGoogle,
   EventTopicCreateBackfillSourceForBigQuery,
+  EventTopicQueryEventsForBigQuery,
 } from './event-topic/index.js';
 import { GoogleAppCheckGenerateToken } from './google-app-check/index.js';
 import { GoogleFirebaseStorageMergeRules } from './google-firebase-storage/index.js';
-import { GoogleFirestoreMergeRules } from './google-firestore/index.js';
+import {
+  DatabaseQueryRecordsForFirestore,
+  GoogleFirestoreMergeRules,
+} from './google-firestore/index.js';
 import {
   GoogleIdentityPlatformGenerateCustomToken,
   GoogleIdentityPlatformGenerateToken,
@@ -33,6 +37,7 @@ import {
 import { GooglePubSubWriteTopics } from './google-pubsub/index.js';
 import { GoogleServicesEnable } from './google-services/index.js';
 import {
+  DatabaseQueryRecordsForSpanner,
   GoogleSpannerListDatabases,
   GoogleSpannerWriteDatabases,
 } from './google-spanner/index.js';
@@ -45,6 +50,7 @@ import {
   SecretFetchForGoogleAccessToken,
   SecretFetchForGoogleSecretManager,
 } from './secret/index.js';
+import { ServiceContainerQueryLogsForCloudRun } from './service-container/index.js';
 import {
   TypeScriptGetDecoratorRendererForGoogleFirestore,
   TypeScriptGetDecoratorRendererForGoogleSpanner,
@@ -53,6 +59,8 @@ import {
 export function registerFunctions(context: ModuleRegistrationContext) {
   context.registerFunctionImplementations(
     CausaListConfigurationSchemasForGoogle,
+    DatabaseQueryRecordsForFirestore,
+    DatabaseQueryRecordsForSpanner,
     EmulatorStartForFirebaseStorage,
     EmulatorStartForFirestore,
     EmulatorStartForIdentityPlatform,
@@ -72,6 +80,7 @@ export function registerFunctions(context: ModuleRegistrationContext) {
     EventTopicBrokerGetTopicIdForPubSub,
     EventTopicBrokerPublishEventsForGoogle,
     EventTopicCreateBackfillSourceForBigQuery,
+    EventTopicQueryEventsForBigQuery,
     GoogleAppCheckGenerateToken,
     GoogleFirebaseStorageMergeRules,
     GoogleFirestoreMergeRules,
@@ -86,6 +95,7 @@ export function registerFunctions(context: ModuleRegistrationContext) {
     ProjectPushArtefactForCloudFunctions,
     SecretFetchForGoogleAccessToken,
     SecretFetchForGoogleSecretManager,
+    ServiceContainerQueryLogsForCloudRun,
     TypeScriptGetDecoratorRendererForGoogleFirestore,
     TypeScriptGetDecoratorRendererForGoogleSpanner,
   );
