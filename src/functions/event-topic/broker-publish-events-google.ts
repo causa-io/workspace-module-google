@@ -1,4 +1,4 @@
-import { callDeferred, WorkspaceContext } from '@causa/workspace';
+import { callDeferred } from '@causa/workspace';
 import {
   EventTopicBrokerPublishEvents,
   type EventsConfiguration,
@@ -9,14 +9,15 @@ import {
  * The supported message broker is Pub/Sub.
  */
 export class EventTopicBrokerPublishEventsForGoogle extends EventTopicBrokerPublishEvents {
-  async _call(context: WorkspaceContext): Promise<void> {
-    return await callDeferred(this, context, import.meta.url);
+  async _call(): Promise<void> {
+    return await callDeferred(this, import.meta.url);
   }
 
-  _supports(context: WorkspaceContext): boolean {
+  _supports(): boolean {
     return (
-      context.asConfiguration<EventsConfiguration>().get('events.broker') ===
-      'google.pubSub'
+      this._context
+        .asConfiguration<EventsConfiguration>()
+        .get('events.broker') === 'google.pubSub'
     );
   }
 }

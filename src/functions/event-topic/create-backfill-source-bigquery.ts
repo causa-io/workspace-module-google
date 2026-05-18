@@ -1,4 +1,4 @@
-import { callDeferred, WorkspaceContext } from '@causa/workspace';
+import { callDeferred } from '@causa/workspace';
 import {
   type BackfillEvent,
   EventTopicCreateBackfillSource,
@@ -22,13 +22,11 @@ export const BIGQUERY_SOURCE_REGEX = /^bq:\/\/(?<tableId>.+)$/;
  * The returned async iterable pages through the query results and yields each row as a {@link BackfillEvent}.
  */
 export class EventTopicCreateBackfillSourceForBigQuery extends EventTopicCreateBackfillSource {
-  async _call(
-    context: WorkspaceContext,
-  ): Promise<AsyncIterable<BackfillEvent>> {
-    return await callDeferred(this, context, import.meta.url);
+  async _call(): Promise<AsyncIterable<BackfillEvent>> {
+    return await callDeferred(this, import.meta.url);
   }
 
-  _supports(context: WorkspaceContext): boolean {
+  _supports(): boolean {
     if (this.source?.match(BIGQUERY_SOURCE_REGEX)) {
       return true;
     }
@@ -37,7 +35,7 @@ export class EventTopicCreateBackfillSourceForBigQuery extends EventTopicCreateB
       return false;
     }
 
-    const conf = context.asConfiguration<
+    const conf = this._context.asConfiguration<
       EventsConfiguration & GoogleConfiguration
     >();
     return (

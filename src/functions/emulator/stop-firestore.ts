@@ -1,4 +1,3 @@
-import { WorkspaceContext } from '@causa/workspace';
 import { EmulatorStop } from '@causa/workspace-core';
 import { DockerEmulatorService } from '@causa/workspace-core/services';
 import {
@@ -10,14 +9,14 @@ import {
  * Implements {@link EmulatorStop} for the Firestore emulator.
  */
 export class EmulatorStopForFirestore extends EmulatorStop {
-  async _call(context: WorkspaceContext): Promise<string> {
-    const containerName = getFirestoreContainerName(context);
+  async _call(): Promise<string> {
+    const containerName = getFirestoreContainerName(this._context);
 
-    context.logger.info('️🗃️ Stopping Firestore emulator.');
+    this._context.logger.info('️🗃️ Stopping Firestore emulator.');
 
-    await context.service(DockerEmulatorService).stop(containerName);
+    await this._context.service(DockerEmulatorService).stop(containerName);
 
-    context.logger.info('️🗃️ Successfully stopped Firestore emulator.');
+    this._context.logger.info('️🗃️ Successfully stopped Firestore emulator.');
 
     return FIRESTORE_EMULATOR_NAME;
   }

@@ -40,9 +40,8 @@ function resolveTableId(
 
 export default async function call(
   this: EventTopicCreateBackfillSourceForBigQuery,
-  context: WorkspaceContext,
 ): Promise<AsyncIterable<BackfillEvent>> {
-  const tableId = resolveTableId(this, context);
+  const tableId = resolveTableId(this, this._context);
 
   let query = `
     SELECT
@@ -56,8 +55,8 @@ export default async function call(
       (${this.filter})`;
   }
 
-  context.logger.debug(`Creating BigQuery job from query '${query}'.`);
-  const bigQuery = context.service(BigQueryService).bigQuery;
+  this._context.logger.debug(`Creating BigQuery job from query '${query}'.`);
+  const bigQuery = this._context.service(BigQueryService).bigQuery;
   const [job] = await bigQuery.createQueryJob(query);
 
   return (async function* () {

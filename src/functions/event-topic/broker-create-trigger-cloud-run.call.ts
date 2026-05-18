@@ -93,14 +93,13 @@ function resolveFromObject(
 
 export default async function call(
   this: EventTopicBrokerCreateTriggerForCloudRun,
-  context: WorkspaceContext,
 ): Promise<string[]> {
   const { serviceId, path } =
     typeof this.trigger === 'string'
-      ? resolveFromString(context, this.trigger)
-      : resolveFromObject(context, this.trigger);
+      ? resolveFromString(this._context, this.trigger)
+      : resolveFromObject(this._context, this.trigger);
 
-  return await context
+  return await this._context
     .service(CloudRunPubSubTriggerService)
     .create(this.backfillId, this.topicId, serviceId, path);
 }

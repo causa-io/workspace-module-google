@@ -1,4 +1,3 @@
-import { WorkspaceContext } from '@causa/workspace';
 import { EmulatorStart, type EmulatorStartResult } from '@causa/workspace-core';
 import {
   FIRESTORE_CONTAINER_RULES_FILE,
@@ -14,8 +13,8 @@ import { GoogleFirestoreMergeRules } from '../google-firestore/index.js';
  * This first merges the Firestore security rules into a single file, and uses this file to configure the emulator.
  */
 export class EmulatorStartForFirestore extends EmulatorStart {
-  async _call(context: WorkspaceContext): Promise<EmulatorStartResult> {
-    const configuration = await this.startFirestore(context);
+  async _call(): Promise<EmulatorStartResult> {
+    const configuration = await this.startFirestore();
 
     return { name: FIRESTORE_EMULATOR_NAME, configuration };
   }
@@ -27,26 +26,23 @@ export class EmulatorStartForFirestore extends EmulatorStart {
   /**
    * Merges the Firestore security rules into a single file, and starts the Firestore emulator using them.
    *
-   * @param context The {@link WorkspaceContext}.
    * @returns The configuration for the Firestore emulator.
    */
-  private async startFirestore(
-    context: WorkspaceContext,
-  ): Promise<Record<string, string>> {
+  private async startFirestore(): Promise<Record<string, string>> {
     if (this.dryRun) {
       return {};
     }
 
-    const { securityRuleFile } = await context.call(
+    const { securityRuleFile } = await this._context.call(
       GoogleFirestoreMergeRules,
       {},
     );
 
-    context.logger.info('🗃️ Starting Firestore emulator.');
+    this._context.logger.info('🗃️ Starting Firestore emulator.');
 
-    const containerName = getFirestoreContainerName(context);
+    const containerName = getFirestoreContainerName(this._context);
 
-    const gcloudEmulatorService = context.service(GcloudEmulatorService);
+    const gcloudEmulatorService = this._context.service(GcloudEmulatorService);
     await gcloudEmulatorService.start(
       'firestore',
       containerName,
@@ -71,7 +67,9 @@ export class EmulatorStartForFirestore extends EmulatorStart {
       },
     );
 
-    context.logger.info('🗃️ Successfully initialized Firestore emulator.');
+    this._context.logger.info(
+      '🗃️ Successfully initialized Firestore emulator.',
+    );
 
     return {
       FIRESTORE_EMULATOR_HOST: `127.0.0.1:${FIRESTORE_PORT}`,

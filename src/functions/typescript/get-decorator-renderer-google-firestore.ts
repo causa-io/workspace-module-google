@@ -1,4 +1,3 @@
-import { WorkspaceContext } from '@causa/workspace';
 import {
   TypeScriptGetDecoratorRenderer,
   type TypeScriptWithDecoratorsRendererType,
@@ -14,9 +13,9 @@ export class TypeScriptGetDecoratorRendererForGoogleFirestore extends TypeScript
     return GoogleFirestoreRenderer;
   }
 
-  _supports(context: WorkspaceContext): boolean {
+  _supports(): boolean {
     return (
-      context.get('project.language') === 'typescript' &&
+      this._context.get('project.language') === 'typescript' &&
       this.generator === 'typescriptModelClass'
     );
   }

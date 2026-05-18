@@ -1,5 +1,5 @@
 import { CliCommand } from '@causa/cli';
-import { WorkspaceContext, WorkspaceFunction } from '@causa/workspace';
+import { WorkspaceFunction } from '@causa/workspace';
 import type { InfrastructureProcessor } from '@causa/workspace-core';
 import { AllowMissing } from '@causa/workspace/validation';
 import { IsBoolean } from 'class-validator';
@@ -54,14 +54,12 @@ export class GoogleFirebaseStorageMergeRules
   @AllowMissing()
   readonly tearDown?: boolean;
 
-  async _call(
-    context: WorkspaceContext,
-  ): Promise<GoogleFirebaseStorageMergeRulesResult> {
+  async _call(): Promise<GoogleFirebaseStorageMergeRulesResult> {
     if (this.tearDown) {
       return { configuration: {}, securityRuleFile: null };
     }
 
-    const googleConf = context.asConfiguration<GoogleConfiguration>();
+    const googleConf = this._context.asConfiguration<GoogleConfiguration>();
     let securityRuleFile =
       googleConf.get('google.firebaseStorage.securityRuleFile') ??
       DEFAULT_FIREBASE_STORAGE_SECURITY_RULE_FILE;
@@ -81,7 +79,7 @@ ${rules}
 }
 `,
       securityRuleFile,
-      context,
+      this._context,
     );
 
     return {

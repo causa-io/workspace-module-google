@@ -1,4 +1,4 @@
-import { callDeferred, SecretFetch, WorkspaceContext } from '@causa/workspace';
+import { callDeferred, SecretFetch } from '@causa/workspace';
 
 /**
  * An error thrown when the default GCP project is needed to look up a secret but it has not been defined.
@@ -39,8 +39,8 @@ export class UnexpectedSecretValueError extends Error {
  * `google.project`.
  */
 export class SecretFetchForGoogleSecretManager extends SecretFetch {
-  async _call(context: WorkspaceContext): Promise<string> {
-    return await callDeferred(this, context, import.meta.url);
+  async _call(): Promise<string> {
+    return await callDeferred(this, import.meta.url);
   }
 
   _supports(): boolean {

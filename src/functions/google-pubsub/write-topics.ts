@@ -1,8 +1,4 @@
-import {
-  type ProcessorResult,
-  WorkspaceContext,
-  WorkspaceFunction,
-} from '@causa/workspace';
+import { type ProcessorResult, WorkspaceFunction } from '@causa/workspace';
 import {
   type EventTopicDefinition,
   EventTopicList,
@@ -52,37 +48,40 @@ export class GooglePubSubWriteTopics
    * Returns the path to the directory where Pub/Sub topic configurations should be written.
    * It is either fetched from the workspace configuration, or the default value is used.
    *
-   * @param context The {@link WorkspaceContext}.
    * @returns The path to the directory where topic configurations should be written.
    */
-  private getConfigurationsDirectory(context: WorkspaceContext): string {
+  private getConfigurationsDirectory(): string {
     return (
-      context
+      this._context
         .asConfiguration<GoogleConfiguration>()
         .get('google.pubSub.topicConfigurationsDirectory') ??
       DEFAULT_TOPIC_CONFIGURATIONS_DIRECTORY
     );
   }
 
-  async _call(context: WorkspaceContext): Promise<ProcessorResult> {
-    const topicConfigurationsDirectory =
-      this.getConfigurationsDirectory(context);
-    const absoluteDir = join(context.rootPath, topicConfigurationsDirectory);
+  async _call(): Promise<ProcessorResult> {
+    const topicConfigurationsDirectory = this.getConfigurationsDirectory();
+    const absoluteDir = join(
+      this._context.rootPath,
+      topicConfigurationsDirectory,
+    );
 
     await rm(absoluteDir, { recursive: true, force: true });
 
     if (this.tearDown) {
-      context.logger.debug(
+      this._context.logger.debug(
         `📫 Tore down Pub/Sub topic configurations directory '${absoluteDir}'.`,
       );
       return { configuration: {} };
     }
 
-    context.logger.info('️📫 Listing and writing Pub/Sub topic configurations.');
+    this._context.logger.info(
+      '️📫 Listing and writing Pub/Sub topic configurations.',
+    );
 
-    const topics = await context.call(EventTopicList, {});
+    const topics = await this._context.call(EventTopicList, {});
 
-    context.logger.debug(
+    this._context.logger.debug(
       `📫 Writing configurations for Pub/Sub topics: ${topics
         .map((d) => `'${d.id}'`)
         .join(', ')}.`,
@@ -99,7 +98,7 @@ export class GooglePubSubWriteTopics
       }),
     );
 
-    context.logger.debug(
+    this._context.logger.debug(
       `️📫 Wrote Pub/Sub topic configurations in '${absoluteDir}'.`,
     );
 

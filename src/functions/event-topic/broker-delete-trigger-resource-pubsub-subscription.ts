@@ -1,4 +1,4 @@
-import { callDeferred, WorkspaceContext } from '@causa/workspace';
+import { callDeferred } from '@causa/workspace';
 import {
   EventTopicBrokerDeleteTriggerResource,
   type EventsConfiguration,
@@ -9,15 +9,16 @@ import {
  * Pub/Sub subscriptions are for example used when creating Cloud Run triggers.
  */
 export class EventTopicBrokerDeleteTriggerResourceForPubSubSubscription extends EventTopicBrokerDeleteTriggerResource {
-  async _call(context: WorkspaceContext): Promise<void> {
-    return await callDeferred(this, context, import.meta.url);
+  async _call(): Promise<void> {
+    return await callDeferred(this, import.meta.url);
   }
 
-  _supports(context: WorkspaceContext): boolean {
+  _supports(): boolean {
     return (
       this.id.match(/^projects\/[\w-]+\/subscriptions\/[\w-]+$/) != null &&
-      context.asConfiguration<EventsConfiguration>().get('events.broker') ===
-        'google.pubSub'
+      this._context
+        .asConfiguration<EventsConfiguration>()
+        .get('events.broker') === 'google.pubSub'
     );
   }
 }

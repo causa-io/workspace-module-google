@@ -1,4 +1,3 @@
-import { WorkspaceContext } from '@causa/workspace';
 import {
   ProjectGetArtefactDestination,
   type ServerlessFunctionsConfiguration,
@@ -11,9 +10,9 @@ import type { GoogleConfiguration } from '../../configurations/index.js';
  * defined in the `google.cloudFunctions.artefactStorage` configuration.
  */
 export class ProjectGetArtefactDestinationForCloudFunctions extends ProjectGetArtefactDestination {
-  async _call(context: WorkspaceContext): Promise<string> {
-    const projectName = context.getOrThrow('project.name');
-    const googleConf = context.asConfiguration<GoogleConfiguration>();
+  async _call(): Promise<string> {
+    const projectName = this._context.getOrThrow('project.name');
+    const googleConf = this._context.asConfiguration<GoogleConfiguration>();
     let bucketAndPrefix = googleConf.getOrThrow(
       'google.cloudFunctions.artefactStorage.bucket',
     );
@@ -28,8 +27,9 @@ export class ProjectGetArtefactDestinationForCloudFunctions extends ProjectGetAr
     return `gs://${bucketAndPrefix}/${projectName}/${this.tag}.zip`;
   }
 
-  _supports(context: WorkspaceContext): boolean {
-    const conf = context.asConfiguration<ServerlessFunctionsConfiguration>();
+  _supports(): boolean {
+    const conf =
+      this._context.asConfiguration<ServerlessFunctionsConfiguration>();
     return (
       conf.get('project.type') === 'serverlessFunctions' &&
       conf.get('serverlessFunctions.platform') === 'google.cloudFunctions'

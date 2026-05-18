@@ -1,4 +1,3 @@
-import type { WorkspaceContext } from '@causa/workspace';
 import type { QueriedEvent } from '@causa/workspace-core';
 import type { GoogleConfiguration } from '../../configurations/index.js';
 import { BigQueryService } from '../../services/index.js';
@@ -16,12 +15,11 @@ const DEFAULT_LIMIT = 1000;
 
 export default async function call(
   this: EventTopicQueryEventsForBigQuery,
-  context: WorkspaceContext,
 ): Promise<QueriedEvent[]> {
   const from = this.from ?? new Date(Date.now() - DEFAULT_FROM_OFFSET);
   const limit = this.limit ?? DEFAULT_LIMIT;
 
-  const googleConf = context.asConfiguration<GoogleConfiguration>();
+  const googleConf = this._context.asConfiguration<GoogleConfiguration>();
   const projectId = googleConf.getOrThrow('google.project');
   const rawEventsDatasetId = googleConf.getOrThrow(
     'google.pubSub.bigQueryStorage.rawEventsDatasetId',
@@ -46,9 +44,9 @@ export default async function call(
     ORDER BY publish_time ASC
     LIMIT ${limit}`;
 
-  context.logger.debug(`Querying BigQuery for events:\n${query}`);
+  this._context.logger.debug(`Querying BigQuery for events:\n${query}`);
 
-  const bigQuery = context.service(BigQueryService).bigQuery;
+  const bigQuery = this._context.service(BigQueryService).bigQuery;
   const [rows] = await bigQuery.query({ query, params });
 
   return rows.map((row: any) => ({

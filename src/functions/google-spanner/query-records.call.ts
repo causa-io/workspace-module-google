@@ -1,4 +1,3 @@
-import type { WorkspaceContext } from '@causa/workspace';
 import {
   type Database,
   Numeric,
@@ -14,7 +13,6 @@ import {
 
 export default async function call(
   this: DatabaseQueryRecordsForSpanner,
-  context: WorkspaceContext,
 ): Promise<any[]> {
   if (!this.database) {
     throw new Error(
@@ -28,11 +26,11 @@ export default async function call(
     );
   }
 
-  const googleConf = context.asConfiguration<GoogleConfiguration>();
+  const googleConf = this._context.asConfiguration<GoogleConfiguration>();
   const projectId = googleConf.getOrThrow('google.project');
   const instanceName = googleConf.getOrThrow('google.spanner.instance.name');
 
-  context.logger.debug(
+  this._context.logger.debug(
     `🗃️ Querying Spanner database '${this.database}' in instance '${instanceName}' (project '${projectId}').`,
   );
 
@@ -49,7 +47,7 @@ export default async function call(
 
     for await (const row of stream) {
       if (rows.length >= SPANNER_QUERY_RECORDS_LIMIT) {
-        context.logger.warn(
+        this._context.logger.warn(
           `⚠️ Spanner query exceeded the hard limit of ${SPANNER_QUERY_RECORDS_LIMIT} rows. Results were truncated.`,
         );
         break;

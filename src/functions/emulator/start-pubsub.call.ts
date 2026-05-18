@@ -16,9 +16,8 @@ import type { EmulatorStartForPubSub } from './start-pubsub.js';
 
 export default async function call(
   this: EmulatorStartForPubSub,
-  context: WorkspaceContext,
 ): Promise<EmulatorStartResult> {
-  const configuration = await startPubSub(this, context);
+  const configuration = await startPubSub(this, this._context);
 
   return { name: PUBSUB_EMULATOR_NAME, configuration };
 }

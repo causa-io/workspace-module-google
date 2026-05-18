@@ -1,4 +1,3 @@
-import { WorkspaceContext } from '@causa/workspace';
 import { EmulatorStop } from '@causa/workspace-core';
 import { DockerEmulatorService } from '@causa/workspace-core/services';
 import {
@@ -10,14 +9,16 @@ import {
  * Implements {@link EmulatorStop} for the Identity Platform emulator.
  */
 export class EmulatorStopForIdentityPlatform extends EmulatorStop {
-  async _call(context: WorkspaceContext): Promise<string> {
-    const containerName = getIdentityPlatformContainerName(context);
+  async _call(): Promise<string> {
+    const containerName = getIdentityPlatformContainerName(this._context);
 
-    context.logger.info('️🛂 Stopping Identity Platform emulator.');
+    this._context.logger.info('️🛂 Stopping Identity Platform emulator.');
 
-    await context.service(DockerEmulatorService).stop(containerName);
+    await this._context.service(DockerEmulatorService).stop(containerName);
 
-    context.logger.info('🛂 Successfully stopped Identity Platform emulator.');
+    this._context.logger.info(
+      '🛂 Successfully stopped Identity Platform emulator.',
+    );
 
     return IDENTITY_PLATFORM_EMULATOR_NAME;
   }

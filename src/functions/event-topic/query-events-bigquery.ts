@@ -1,4 +1,4 @@
-import { callDeferred, WorkspaceContext } from '@causa/workspace';
+import { callDeferred } from '@causa/workspace';
 import {
   EventTopicQueryEvents,
   type EventsConfiguration,
@@ -11,12 +11,12 @@ import type { GoogleConfiguration } from '../../configurations/index.js';
  * subscription. The events are read from the dataset configured at `google.pubSub.bigQueryStorage.rawEventsDatasetId`.
  */
 export class EventTopicQueryEventsForBigQuery extends EventTopicQueryEvents {
-  async _call(context: WorkspaceContext): Promise<QueriedEvent[]> {
-    return await callDeferred(this, context, import.meta.url);
+  async _call(): Promise<QueriedEvent[]> {
+    return await callDeferred(this, import.meta.url);
   }
 
-  _supports(context: WorkspaceContext): boolean {
-    const conf = context.asConfiguration<
+  _supports(): boolean {
+    const conf = this._context.asConfiguration<
       EventsConfiguration & GoogleConfiguration
     >();
     return (

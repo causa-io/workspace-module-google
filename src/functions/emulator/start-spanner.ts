@@ -1,4 +1,4 @@
-import { callDeferred, WorkspaceContext } from '@causa/workspace';
+import { callDeferred } from '@causa/workspace';
 import { EmulatorStart, type EmulatorStartResult } from '@causa/workspace-core';
 import { SPANNER_EMULATOR_NAME } from '../../emulators/index.js';
 
@@ -7,8 +7,8 @@ import { SPANNER_EMULATOR_NAME } from '../../emulators/index.js';
  * This starts the emulator, creates a local instance, and creates the databases using the DDLs found in the workspace.
  */
 export class EmulatorStartForSpanner extends EmulatorStart {
-  async _call(context: WorkspaceContext): Promise<EmulatorStartResult> {
-    return await callDeferred(this, context, import.meta.url);
+  async _call(): Promise<EmulatorStartResult> {
+    return await callDeferred(this, import.meta.url);
   }
 
   _supports(): boolean {

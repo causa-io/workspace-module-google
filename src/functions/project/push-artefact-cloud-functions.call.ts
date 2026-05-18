@@ -1,4 +1,3 @@
-import type { WorkspaceContext } from '@causa/workspace';
 import { ArtefactAlreadyExistsError } from '@causa/workspace-core';
 import { rm } from 'fs/promises';
 import { CloudStorageService } from '../../services/storage.js';
@@ -6,11 +5,12 @@ import type { ProjectPushArtefactForCloudFunctions } from './push-artefact-cloud
 
 export default async function call(
   this: ProjectPushArtefactForCloudFunctions,
-  context: WorkspaceContext,
 ): Promise<string> {
-  context.logger.info(`🚚 Pushing Cloud Functions archive to Cloud Storage.`);
+  this._context.logger.info(
+    `🚚 Pushing Cloud Functions archive to Cloud Storage.`,
+  );
 
-  const storageService = context.service(CloudStorageService);
+  const storageService = this._context.service(CloudStorageService);
 
   const destination = storageService.getFileFromGsUri(this.destination);
 
@@ -23,11 +23,11 @@ export default async function call(
 
   await destination.bucket.upload(this.artefact, { destination });
 
-  context.logger.info(
+  this._context.logger.info(
     `🚚 Successfully pushed archive to '${this.destination}'.`,
   );
 
-  context.logger.debug(`🔥 Removing local artefact '${this.artefact}'.`);
+  this._context.logger.debug(`🔥 Removing local artefact '${this.artefact}'.`);
   await rm(this.artefact);
 
   return this.destination;

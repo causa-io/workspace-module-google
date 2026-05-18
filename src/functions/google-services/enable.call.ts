@@ -1,4 +1,3 @@
-import type { WorkspaceContext } from '@causa/workspace';
 import { ServiceUsageClient } from '@google-cloud/service-usage';
 import type { GoogleConfiguration } from '../../configurations/index.js';
 import type { GoogleServicesEnable } from './enable.js';
@@ -8,10 +7,7 @@ import type { GoogleServicesEnable } from './enable.js';
  */
 const MAX_SERVICE_BATCH = 20;
 
-export default async function call(
-  this: GoogleServicesEnable,
-  context: WorkspaceContext,
-): Promise<{
+export default async function call(this: GoogleServicesEnable): Promise<{
   configuration: GoogleConfiguration;
   services: string[];
 }> {
@@ -19,7 +15,7 @@ export default async function call(
     return { configuration: {}, services: [] };
   }
 
-  const googleConf = context.asConfiguration<GoogleConfiguration>();
+  const googleConf = this._context.asConfiguration<GoogleConfiguration>();
   const gcpProject = googleConf.getOrThrow('google.project');
   const services = googleConf.get('google.services');
   if (!services) {
@@ -33,7 +29,7 @@ export default async function call(
   const parent = `projects/${gcpProject}`;
   while (servicesToEnable.length > 0) {
     const serviceIds = servicesToEnable.splice(0, MAX_SERVICE_BATCH);
-    context.logger.info(
+    this._context.logger.info(
       `➕ Enabling GCP service(s) ${serviceIds
         .map((s) => `'${s}'`)
         .join(', ')} in project '${gcpProject}'.`,

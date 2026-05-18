@@ -1,4 +1,3 @@
-import { WorkspaceContext } from '@causa/workspace';
 import { EmulatorStart, type EmulatorStartResult } from '@causa/workspace-core';
 import { fileURLToPath } from 'url';
 import {
@@ -23,8 +22,8 @@ const FIREBASE_CONF_FILE = fileURLToPath(
  * emulator.
  */
 export class EmulatorStartForFirebaseStorage extends EmulatorStart {
-  async _call(context: WorkspaceContext): Promise<EmulatorStartResult> {
-    const configuration = await this.startFirebaseStorage(context);
+  async _call(): Promise<EmulatorStartResult> {
+    const configuration = await this.startFirebaseStorage();
 
     return { name: FIREBASE_STORAGE_EMULATOR_NAME, configuration };
   }
@@ -37,26 +36,24 @@ export class EmulatorStartForFirebaseStorage extends EmulatorStart {
 
   /**
    * Merges the Firebase Storage security rules into a single file, and starts the Firebase Storage emulator using them.
-   *
-   * @param context The {@link WorkspaceContext}.
    */
-  private async startFirebaseStorage(
-    context: WorkspaceContext,
-  ): Promise<Record<string, string>> {
+  private async startFirebaseStorage(): Promise<Record<string, string>> {
     if (this.dryRun) {
       return {};
     }
 
-    const { securityRuleFile } = await context.call(
+    const { securityRuleFile } = await this._context.call(
       GoogleFirebaseStorageMergeRules,
       {},
     );
 
-    context.logger.info('️🍱 Starting Firebase Storage emulator.');
+    this._context.logger.info('️🍱 Starting Firebase Storage emulator.');
 
-    const containerName = getFirebaseStorageContainerName(context);
+    const containerName = getFirebaseStorageContainerName(this._context);
 
-    const firebaseEmulatorService = context.service(FirebaseEmulatorService);
+    const firebaseEmulatorService = this._context.service(
+      FirebaseEmulatorService,
+    );
     await firebaseEmulatorService.start(
       containerName,
       FIREBASE_CONF_FILE,
@@ -81,7 +78,7 @@ export class EmulatorStartForFirebaseStorage extends EmulatorStart {
       },
     );
 
-    context.logger.info(
+    this._context.logger.info(
       '️🍱 Successfully initialized Firebase Storage emulator.',
     );
 

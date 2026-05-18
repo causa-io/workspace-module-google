@@ -1,8 +1,4 @@
-import {
-  type ProcessorResult,
-  WorkspaceContext,
-  WorkspaceFunction,
-} from '@causa/workspace';
+import { type ProcessorResult, WorkspaceFunction } from '@causa/workspace';
 import type { InfrastructureProcessor } from '@causa/workspace-core';
 import { CAUSA_FOLDER } from '@causa/workspace/initialization';
 import { AllowMissing } from '@causa/workspace/validation';
@@ -39,41 +35,42 @@ export class GoogleSpannerWriteDatabases
    * Returns the path to the directory where Spanner databases configurations should be written.
    * It is either fetched from the workspace configuration, or the default value is used.
    *
-   * @param context The {@link WorkspaceContext}.
    * @returns The path to the directory where database configurations should be written.
    */
-  private getConfigurationsDirectory(context: WorkspaceContext): string {
+  private getConfigurationsDirectory(): string {
     return (
-      context
+      this._context
         .asConfiguration<GoogleConfiguration>()
         .get('google.spanner.databaseConfigurationsDirectory') ??
       DEFAULT_DATABASE_CONFIGURATIONS_DIRECTORY
     );
   }
 
-  async _call(context: WorkspaceContext): Promise<ProcessorResult> {
-    const databaseConfigurationsDirectory =
-      this.getConfigurationsDirectory(context);
-    const absoluteDir = join(context.rootPath, databaseConfigurationsDirectory);
+  async _call(): Promise<ProcessorResult> {
+    const databaseConfigurationsDirectory = this.getConfigurationsDirectory();
+    const absoluteDir = join(
+      this._context.rootPath,
+      databaseConfigurationsDirectory,
+    );
 
     await rm(absoluteDir, { recursive: true, force: true });
 
     if (this.tearDown) {
-      context.logger.debug(
+      this._context.logger.debug(
         `️🗃️ Tore down Spanner database configurations directory '${absoluteDir}'.`,
       );
       return { configuration: {} };
     }
 
-    context.logger.info(
+    this._context.logger.info(
       '🗃️ Listing and writing Spanner database configurations.',
     );
 
-    const databases = await context.call(GoogleSpannerListDatabases, {});
+    const databases = await this._context.call(GoogleSpannerListDatabases, {});
 
     await mkdir(absoluteDir, { recursive: true });
 
-    context.logger.debug(
+    this._context.logger.debug(
       `🗃️ Writing configurations for Spanner databases: ${databases
         .map((d) => `'${d.id}'`)
         .join(', ')}.`,
@@ -87,7 +84,7 @@ export class GoogleSpannerWriteDatabases
       ),
     );
 
-    context.logger.debug(
+    this._context.logger.debug(
       `🗃️ Wrote Spanner database configurations in '${absoluteDir}'.`,
     );
 

@@ -1,4 +1,4 @@
-import { callDeferred, WorkspaceContext } from '@causa/workspace';
+import { callDeferred } from '@causa/workspace';
 import {
   EventTopicBrokerCreateTopic,
   type EventsConfiguration,
@@ -10,14 +10,15 @@ import {
  * If a `google.region` configuration is set, the message storage policy for the topic is set accordingly.
  */
 export class EventTopicBrokerCreateTopicForPubSub extends EventTopicBrokerCreateTopic {
-  async _call(context: WorkspaceContext): Promise<string> {
-    return await callDeferred(this, context, import.meta.url);
+  async _call(): Promise<string> {
+    return await callDeferred(this, import.meta.url);
   }
 
-  _supports(context: WorkspaceContext): boolean {
+  _supports(): boolean {
     return (
-      context.asConfiguration<EventsConfiguration>().get('events.broker') ===
-      'google.pubSub'
+      this._context
+        .asConfiguration<EventsConfiguration>()
+        .get('events.broker') === 'google.pubSub'
     );
   }
 }

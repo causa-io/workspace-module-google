@@ -1,8 +1,4 @@
-import {
-  WorkspaceContext,
-  WorkspaceFunction,
-  listFilesAndFormat,
-} from '@causa/workspace';
+import { WorkspaceFunction, listFilesAndFormat } from '@causa/workspace';
 import { readFile } from 'fs/promises';
 import type { GoogleConfiguration } from '../../configurations/index.js';
 
@@ -48,8 +44,8 @@ const DEFAULT_DDL_REGULAR_EXPRESSION =
 export class GoogleSpannerListDatabases extends WorkspaceFunction<
   Promise<SpannerDatabase[]>
 > {
-  async _call(context: WorkspaceContext): Promise<SpannerDatabase[]> {
-    const googleConf = context.asConfiguration<GoogleConfiguration>();
+  async _call(): Promise<SpannerDatabase[]> {
+    const googleConf = this._context.asConfiguration<GoogleConfiguration>();
     const format =
       googleConf.get('google.spanner.ddls.format') ??
       DEFAULT_DDL_DATABASE_ID_FORMAT;
@@ -59,16 +55,16 @@ export class GoogleSpannerListDatabases extends WorkspaceFunction<
       googleConf.get('google.spanner.ddls.regularExpression') ??
       DEFAULT_DDL_REGULAR_EXPRESSION;
 
-    context.logger.debug('🗃️ Listing Spanner databases and DDL files.');
+    this._context.logger.debug('🗃️ Listing Spanner databases and DDL files.');
 
     const filesAndFormats = await listFilesAndFormat(
       globs,
       regExp,
       format,
-      context.rootPath,
+      this._context.rootPath,
       {
         nonMatchingPathHandler: (path) =>
-          context.logger.warn(
+          this._context.logger.warn(
             `📂 Path '${path}' matches the Spanner DDL globs but did not match the regular expression. It will be ignored.`,
           ),
       },
@@ -92,7 +88,7 @@ export class GoogleSpannerListDatabases extends WorkspaceFunction<
 
         const ddls = ddlsInFiles.flatMap((ddls) => ddls);
 
-        context.logger.debug(
+        this._context.logger.debug(
           `🗃️ Found Spanner database '${id}' with ${ddlFiles.length} DDL file(s) and ${ddls.length} statement(s).`,
         );
 

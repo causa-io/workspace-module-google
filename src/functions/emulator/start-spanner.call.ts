@@ -22,9 +22,8 @@ import type { EmulatorStartForSpanner } from './start-spanner.js';
 
 export default async function call(
   this: EmulatorStartForSpanner,
-  context: WorkspaceContext,
 ): Promise<EmulatorStartResult> {
-  const configuration = await startSpanner(this, context);
+  const configuration = await startSpanner(this, this._context);
 
   return { name: SPANNER_EMULATOR_NAME, configuration };
 }

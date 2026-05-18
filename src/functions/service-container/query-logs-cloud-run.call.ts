@@ -1,4 +1,3 @@
-import type { WorkspaceContext } from '@causa/workspace';
 import type { QueriedLogEntry } from '@causa/workspace-core';
 import { LoggingService } from '../../services/index.js';
 import type { ServiceContainerQueryLogsForCloudRun } from './query-logs-cloud-run.js';
@@ -15,7 +14,6 @@ const DEFAULT_LIMIT = 1000;
 
 export default async function call(
   this: ServiceContainerQueryLogsForCloudRun,
-  context: WorkspaceContext,
 ): Promise<QueriedLogEntry[]> {
   const from = this.from ?? new Date(Date.now() - DEFAULT_FROM_OFFSET);
   const limit = this.limit ?? DEFAULT_LIMIT;
@@ -33,8 +31,8 @@ export default async function call(
   }
   const filter = filterParts.join('\n');
 
-  const loggingService = context.service(LoggingService);
-  context.logger.debug(
+  const loggingService = this._context.service(LoggingService);
+  this._context.logger.debug(
     `Querying Cloud Logging for service '${this.service}' in project '${loggingService.projectId}' with filter:\n${filter}`,
   );
 

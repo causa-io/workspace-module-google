@@ -1,4 +1,3 @@
-import type { WorkspaceContext } from '@causa/workspace';
 import { getAppCheck } from 'firebase-admin/app-check';
 import { FirebaseAppService } from '../../services/firebase-app.js';
 import type { GoogleAppCheckGenerateToken } from './generate-token.js';
@@ -10,13 +9,12 @@ const TOKEN_TTL = 3600;
 
 export default async function call(
   this: GoogleAppCheckGenerateToken,
-  context: WorkspaceContext,
 ): Promise<string> {
-  const firebaseAppService = context.service(FirebaseAppService);
+  const firebaseAppService = this._context.service(FirebaseAppService);
   const app = await firebaseAppService.getAdminAppForAdminServiceAccount();
   const appId = this.app ?? (await firebaseAppService.getAppId());
 
-  context.logger.info(
+  this._context.logger.info(
     `🛂 Generating AppCheck token for Firebase application '${appId}'.`,
   );
 

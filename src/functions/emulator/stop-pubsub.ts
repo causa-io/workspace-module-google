@@ -1,4 +1,3 @@
-import { WorkspaceContext } from '@causa/workspace';
 import { EmulatorStop } from '@causa/workspace-core';
 import { DockerEmulatorService } from '@causa/workspace-core/services';
 import {
@@ -10,14 +9,14 @@ import {
  * Implements {@link EmulatorStop} for the Pub/Sub emulator.
  */
 export class EmulatorStopForPubSub extends EmulatorStop {
-  async _call(context: WorkspaceContext): Promise<string> {
-    const containerName = getPubSubContainerName(context);
+  async _call(): Promise<string> {
+    const containerName = getPubSubContainerName(this._context);
 
-    context.logger.info('️📫 Stopping Pub/Sub emulator.');
+    this._context.logger.info('️📫 Stopping Pub/Sub emulator.');
 
-    await context.service(DockerEmulatorService).stop(containerName);
+    await this._context.service(DockerEmulatorService).stop(containerName);
 
-    context.logger.info('📫 Successfully stopped Pub/Sub emulator.');
+    this._context.logger.info('📫 Successfully stopped Pub/Sub emulator.');
 
     return PUBSUB_EMULATOR_NAME;
   }
