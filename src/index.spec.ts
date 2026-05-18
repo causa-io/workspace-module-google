@@ -29,7 +29,7 @@ describe('registerFunctions', () => {
     const actualModules = getLoadedModules();
 
     const actualHeavyModules = actualModules.filter((m) =>
-      heavyModules.some((fm) => m.includes(fm)),
+      heavyModules.some((fm) => m.includes(`/node_modules/${fm}/`)),
     );
     expect(actualHeavyModules).toBeEmpty();
   });
