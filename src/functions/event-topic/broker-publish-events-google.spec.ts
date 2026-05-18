@@ -78,9 +78,9 @@ describe('EventTopicBrokerPublishEventsForGoogle', () => {
       data: message.data?.toString(),
     }));
     expect(actualMessages).toEqual([
-      { data: 'e-0', attributes: { index: '0' }, orderingKey: undefined },
-      { data: 'e-1', attributes: { index: '1' }, orderingKey: undefined },
-      { data: 'e-2', attributes: { index: '2' }, orderingKey: undefined },
+      { data: 'e-0', attributes: { index: '0' } },
+      { data: 'e-1', attributes: { index: '1' } },
+      { data: 'e-2', attributes: { index: '2' } },
     ]);
     expect(publisher.all).toHaveBeenCalledOnce();
   });
@@ -102,7 +102,6 @@ describe('EventTopicBrokerPublishEventsForGoogle', () => {
     expect(publishMock).toHaveBeenCalledExactlyOnceWith({
       data: expect.any(Buffer),
       attributes: { index: '0' },
-      orderingKey: undefined,
     });
     expect(publisher.all).not.toHaveBeenCalled();
     waitPromiseResolve();
@@ -110,28 +109,5 @@ describe('EventTopicBrokerPublishEventsForGoogle', () => {
     await publishPromise;
     expect(publishMock).toHaveBeenCalledTimes(3);
     expect(publisher.all).toHaveBeenCalledOnce();
-  });
-
-  it('should forward the ordering key when provided', async () => {
-    const source = (): AsyncIterable<BackfillEvent> =>
-      (async function* () {
-        yield {
-          data: Buffer.from('payload'),
-          attributes: { k: 'v' },
-          key: 'order-key',
-        };
-      })();
-
-    await context.call(EventTopicBrokerPublishEvents, {
-      eventTopic: 'my-topic',
-      topicId: 'my-topic',
-      source,
-    });
-
-    expect(publishMock).toHaveBeenCalledExactlyOnceWith({
-      data: expect.any(Buffer),
-      attributes: { k: 'v' },
-      orderingKey: 'order-key',
-    });
   });
 });

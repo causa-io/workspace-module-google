@@ -40,7 +40,6 @@ export default async function call(
     const wait = publisher.publish({
       data: event.data,
       attributes: event.attributes,
-      orderingKey: event.key,
     });
     if (wait) {
       this._context.logger.debug(
