@@ -29,6 +29,7 @@ import { GoogleFirebaseStorageMergeRules } from './google-firebase-storage/index
 import {
   DatabaseQueryRecordsForFirestore,
   GoogleFirestoreMergeRules,
+  ModelSchemaExtractDatabaseForGoogleFirestore,
 } from './google-firestore/index.js';
 import {
   GoogleIdentityPlatformGenerateCustomToken,
@@ -90,6 +91,7 @@ export function registerFunctions(context: ModuleRegistrationContext) {
     GoogleServicesEnable,
     GoogleSpannerListDatabases,
     GoogleSpannerWriteDatabases,
+    ModelSchemaExtractDatabaseForGoogleFirestore,
     ProjectGetArtefactDestinationForCloudFunctions,
     ProjectGetArtefactDestinationForCloudRun,
     ProjectPushArtefactForCloudFunctions,
