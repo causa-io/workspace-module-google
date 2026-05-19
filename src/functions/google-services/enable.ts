@@ -1,9 +1,5 @@
 import { CliCommand } from '@causa/cli';
-import {
-  callDeferred,
-  WorkspaceContext,
-  WorkspaceFunction,
-} from '@causa/workspace';
+import { callDeferred, WorkspaceFunction } from '@causa/workspace';
 import type { InfrastructureProcessor } from '@causa/workspace-core';
 import { AllowMissing } from '@causa/workspace/validation';
 import { IsBoolean } from 'class-validator';
@@ -48,8 +44,8 @@ export class GoogleServicesEnable
   @AllowMissing()
   readonly tearDown?: boolean;
 
-  async _call(context: WorkspaceContext): Promise<GoogleServicesEnableResult> {
-    return await callDeferred(this, context, import.meta.url);
+  async _call(): Promise<GoogleServicesEnableResult> {
+    return await callDeferred(this, import.meta.url);
   }
 
   _supports(): boolean {

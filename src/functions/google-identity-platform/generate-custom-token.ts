@@ -1,8 +1,4 @@
-import {
-  callDeferred,
-  WorkspaceContext,
-  WorkspaceFunction,
-} from '@causa/workspace';
+import { callDeferred, WorkspaceFunction } from '@causa/workspace';
 import { AllowMissing } from '@causa/workspace/validation';
 import { IsObject, IsString } from 'class-validator';
 
@@ -29,8 +25,8 @@ export class GoogleIdentityPlatformGenerateCustomToken extends WorkspaceFunction
   @AllowMissing()
   readonly claims?: Record<string, any>;
 
-  async _call(context: WorkspaceContext): Promise<string> {
-    return await callDeferred(this, context, import.meta.url);
+  async _call(): Promise<string> {
+    return await callDeferred(this, import.meta.url);
   }
 
   _supports(): boolean {

@@ -1,4 +1,4 @@
-import { callDeferred, SecretFetch, WorkspaceContext } from '@causa/workspace';
+import { callDeferred, SecretFetch } from '@causa/workspace';
 
 /**
  * An error thrown when the auth client does not return a token.
@@ -19,8 +19,8 @@ export class AuthClientResponseError extends Error {
  * The backend ID is `google.accessToken`.
  */
 export class SecretFetchForGoogleAccessToken extends SecretFetch {
-  async _call(context: WorkspaceContext): Promise<string> {
-    return await callDeferred(this, context, import.meta.url);
+  async _call(): Promise<string> {
+    return await callDeferred(this, import.meta.url);
   }
 
   _supports(): boolean {

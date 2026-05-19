@@ -1,4 +1,4 @@
-import { callDeferred, WorkspaceContext } from '@causa/workspace';
+import { callDeferred } from '@causa/workspace';
 import { DatabaseQueryRecords } from '@causa/workspace-core';
 
 /**
@@ -15,8 +15,8 @@ export const FIRESTORE_ENGINE = 'google.firestore';
  * Returns an array containing a single document's data, or an empty array if the document does not exist.
  */
 export class DatabaseQueryRecordsForFirestore extends DatabaseQueryRecords {
-  async _call(context: WorkspaceContext): Promise<any[]> {
-    return await callDeferred(this, context, import.meta.url);
+  async _call(): Promise<any[]> {
+    return await callDeferred(this, import.meta.url);
   }
 
   _supports(): boolean {

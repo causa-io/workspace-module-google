@@ -1,4 +1,3 @@
-import { WorkspaceContext } from '@causa/workspace';
 import { EmulatorStop } from '@causa/workspace-core';
 import { DockerEmulatorService } from '@causa/workspace-core/services';
 import {
@@ -10,14 +9,14 @@ import {
  * Implements {@link EmulatorStop} for the Spanner emulator.
  */
 export class EmulatorStopForSpanner extends EmulatorStop {
-  async _call(context: WorkspaceContext): Promise<string> {
-    const containerName = getSpannerContainerName(context);
+  async _call(): Promise<string> {
+    const containerName = getSpannerContainerName(this._context);
 
-    context.logger.info('️️🗃️ Stopping Spanner emulator.');
+    this._context.logger.info('️️🗃️ Stopping Spanner emulator.');
 
-    await context.service(DockerEmulatorService).stop(containerName);
+    await this._context.service(DockerEmulatorService).stop(containerName);
 
-    context.logger.info('️🗃️ Successfully stopped Spanner emulator.');
+    this._context.logger.info('️🗃️ Successfully stopped Spanner emulator.');
 
     return SPANNER_EMULATOR_NAME;
   }

@@ -1,4 +1,3 @@
-import type { WorkspaceContext } from '@causa/workspace';
 import { deleteApp, initializeApp } from 'firebase-admin/app';
 import {
   DocumentReference,
@@ -12,7 +11,6 @@ import type { DatabaseQueryRecordsForFirestore } from './query-records.js';
 
 export default async function call(
   this: DatabaseQueryRecordsForFirestore,
-  context: WorkspaceContext,
 ): Promise<any[]> {
   if (!this.query) {
     throw new Error(
@@ -20,11 +18,11 @@ export default async function call(
     );
   }
 
-  const googleConf = context.asConfiguration<GoogleConfiguration>();
+  const googleConf = this._context.asConfiguration<GoogleConfiguration>();
   const projectId = googleConf.getOrThrow('google.project');
   const database = this.database ?? '(default)';
 
-  context.logger.debug(
+  this._context.logger.debug(
     `🗃️ Fetching Firestore document '${this.query}' from database '${database}' in project '${projectId}'.`,
   );
 

@@ -1,4 +1,4 @@
-import { callDeferred, WorkspaceContext } from '@causa/workspace';
+import { callDeferred } from '@causa/workspace';
 import { DatabaseQueryRecords } from '@causa/workspace-core';
 
 /**
@@ -21,8 +21,8 @@ export const SPANNER_QUERY_RECORDS_LIMIT = 100_000;
  * Results are streamed and capped to {@link SPANNER_QUERY_RECORDS_LIMIT} rows.
  */
 export class DatabaseQueryRecordsForSpanner extends DatabaseQueryRecords {
-  async _call(context: WorkspaceContext): Promise<any[]> {
-    return await callDeferred(this, context, import.meta.url);
+  async _call(): Promise<any[]> {
+    return await callDeferred(this, import.meta.url);
   }
 
   _supports(): boolean {

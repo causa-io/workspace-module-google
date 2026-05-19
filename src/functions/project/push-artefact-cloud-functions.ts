@@ -1,4 +1,4 @@
-import { callDeferred, WorkspaceContext } from '@causa/workspace';
+import { callDeferred } from '@causa/workspace';
 import {
   ProjectPushArtefact,
   type ServerlessFunctionsConfiguration,
@@ -10,12 +10,13 @@ import {
  * {@link ProjectPushArtefact.destination}.
  */
 export class ProjectPushArtefactForCloudFunctions extends ProjectPushArtefact {
-  async _call(context: WorkspaceContext): Promise<string> {
-    return await callDeferred(this, context, import.meta.url);
+  async _call(): Promise<string> {
+    return await callDeferred(this, import.meta.url);
   }
 
-  _supports(context: WorkspaceContext): boolean {
-    const conf = context.asConfiguration<ServerlessFunctionsConfiguration>();
+  _supports(): boolean {
+    const conf =
+      this._context.asConfiguration<ServerlessFunctionsConfiguration>();
     return (
       conf.get('project.type') === 'serverlessFunctions' &&
       conf.get('serverlessFunctions.platform') === 'google.cloudFunctions'

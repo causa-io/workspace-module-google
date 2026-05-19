@@ -1,4 +1,4 @@
-import { callDeferred, WorkspaceContext } from '@causa/workspace';
+import { callDeferred } from '@causa/workspace';
 import {
   EventTopicBrokerDeleteTriggerResource,
   type EventsConfiguration,
@@ -16,15 +16,16 @@ const CLOUD_RUN_INVOKER_ID_REGEX =
  * a dedicated service account to invoke the service. This function removes that binding.
  */
 export class EventTopicBrokerDeleteTriggerResourceForCloudRunInvokerRole extends EventTopicBrokerDeleteTriggerResource {
-  async _call(context: WorkspaceContext): Promise<void> {
-    return await callDeferred(this, context, import.meta.url);
+  async _call(): Promise<void> {
+    return await callDeferred(this, import.meta.url);
   }
 
-  _supports(context: WorkspaceContext): boolean {
+  _supports(): boolean {
     return (
       this.id.match(CLOUD_RUN_INVOKER_ID_REGEX) != null &&
-      context.asConfiguration<EventsConfiguration>().get('events.broker') ===
-        'google.pubSub'
+      this._context
+        .asConfiguration<EventsConfiguration>()
+        .get('events.broker') === 'google.pubSub'
     );
   }
 }

@@ -1,7 +1,4 @@
-import {
-  InvalidSecretDefinitionError,
-  type WorkspaceContext,
-} from '@causa/workspace';
+import { InvalidSecretDefinitionError } from '@causa/workspace';
 import { GoogleSecretManagerService } from '../../services/secret-manager.js';
 import {
   type SecretFetchForGoogleSecretManager,
@@ -18,7 +15,6 @@ const SECRET_ID_REGEX =
 
 export default async function call(
   this: SecretFetchForGoogleSecretManager,
-  context: WorkspaceContext,
 ): Promise<string> {
   const id = this.configuration.id as string | undefined;
   if (!id) {
@@ -35,7 +31,7 @@ export default async function call(
     );
   }
 
-  const { client, defaultProject } = context.service(
+  const { client, defaultProject } = this._context.service(
     GoogleSecretManagerService,
   );
   const project = match?.groups?.projectId ?? defaultProject;

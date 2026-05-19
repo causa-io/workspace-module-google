@@ -2,7 +2,7 @@ import { mkdir, readFile, writeFile } from 'fs/promises';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { globby } from 'globby';
-import { dump, load } from 'js-yaml';
+import { parse, stringify } from 'yaml';
 
 /**
  * The root directory of the repository.
@@ -36,7 +36,7 @@ const TEMPLATE_STRING_DEF = {
  */
 async function processSchema(relativePath) {
   const content = await readFile(join(ROOT_DIR, relativePath), 'utf-8');
-  const schema = load(content);
+  const schema = parse(content);
 
   if (schema.$defs?._TemplateString) {
     schema.$defs._TemplateString = TEMPLATE_STRING_DEF;
@@ -44,7 +44,7 @@ async function processSchema(relativePath) {
 
   const destPath = join(ROOT_DIR, 'dist', relativePath.slice('src/'.length));
   await mkdir(dirname(destPath), { recursive: true });
-  await writeFile(destPath, dump(schema));
+  await writeFile(destPath, stringify(schema));
 }
 
 const files = await globby('src/configurations/schemas/**/*.yaml', {

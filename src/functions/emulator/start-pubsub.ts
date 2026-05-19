@@ -1,4 +1,4 @@
-import { callDeferred, WorkspaceContext } from '@causa/workspace';
+import { callDeferred } from '@causa/workspace';
 import { EmulatorStart, type EmulatorStartResult } from '@causa/workspace-core';
 import { PUBSUB_EMULATOR_NAME } from '../../emulators/index.js';
 
@@ -8,8 +8,8 @@ import { PUBSUB_EMULATOR_NAME } from '../../emulators/index.js';
  * configured with Pub/Sub as its event broker).
  */
 export class EmulatorStartForPubSub extends EmulatorStart {
-  async _call(context: WorkspaceContext): Promise<EmulatorStartResult> {
-    return await callDeferred(this, context, import.meta.url);
+  async _call(): Promise<EmulatorStartResult> {
+    return await callDeferred(this, import.meta.url);
   }
 
   _supports(): boolean {

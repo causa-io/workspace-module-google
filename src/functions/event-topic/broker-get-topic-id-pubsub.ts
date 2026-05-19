@@ -1,4 +1,3 @@
-import { WorkspaceContext } from '@causa/workspace';
 import {
   EventTopicBrokerGetTopicId,
   type EventsConfiguration,
@@ -10,17 +9,18 @@ import type { GoogleConfiguration } from '../../configurations/index.js';
  * The returned topic ID is a full Pub/Sub topic ID, e.g. `projects/<projectId>/topics/<topicId>`.
  */
 export class EventTopicBrokerGetTopicIdForPubSub extends EventTopicBrokerGetTopicId {
-  async _call(context: WorkspaceContext): Promise<string> {
-    const googleConf = context.asConfiguration<GoogleConfiguration>();
+  async _call(): Promise<string> {
+    const googleConf = this._context.asConfiguration<GoogleConfiguration>();
     const projectId = googleConf.getOrThrow('google.project');
 
     return `projects/${projectId}/topics/${this.eventTopic}`;
   }
 
-  _supports(context: WorkspaceContext): boolean {
+  _supports(): boolean {
     return (
-      context.asConfiguration<EventsConfiguration>().get('events.broker') ===
-      'google.pubSub'
+      this._context
+        .asConfiguration<EventsConfiguration>()
+        .get('events.broker') === 'google.pubSub'
     );
   }
 }

@@ -1,4 +1,4 @@
-import { callDeferred, WorkspaceContext } from '@causa/workspace';
+import { callDeferred } from '@causa/workspace';
 import {
   EventTopicBrokerCreateTrigger,
   type EventsConfiguration,
@@ -22,14 +22,15 @@ export const CLOUD_RUN_TRIGGER_ID_REGEX =
  *   `serviceContainer.triggers` whose endpoint is of type `http`. Options are forwarded as URL query parameters.
  */
 export class EventTopicBrokerCreateTriggerForCloudRun extends EventTopicBrokerCreateTrigger {
-  async _call(context: WorkspaceContext): Promise<string[]> {
-    return await callDeferred(this, context, import.meta.url);
+  async _call(): Promise<string[]> {
+    return await callDeferred(this, import.meta.url);
   }
 
-  _supports(context: WorkspaceContext): boolean {
+  _supports(): boolean {
     const isPubSub =
-      context.asConfiguration<EventsConfiguration>().get('events.broker') ===
-      'google.pubSub';
+      this._context
+        .asConfiguration<EventsConfiguration>()
+        .get('events.broker') === 'google.pubSub';
     if (!isPubSub) {
       return false;
     }
@@ -38,7 +39,7 @@ export class EventTopicBrokerCreateTriggerForCloudRun extends EventTopicBrokerCr
       return CLOUD_RUN_TRIGGER_ID_REGEX.test(this.trigger);
     }
 
-    const conf = context.asConfiguration<ServiceContainerConfiguration>();
+    const conf = this._context.asConfiguration<ServiceContainerConfiguration>();
     return (
       conf.get('project.type') === 'serviceContainer' &&
       conf.get('serviceContainer.platform') === 'google.cloudRun'

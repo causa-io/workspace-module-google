@@ -1,4 +1,3 @@
-import { WorkspaceContext } from '@causa/workspace';
 import { EmulatorStart, type EmulatorStartResult } from '@causa/workspace-core';
 import { fileURLToPath } from 'url';
 import {
@@ -20,8 +19,8 @@ const FIREBASE_CONF_FILE = fileURLToPath(
  * This actually runs the "legacy" Firebase Auth emulator, which is the same service before it was re-branded.
  */
 export class EmulatorStartForIdentityPlatform extends EmulatorStart {
-  async _call(context: WorkspaceContext): Promise<EmulatorStartResult> {
-    const configuration = await this.startIdentityPlatform(context);
+  async _call(): Promise<EmulatorStartResult> {
+    const configuration = await this.startIdentityPlatform();
 
     return { name: IDENTITY_PLATFORM_EMULATOR_NAME, configuration };
   }
@@ -34,21 +33,19 @@ export class EmulatorStartForIdentityPlatform extends EmulatorStart {
 
   /**
    * Starts the Identity Platform (Firebase Auth) emulator.
-   *
-   * @param context The {@link WorkspaceContext}.
    */
-  private async startIdentityPlatform(
-    context: WorkspaceContext,
-  ): Promise<Record<string, string>> {
+  private async startIdentityPlatform(): Promise<Record<string, string>> {
     if (this.dryRun) {
       return {};
     }
 
-    context.logger.info('🛂 Starting the Identity Platform emulator.');
+    this._context.logger.info('🛂 Starting the Identity Platform emulator.');
 
-    const containerName = getIdentityPlatformContainerName(context);
+    const containerName = getIdentityPlatformContainerName(this._context);
 
-    const firebaseEmulatorService = context.service(FirebaseEmulatorService);
+    const firebaseEmulatorService = this._context.service(
+      FirebaseEmulatorService,
+    );
     await firebaseEmulatorService.start(containerName, FIREBASE_CONF_FILE, [
       {
         host: '127.0.0.1',
@@ -57,7 +54,7 @@ export class EmulatorStartForIdentityPlatform extends EmulatorStart {
       },
     ]);
 
-    context.logger.info(
+    this._context.logger.info(
       '🛂 Successfully initialized the Identity Platform emulator.',
     );
 

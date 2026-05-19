@@ -1,9 +1,5 @@
 import { CliCommand, CliOption } from '@causa/cli';
-import {
-  callDeferred,
-  WorkspaceContext,
-  WorkspaceFunction,
-} from '@causa/workspace';
+import { callDeferred, WorkspaceFunction } from '@causa/workspace';
 import { AllowMissing } from '@causa/workspace/validation';
 import { IsString } from 'class-validator';
 import { appCheckCommandDefinition } from '../../cli/index.js';
@@ -38,8 +34,8 @@ export class GoogleAppCheckGenerateToken extends WorkspaceFunction<
   @AllowMissing()
   readonly app?: string;
 
-  async _call(context: WorkspaceContext): Promise<string> {
-    return await callDeferred(this, context, import.meta.url);
+  async _call(): Promise<string> {
+    return await callDeferred(this, import.meta.url);
   }
 
   _supports(): boolean {

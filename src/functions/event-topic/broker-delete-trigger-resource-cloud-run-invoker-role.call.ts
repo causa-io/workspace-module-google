@@ -1,4 +1,3 @@
-import type { WorkspaceContext } from '@causa/workspace';
 import { CloudRunService } from '../../services/cloud-run.js';
 import type { EventTopicBrokerDeleteTriggerResourceForCloudRunInvokerRole } from './broker-delete-trigger-resource-cloud-run-invoker-role.js';
 
@@ -10,7 +9,6 @@ const CLOUD_RUN_INVOKER_ID_REGEX =
 
 export default async function call(
   this: EventTopicBrokerDeleteTriggerResourceForCloudRunInvokerRole,
-  context: WorkspaceContext,
 ): Promise<void> {
   const match = this.id.match(CLOUD_RUN_INVOKER_ID_REGEX);
   if (!match?.groups) {
@@ -18,11 +16,11 @@ export default async function call(
   }
 
   const { serviceId, pubSubServiceAccount } = match.groups;
-  context.logger.info(
+  this._context.logger.info(
     `🛂 Removing invoker role on Cloud Run service '${serviceId}' for Pub/Sub service account '${pubSubServiceAccount}'.`,
   );
 
-  await context
+  await this._context
     .service(CloudRunService)
     .removeInvokerBinding(serviceId, pubSubServiceAccount);
 }

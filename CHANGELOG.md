@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+Features:
+
+- Implement `ModelSchemaExtractDatabase` for the `google.spanner` and `google.firestore` engines, deriving database bindings from the `googleSpannerTable` and `googleFirestoreCollection` Causa extensions.
+
+Chore:
+
+- Adapt to `@causa/workspace`'s removal of the `context` argument from `_call` and `_supports`. The context is now read from `this._context` in all function implementations and deferred calls.
+- Adapt to `@causa/workspace-core`'s removal of `BackfillEvent.key`. The Pub/Sub publisher no longer forwards an ordering key.
+- Replace `js-yaml` with `yaml` in the schema transformation script.
+
 ## v0.17.0 (2026-05-04)
 
 Features:
