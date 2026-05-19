@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.18.0-beta.1 (2026-05-19)
+
 Features:
 
 - Implement `ModelSchemaExtractDatabase` for the `google.spanner` and `google.firestore` engines, deriving database bindings from the `googleSpannerTable` and `googleFirestoreCollection` Causa extensions.
