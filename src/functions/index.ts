@@ -41,6 +41,7 @@ import {
   DatabaseQueryRecordsForSpanner,
   GoogleSpannerListDatabases,
   GoogleSpannerWriteDatabases,
+  ModelSchemaExtractDatabaseForGoogleSpanner,
 } from './google-spanner/index.js';
 import {
   ProjectGetArtefactDestinationForCloudFunctions,
@@ -92,6 +93,7 @@ export function registerFunctions(context: ModuleRegistrationContext) {
     GoogleSpannerListDatabases,
     GoogleSpannerWriteDatabases,
     ModelSchemaExtractDatabaseForGoogleFirestore,
+    ModelSchemaExtractDatabaseForGoogleSpanner,
     ProjectGetArtefactDestinationForCloudFunctions,
     ProjectGetArtefactDestinationForCloudRun,
     ProjectPushArtefactForCloudFunctions,
