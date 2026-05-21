@@ -58,8 +58,7 @@
     "google-gax": "5.0.6",
     "googleapis": "^172.0.0",
     "micromatch": "^4.0.8",
-    "pino": "^10.3.1",
-    "quicktype-core": "^23.2.6"
+    "pino": "^10.3.1"
   },
   "devDependencies": {
     "@swc/core": "^1.15.33",
