@@ -29,6 +29,7 @@ import { GoogleFirebaseStorageMergeRules } from './google-firebase-storage/index
 import {
   DatabaseQueryRecordsForFirestore,
   GoogleFirestoreMergeRules,
+  ModelGenerateTypeScriptDecoratorsForGoogleFirestore,
   ModelSchemaExtractDatabaseForGoogleFirestore,
 } from './google-firestore/index.js';
 import {
@@ -41,6 +42,7 @@ import {
   DatabaseQueryRecordsForSpanner,
   GoogleSpannerListDatabases,
   GoogleSpannerWriteDatabases,
+  ModelGenerateTypeScriptDecoratorsForGoogleSpanner,
   ModelSchemaExtractDatabaseForGoogleSpanner,
 } from './google-spanner/index.js';
 import {
@@ -53,10 +55,6 @@ import {
   SecretFetchForGoogleSecretManager,
 } from './secret/index.js';
 import { ServiceContainerQueryLogsForCloudRun } from './service-container/index.js';
-import {
-  TypeScriptGetDecoratorRendererForGoogleFirestore,
-  TypeScriptGetDecoratorRendererForGoogleSpanner,
-} from './typescript/index.js';
 
 export function registerFunctions(context: ModuleRegistrationContext) {
   context.registerFunctionImplementations(
@@ -92,6 +90,8 @@ export function registerFunctions(context: ModuleRegistrationContext) {
     GoogleServicesEnable,
     GoogleSpannerListDatabases,
     GoogleSpannerWriteDatabases,
+    ModelGenerateTypeScriptDecoratorsForGoogleFirestore,
+    ModelGenerateTypeScriptDecoratorsForGoogleSpanner,
     ModelSchemaExtractDatabaseForGoogleFirestore,
     ModelSchemaExtractDatabaseForGoogleSpanner,
     ProjectGetArtefactDestinationForCloudFunctions,
@@ -100,7 +100,5 @@ export function registerFunctions(context: ModuleRegistrationContext) {
     SecretFetchForGoogleAccessToken,
     SecretFetchForGoogleSecretManager,
     ServiceContainerQueryLogsForCloudRun,
-    TypeScriptGetDecoratorRendererForGoogleFirestore,
-    TypeScriptGetDecoratorRendererForGoogleSpanner,
   );
 }
