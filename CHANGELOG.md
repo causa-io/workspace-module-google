@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.18.0-beta.2 (2026-05-22)
+
 Breaking changes:
 
 - Rewrite the `TypeScriptGetDecoratorRendererForGoogleFirestore` and `TypeScriptGetDecoratorRendererForGoogleSpanner` workspace functions (and the underlying `GoogleFirestoreRenderer` / `GoogleSpannerRenderer` classes) as `ModelGenerateTypeScriptDecoratorsForGoogleFirestore` and `ModelGenerateTypeScriptDecoratorsForGoogleSpanner`, following the `@causa/workspace-typescript` breaking change that replaces `TypeScriptGetDecoratorRenderer` with the schema-based `ModelGenerateTypeScriptDecorators` function.
