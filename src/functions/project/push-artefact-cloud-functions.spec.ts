@@ -33,6 +33,7 @@ describe('ProjectPushArtefactForCloudFunctions', () => {
       rootPath: emulatorTmpDir,
       configuration: {
         workspace: { name: 'emulator-cf' },
+        google: { firebaseStorage: { emulator: { port: 19199 } } },
       },
       functions: [
         GoogleFirebaseStorageMergeRules,
