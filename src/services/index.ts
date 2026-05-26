@@ -1,4 +1,8 @@
 export { BigQueryService } from './bigquery.js';
+export {
+  CloudMonitoringService,
+  type MetricPoint,
+} from './cloud-monitoring.js';
 export { CloudRunPubSubTriggerService } from './cloud-run-pubsub-trigger.js';
 export { CloudRunService } from './cloud-run.js';
 export * from './firebase-app.errors.js';
