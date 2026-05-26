@@ -4,6 +4,7 @@ import {
   FIRESTORE_EMULATOR_NAME,
   FIRESTORE_PORT,
   getFirestoreContainerName,
+  getFirestoreEmulatorPort,
 } from '../../emulators/index.js';
 import { GcloudEmulatorService } from '../../services/gcloud-emulator.js';
 import { GoogleFirestoreMergeRules } from '../google-firestore/index.js';
@@ -41,18 +42,13 @@ export class EmulatorStartForFirestore extends EmulatorStart {
     this._context.logger.info('🗃️ Starting Firestore emulator.');
 
     const containerName = getFirestoreContainerName(this._context);
+    const hostPort = getFirestoreEmulatorPort(this._context);
 
     const gcloudEmulatorService = this._context.service(GcloudEmulatorService);
     await gcloudEmulatorService.start(
       'firestore',
       containerName,
-      [
-        {
-          host: '127.0.0.1',
-          local: FIRESTORE_PORT,
-          container: FIRESTORE_PORT,
-        },
-      ],
+      [{ host: '127.0.0.1', local: hostPort, container: FIRESTORE_PORT }],
       {
         mounts: [
           {
@@ -63,7 +59,7 @@ export class EmulatorStartForFirestore extends EmulatorStart {
           },
         ],
         additionalArguments: ['--rules', FIRESTORE_CONTAINER_RULES_FILE],
-        availabilityEndpoint: `http://127.0.0.1:${FIRESTORE_PORT}/`,
+        availabilityEndpoint: `http://127.0.0.1:${hostPort}/`,
       },
     );
 
@@ -72,7 +68,7 @@ export class EmulatorStartForFirestore extends EmulatorStart {
     );
 
     return {
-      FIRESTORE_EMULATOR_HOST: `127.0.0.1:${FIRESTORE_PORT}`,
+      FIRESTORE_EMULATOR_HOST: `127.0.0.1:${hostPort}`,
       GOOGLE_CLOUD_PROJECT: gcloudEmulatorService.localGcpProject,
       GCP_PROJECT: gcloudEmulatorService.localGcpProject,
       GCLOUD_PROJECT: gcloudEmulatorService.localGcpProject,
