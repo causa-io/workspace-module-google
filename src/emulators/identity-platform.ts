@@ -29,6 +29,23 @@ export function getIdentityPlatformContainerName(
 }
 
 /**
- * The port on which the Firebase Auth emulator is listening.
+ * The default host port on which the Firebase Auth emulator is listening.
  */
 export const FIREBASE_AUTH_PORT = 9099;
+
+/**
+ * Returns the host port to which the Identity Platform (Firebase Auth) emulator should be bound.
+ * Reads `google.identityPlatform.emulator.port`, falling back to {@link FIREBASE_AUTH_PORT}.
+ *
+ * @param context The {@link WorkspaceContext}.
+ * @returns The host port for the Identity Platform emulator.
+ */
+export function getIdentityPlatformEmulatorPort(
+  context: WorkspaceContext,
+): number {
+  return (
+    context
+      .asConfiguration<GoogleConfiguration>()
+      .get('google.identityPlatform.emulator.port') ?? FIREBASE_AUTH_PORT
+  );
+}
