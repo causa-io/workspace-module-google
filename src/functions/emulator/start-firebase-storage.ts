@@ -5,6 +5,7 @@ import {
   FIREBASE_STORAGE_EMULATOR_NAME,
   FIREBASE_STORAGE_PORT,
   getFirebaseStorageContainerName,
+  getFirebaseStorageEmulatorPort,
 } from '../../emulators/index.js';
 import { FirebaseEmulatorService } from '../../services/firebase-emulator.js';
 import { GoogleFirebaseStorageMergeRules } from '../google-firebase-storage/index.js';
@@ -50,6 +51,7 @@ export class EmulatorStartForFirebaseStorage extends EmulatorStart {
     this._context.logger.info('️🍱 Starting Firebase Storage emulator.');
 
     const containerName = getFirebaseStorageContainerName(this._context);
+    const hostPort = getFirebaseStorageEmulatorPort(this._context);
 
     const firebaseEmulatorService = this._context.service(
       FirebaseEmulatorService,
@@ -61,7 +63,7 @@ export class EmulatorStartForFirebaseStorage extends EmulatorStart {
         {
           host: '127.0.0.1',
           container: FIREBASE_STORAGE_PORT,
-          local: FIREBASE_STORAGE_PORT,
+          local: hostPort,
         },
       ],
       {
@@ -83,7 +85,7 @@ export class EmulatorStartForFirebaseStorage extends EmulatorStart {
     );
 
     return {
-      FIREBASE_STORAGE_EMULATOR_HOST: `127.0.0.1:${FIREBASE_STORAGE_PORT}`,
+      FIREBASE_STORAGE_EMULATOR_HOST: `127.0.0.1:${hostPort}`,
       GOOGLE_CLOUD_PROJECT: firebaseEmulatorService.localGcpProject,
       GCP_PROJECT: firebaseEmulatorService.localGcpProject,
       GCLOUD_PROJECT: firebaseEmulatorService.localGcpProject,
