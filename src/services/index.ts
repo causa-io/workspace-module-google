@@ -13,7 +13,11 @@ export { GcloudEmulatorService } from './gcloud-emulator.js';
 export { GoogleApisService } from './google-apis.js';
 export { IamService } from './iam.js';
 export { LoggingService } from './logging.js';
-export { PubSubService } from './pubsub.js';
+export {
+  PUBSUB_SUBSCRIPTION_ID_REGEX,
+  PubSubService,
+  shortSubscriptionId,
+} from './pubsub.js';
 export { ResourceManagerService } from './resource-manager.js';
 export { GoogleSecretManagerService } from './secret-manager.js';
 export * from './storage.errors.js';

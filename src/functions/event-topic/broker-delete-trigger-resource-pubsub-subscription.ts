@@ -3,6 +3,7 @@ import {
   EventTopicBrokerDeleteTriggerResource,
   type EventsConfiguration,
 } from '@causa/workspace-core';
+import { PUBSUB_SUBSCRIPTION_ID_REGEX } from '../../services/pubsub.utils.js';
 
 /**
  * Implements {@link EventTopicBrokerDeleteTriggerResource} for Pub/Sub subscriptions.
@@ -15,7 +16,7 @@ export class EventTopicBrokerDeleteTriggerResourceForPubSubSubscription extends 
 
   _supports(): boolean {
     return (
-      this.id.match(/^projects\/[\w-]+\/subscriptions\/[\w-]+$/) != null &&
+      PUBSUB_SUBSCRIPTION_ID_REGEX.test(this.id) &&
       this._context
         .asConfiguration<EventsConfiguration>()
         .get('events.broker') === 'google.pubSub'
