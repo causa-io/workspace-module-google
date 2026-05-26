@@ -1,19 +1,29 @@
 import { WorkspaceContext } from '@causa/workspace';
-import { DatabaseQueryRecords } from '@causa/workspace-core';
-import { DockerEmulatorService } from '@causa/workspace-core/services';
-import { NoImplementationFoundError } from '@causa/workspace/function-registry';
-import { createContext } from '@causa/workspace/testing';
+import {
+  DatabaseQueryRecords,
+  EmulatorStart,
+  EmulatorStop,
+} from '@causa/workspace-core';
+import {
+  FunctionRegistry,
+  NoImplementationFoundError,
+} from '@causa/workspace/function-registry';
+import { createContext, registerMockFunction } from '@causa/workspace/testing';
 import { Spanner } from '@google-cloud/spanner';
 import { grpc } from 'google-gax';
 import 'jest-extended';
+import {
+  EmulatorStartForSpanner,
+  EmulatorStopForSpanner,
+} from '../emulator/index.js';
+import { GoogleSpannerListDatabases } from './list-databases.js';
 import {
   DatabaseQueryRecordsForSpanner,
   SPANNER_QUERY_RECORDS_LIMIT,
 } from './query-records.js';
 
-const SPANNER_IMAGE = 'gcr.io/cloud-spanner-emulator/emulator:latest';
-const SPANNER_HOST_GRPC_PORT = 19010;
-const SPANNER_HOST_HTTP_PORT = 19020;
+const SPANNER_HOST_GRPC_PORT = 29010;
+const SPANNER_HOST_HTTP_PORT = 29020;
 const SPANNER_CONTAINER_NAME = 'causa-test-spanner-query-records';
 const PROJECT_ID = 'demo-spanner-query-records';
 const INSTANCE_NAME = 'local';
@@ -21,50 +31,61 @@ const DATABASE_NAME = 'my-db';
 
 describe('DatabaseQueryRecordsForSpanner', () => {
   let context: WorkspaceContext;
-  let dockerEmulatorService: DockerEmulatorService;
+  let functionRegistry: FunctionRegistry<WorkspaceContext>;
+  let initialEnv: Record<string, string | undefined>;
 
   beforeAll(async () => {
-    ({ context } = createContext({
+    initialEnv = process.env;
+
+    ({ context, functionRegistry } = createContext({
       configuration: {
         workspace: { name: 'spanner-query-records-test' },
         google: {
           project: PROJECT_ID,
-          spanner: { instance: { name: INSTANCE_NAME } },
+          localProject: PROJECT_ID,
+          spanner: {
+            instance: { name: INSTANCE_NAME },
+            emulator: {
+              containerName: SPANNER_CONTAINER_NAME,
+              instanceName: INSTANCE_NAME,
+              grpcPort: SPANNER_HOST_GRPC_PORT,
+              httpPort: SPANNER_HOST_HTTP_PORT,
+            },
+          },
         },
       },
-      functions: [DatabaseQueryRecordsForSpanner],
+      functions: [
+        EmulatorStartForSpanner,
+        EmulatorStopForSpanner,
+        DatabaseQueryRecordsForSpanner,
+      ],
     }));
-    dockerEmulatorService = context.service(DockerEmulatorService);
-    await dockerEmulatorService.start(SPANNER_IMAGE, SPANNER_CONTAINER_NAME, [
-      { host: '127.0.0.1', local: SPANNER_HOST_GRPC_PORT, container: 9010 },
-      { host: '127.0.0.1', local: SPANNER_HOST_HTTP_PORT, container: 9020 },
-    ]);
-    await dockerEmulatorService.waitForAvailability(
-      SPANNER_CONTAINER_NAME,
-      `http://127.0.0.1:${SPANNER_HOST_HTTP_PORT}/v1/projects/${PROJECT_ID}/instances`,
+    registerMockFunction(
+      functionRegistry,
+      GoogleSpannerListDatabases,
+      async () => [
+        {
+          id: DATABASE_NAME,
+          ddlFiles: [],
+          ddls: [
+            'CREATE TABLE Singers (id INT64 NOT NULL, name STRING(MAX)) PRIMARY KEY (id)',
+          ],
+        },
+      ],
     );
-    process.env.SPANNER_EMULATOR_HOST = `127.0.0.1:${SPANNER_HOST_GRPC_PORT}`;
+
+    const { configuration } = await context.call(EmulatorStart, {
+      name: 'google.spanner',
+    });
+    process.env = { ...initialEnv, ...configuration };
+
     const spanner = new Spanner({
       servicePath: '127.0.0.1',
       port: SPANNER_HOST_GRPC_PORT,
       projectId: PROJECT_ID,
       sslCreds: grpc.credentials.createInsecure(),
     });
-    const [instance, instanceOp] = await spanner.createInstance(INSTANCE_NAME, {
-      config: 'emulator-config',
-      displayName: INSTANCE_NAME,
-      processingUnits: 100,
-    });
-    await instanceOp.promise();
-    const [database, databaseOp] = await instance.createDatabase(
-      DATABASE_NAME,
-      {
-        schema: [
-          'CREATE TABLE Singers (id INT64 NOT NULL, name STRING(MAX)) PRIMARY KEY (id)',
-        ],
-      },
-    );
-    await databaseOp.promise();
+    const database = spanner.instance(INSTANCE_NAME).database(DATABASE_NAME);
     await database.table('Singers').insert([
       { id: 1, name: 'Eddie' },
       { id: 2, name: 'Wilson' },
@@ -74,8 +95,8 @@ describe('DatabaseQueryRecordsForSpanner', () => {
   }, 300000);
 
   afterAll(async () => {
-    delete process.env.SPANNER_EMULATOR_HOST;
-    await dockerEmulatorService.stop(SPANNER_CONTAINER_NAME);
+    await context.call(EmulatorStop, { name: 'google.spanner' });
+    process.env = initialEnv;
   });
 
   it('should not support a different engine', () => {

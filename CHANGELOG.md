@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+Features:
+
+- Add the `google.firestore.emulator.port`, `google.pubSub.emulator.port`, `google.firebaseStorage.emulator.port`, `google.identityPlatform.emulator.port`, `google.spanner.emulator.grpcPort`, and `google.spanner.emulator.httpPort` configurations to override the host ports bound by the emulators, enabling several workspaces to run their emulators in parallel on the same machine.
+
 ## v0.18.0-beta.2 (2026-05-22)
 
 Breaking changes:

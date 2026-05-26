@@ -32,6 +32,21 @@ export function getFirestoreContainerName(context: WorkspaceContext): string {
 export const FIRESTORE_CONTAINER_RULES_FILE = '/firestore.rules';
 
 /**
- * The port on which the Firestore emulator listens.
+ * The default host port on which the Firestore emulator listens.
  */
 export const FIRESTORE_PORT = 8080;
+
+/**
+ * Returns the host port to which the Firestore emulator should be bound.
+ * Reads `google.firestore.emulator.port`, falling back to {@link FIRESTORE_PORT}.
+ *
+ * @param context The {@link WorkspaceContext}.
+ * @returns The host port for the Firestore emulator.
+ */
+export function getFirestoreEmulatorPort(context: WorkspaceContext): number {
+  return (
+    context
+      .asConfiguration<GoogleConfiguration>()
+      .get('google.firestore.emulator.port') ?? FIRESTORE_PORT
+  );
+}

@@ -88,4 +88,45 @@ describe('EmulatorStartForFirebaseStorage', () => {
       },
     );
   });
+
+  it('should bind the configured host port', async () => {
+    ({ context, functionRegistry } = createContext({
+      configuration: {
+        workspace: { name: 'firebase-storage-test' },
+        google: { firebaseStorage: { emulator: { port: 19199 } } },
+      },
+      functions: [EmulatorStartForFirebaseStorage],
+    }));
+    registerMockFunction(
+      functionRegistry,
+      GoogleFirebaseStorageMergeRules,
+      async () => ({ securityRuleFile: 'security.rules', configuration: {} }),
+    );
+    firebaseEmulatorService = context.service(FirebaseEmulatorService);
+    jest.spyOn(firebaseEmulatorService, 'start').mockResolvedValue();
+
+    const actualResult = await context.call(EmulatorStart, {
+      name: 'google.firebaseStorage',
+    });
+
+    expect(actualResult).toEqual({
+      configuration: {
+        FIREBASE_STORAGE_EMULATOR_HOST: `127.0.0.1:19199`,
+        GOOGLE_CLOUD_PROJECT: 'demo-firebase-storage-test',
+        GCP_PROJECT: 'demo-firebase-storage-test',
+        GCLOUD_PROJECT: 'demo-firebase-storage-test',
+        FIREBASE_STORAGE_BUCKET_NAME: `demo-firebase-storage-test.appspot.com`,
+        FIREBASE_CONFIG: '{}',
+      },
+      name: 'google.firebaseStorage',
+    });
+    expect(firebaseEmulatorService.start).toHaveBeenCalledExactlyOnceWith(
+      'firebase-storage-test-firebase-storage',
+      fileURLToPath(
+        new URL('../../assets/firebase-storage.json', import.meta.url),
+      ),
+      [{ host: '127.0.0.1', container: 9199, local: 19199 }],
+      expect.any(Object),
+    );
+  });
 });

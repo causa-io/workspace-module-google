@@ -25,9 +25,24 @@ export function getPubSubContainerName(context: WorkspaceContext): string {
 }
 
 /**
- * The port on which the Pub/Sub emulator is listening.
+ * The default host port on which the Pub/Sub emulator is listening.
  */
 export const PUBSUB_PORT = 8085;
+
+/**
+ * Returns the host port to which the Pub/Sub emulator should be bound.
+ * Reads `google.pubSub.emulator.port`, falling back to {@link PUBSUB_PORT}.
+ *
+ * @param context The {@link WorkspaceContext}.
+ * @returns The host port for the Pub/Sub emulator.
+ */
+export function getPubSubEmulatorPort(context: WorkspaceContext): number {
+  return (
+    context
+      .asConfiguration<GoogleConfiguration>()
+      .get('google.pubSub.emulator.port') ?? PUBSUB_PORT
+  );
+}
 
 /**
  * Formats the name of a Pub/Sub topic as an environment variable.

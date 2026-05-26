@@ -13,10 +13,11 @@ import { createContext, registerMockFunction } from '@causa/workspace/testing';
 import { PubSub } from '@google-cloud/pubsub';
 import { jest } from '@jest/globals';
 import 'jest-extended';
-import { PUBSUB_PORT } from '../../emulators/index.js';
 import { GcloudEmulatorService } from '../../services/gcloud-emulator.js';
 import { EmulatorStartForPubSub } from './start-pubsub.js';
 import { EmulatorStopForPubSub } from './stop-pubsub.js';
+
+const PUBSUB_HOST_PORT = 18085;
 
 describe('EmulatorStartForPubSub', () => {
   let context: WorkspaceContext;
@@ -28,6 +29,7 @@ describe('EmulatorStartForPubSub', () => {
       configuration: {
         workspace: { name: 'pubsub-test' },
         events: { broker: 'google.pubSub' },
+        google: { pubSub: { emulator: { port: PUBSUB_HOST_PORT } } },
       },
       functions: [EmulatorStartForPubSub, EmulatorStopForPubSub],
     }));
@@ -89,7 +91,7 @@ describe('EmulatorStartForPubSub', () => {
 
     expect(actualResult.name).toEqual('google.pubSub');
     expect(actualResult.configuration).toEqual({
-      PUBSUB_EMULATOR_HOST: '127.0.0.1:8085',
+      PUBSUB_EMULATOR_HOST: `127.0.0.1:${PUBSUB_HOST_PORT}`,
       GOOGLE_CLOUD_PROJECT: 'demo-pubsub-test',
       GCP_PROJECT: 'demo-pubsub-test',
       GCLOUD_PROJECT: 'demo-pubsub-test',
@@ -109,6 +111,7 @@ describe('EmulatorStartForPubSub', () => {
       configuration: {
         workspace: { name: 'pubsub-test' },
         events: { broker: '📫' },
+        google: { pubSub: { emulator: { port: PUBSUB_HOST_PORT } } },
       },
       functions: [EmulatorStartForPubSub, EmulatorStopForPubSub],
     }));
@@ -124,7 +127,7 @@ describe('EmulatorStartForPubSub', () => {
 
     expect(actualResult.name).toEqual('google.pubSub');
     expect(actualResult.configuration).toEqual({
-      PUBSUB_EMULATOR_HOST: '127.0.0.1:8085',
+      PUBSUB_EMULATOR_HOST: `127.0.0.1:${PUBSUB_HOST_PORT}`,
       GOOGLE_CLOUD_PROJECT: 'demo-pubsub-test',
       GCP_PROJECT: 'demo-pubsub-test',
       GCLOUD_PROJECT: 'demo-pubsub-test',
@@ -135,7 +138,7 @@ describe('EmulatorStartForPubSub', () => {
   async function getPubSubEmulatorTopics(): Promise<string[]> {
     const [topics] = await new PubSub({
       projectId: 'demo-pubsub-test',
-      apiEndpoint: `127.0.0.1:${PUBSUB_PORT}`,
+      apiEndpoint: `127.0.0.1:${PUBSUB_HOST_PORT}`,
     }).getTopics();
     return topics.map((t) => t.name).sort();
   }

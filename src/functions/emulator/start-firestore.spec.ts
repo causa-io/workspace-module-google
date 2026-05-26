@@ -85,4 +85,44 @@ describe('EmulatorStartForFirestore', () => {
       },
     );
   });
+
+  it('should bind the configured host port', async () => {
+    ({ context, functionRegistry } = createContext({
+      configuration: {
+        workspace: { name: 'firestore-test' },
+        google: { firestore: { emulator: { port: 18080 } } },
+      },
+      functions: [EmulatorStartForFirestore],
+    }));
+    registerMockFunction(
+      functionRegistry,
+      GoogleFirestoreMergeRules,
+      async () => ({ securityRuleFile: 'security.rules', configuration: {} }),
+    );
+    gcloudEmulatorService = context.service(GcloudEmulatorService);
+    jest.spyOn(gcloudEmulatorService, 'start').mockResolvedValue();
+
+    const actualResult = await context.call(EmulatorStart, {
+      name: 'google.firestore',
+    });
+
+    expect(actualResult).toEqual({
+      configuration: {
+        FIRESTORE_EMULATOR_HOST: '127.0.0.1:18080',
+        GOOGLE_CLOUD_PROJECT: 'demo-firestore-test',
+        GCP_PROJECT: 'demo-firestore-test',
+        GCLOUD_PROJECT: 'demo-firestore-test',
+        FIREBASE_CONFIG: '{}',
+      },
+      name: 'google.firestore',
+    });
+    expect(gcloudEmulatorService.start).toHaveBeenCalledExactlyOnceWith(
+      'firestore',
+      'firestore-test-firestore',
+      [{ host: '127.0.0.1', local: 18080, container: 8080 }],
+      expect.objectContaining({
+        availabilityEndpoint: 'http://127.0.0.1:18080/',
+      }),
+    );
+  });
 });

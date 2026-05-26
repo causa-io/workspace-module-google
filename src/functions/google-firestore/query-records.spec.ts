@@ -1,53 +1,88 @@
 import { WorkspaceContext } from '@causa/workspace';
-import { DatabaseQueryRecords } from '@causa/workspace-core';
-import { DockerEmulatorService } from '@causa/workspace-core/services';
-import { NoImplementationFoundError } from '@causa/workspace/function-registry';
-import { createContext } from '@causa/workspace/testing';
+import {
+  DatabaseQueryRecords,
+  EmulatorStart,
+  EmulatorStop,
+} from '@causa/workspace-core';
+import {
+  FunctionRegistry,
+  NoImplementationFoundError,
+} from '@causa/workspace/function-registry';
+import { createContext, registerMockFunction } from '@causa/workspace/testing';
 import { deleteApp, initializeApp } from 'firebase-admin/app';
 import { GeoPoint, Timestamp, getFirestore } from 'firebase-admin/firestore';
 import 'jest-extended';
+import { mkdtemp, rm, writeFile } from 'fs/promises';
 import { randomUUID } from 'node:crypto';
+import { tmpdir } from 'os';
+import { join, resolve } from 'path';
+import {
+  EmulatorStartForFirestore,
+  EmulatorStopForFirestore,
+} from '../emulator/index.js';
+import { GoogleFirestoreMergeRules } from './merge-rules.js';
 import { DatabaseQueryRecordsForFirestore } from './query-records.js';
 
-const FIRESTORE_IMAGE =
-  'gcr.io/google.com/cloudsdktool/google-cloud-cli:emulators';
-const FIRESTORE_HOST_PORT = 18080;
+const FIRESTORE_HOST_PORT = 28080;
 const FIRESTORE_CONTAINER_NAME = 'causa-test-firestore-query-records';
 const PROJECT_ID = 'demo-firestore-query-records';
 const COLLECTION = 'singers';
 
 describe('DatabaseQueryRecordsForFirestore', () => {
   let context: WorkspaceContext;
-  let dockerEmulatorService: DockerEmulatorService;
+  let functionRegistry: FunctionRegistry<WorkspaceContext>;
+  let rulesDir: string;
+  let initialEnv: Record<string, string | undefined>;
 
   beforeAll(async () => {
-    ({ context } = createContext({
+    initialEnv = process.env;
+
+    rulesDir = resolve(await mkdtemp(join(tmpdir(), 'causa-firestore-rules-')));
+    const rulesFile = join(rulesDir, 'firestore.rules');
+    await writeFile(
+      rulesFile,
+      `rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}
+`,
+    );
+
+    ({ context, functionRegistry } = createContext({
       configuration: {
         workspace: { name: 'firestore-query-records-test' },
-        google: { project: PROJECT_ID },
+        google: {
+          project: PROJECT_ID,
+          localProject: PROJECT_ID,
+          firestore: {
+            emulator: {
+              containerName: FIRESTORE_CONTAINER_NAME,
+              port: FIRESTORE_HOST_PORT,
+            },
+          },
+        },
       },
-      functions: [DatabaseQueryRecordsForFirestore],
+      functions: [
+        EmulatorStartForFirestore,
+        EmulatorStopForFirestore,
+        DatabaseQueryRecordsForFirestore,
+      ],
     }));
-    dockerEmulatorService = context.service(DockerEmulatorService);
-    await dockerEmulatorService.start(
-      FIRESTORE_IMAGE,
-      FIRESTORE_CONTAINER_NAME,
-      [{ host: '127.0.0.1', local: FIRESTORE_HOST_PORT, container: 8080 }],
-      {
-        commandAndArgs: [
-          'gcloud',
-          'emulators',
-          'firestore',
-          'start',
-          '--host-port=0.0.0.0:8080',
-        ],
-      },
+    registerMockFunction(
+      functionRegistry,
+      GoogleFirestoreMergeRules,
+      async () => ({ securityRuleFile: rulesFile, configuration: {} }),
     );
-    await dockerEmulatorService.waitForAvailability(
-      FIRESTORE_CONTAINER_NAME,
-      `http://127.0.0.1:${FIRESTORE_HOST_PORT}/`,
-    );
-    process.env.FIRESTORE_EMULATOR_HOST = `127.0.0.1:${FIRESTORE_HOST_PORT}`;
+
+    const { configuration } = await context.call(EmulatorStart, {
+      name: 'google.firestore',
+    });
+    process.env = { ...initialEnv, ...configuration };
+
     const app = initializeApp({ projectId: PROJECT_ID }, randomUUID());
     try {
       const firestore = getFirestore(app);
@@ -70,8 +105,9 @@ describe('DatabaseQueryRecordsForFirestore', () => {
   }, 300000);
 
   afterAll(async () => {
-    delete process.env.FIRESTORE_EMULATOR_HOST;
-    await dockerEmulatorService.stop(FIRESTORE_CONTAINER_NAME);
+    await context.call(EmulatorStop, { name: 'google.firestore' });
+    await rm(rulesDir, { recursive: true, force: true });
+    process.env = initialEnv;
   });
 
   it('should not support a different engine', () => {

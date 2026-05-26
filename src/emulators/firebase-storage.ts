@@ -29,9 +29,26 @@ export function getFirebaseStorageContainerName(
 }
 
 /**
- * The exposed port for Firebase Storage.
+ * The default exposed host port for Firebase Storage.
  */
 export const FIREBASE_STORAGE_PORT = 9199;
+
+/**
+ * Returns the host port to which the Firebase Storage emulator should be bound.
+ * Reads `google.firebaseStorage.emulator.port`, falling back to {@link FIREBASE_STORAGE_PORT}.
+ *
+ * @param context The {@link WorkspaceContext}.
+ * @returns The host port for the Firebase Storage emulator.
+ */
+export function getFirebaseStorageEmulatorPort(
+  context: WorkspaceContext,
+): number {
+  return (
+    context
+      .asConfiguration<GoogleConfiguration>()
+      .get('google.firebaseStorage.emulator.port') ?? FIREBASE_STORAGE_PORT
+  );
+}
 
 /**
  * The location of the Firebase Storage security rules file within the container.

@@ -4,6 +4,7 @@ import {
   FIREBASE_AUTH_PORT,
   IDENTITY_PLATFORM_EMULATOR_NAME,
   getIdentityPlatformContainerName,
+  getIdentityPlatformEmulatorPort,
 } from '../../emulators/index.js';
 import { FirebaseEmulatorService } from '../../services/firebase-emulator.js';
 
@@ -42,16 +43,13 @@ export class EmulatorStartForIdentityPlatform extends EmulatorStart {
     this._context.logger.info('🛂 Starting the Identity Platform emulator.');
 
     const containerName = getIdentityPlatformContainerName(this._context);
+    const hostPort = getIdentityPlatformEmulatorPort(this._context);
 
     const firebaseEmulatorService = this._context.service(
       FirebaseEmulatorService,
     );
     await firebaseEmulatorService.start(containerName, FIREBASE_CONF_FILE, [
-      {
-        host: '127.0.0.1',
-        local: FIREBASE_AUTH_PORT,
-        container: FIREBASE_AUTH_PORT,
-      },
+      { host: '127.0.0.1', local: hostPort, container: FIREBASE_AUTH_PORT },
     ]);
 
     this._context.logger.info(
@@ -59,7 +57,7 @@ export class EmulatorStartForIdentityPlatform extends EmulatorStart {
     );
 
     return {
-      FIREBASE_AUTH_EMULATOR_HOST: `127.0.0.1:${FIREBASE_AUTH_PORT}`,
+      FIREBASE_AUTH_EMULATOR_HOST: `127.0.0.1:${hostPort}`,
       GOOGLE_CLOUD_PROJECT: firebaseEmulatorService.localGcpProject,
       GCP_PROJECT: firebaseEmulatorService.localGcpProject,
       GCLOUD_PROJECT: firebaseEmulatorService.localGcpProject,

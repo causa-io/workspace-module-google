@@ -63,4 +63,38 @@ describe('EmulatorStartForIdentityPlatform', () => {
       [{ host: '127.0.0.1', container: 9099, local: 9099 }],
     );
   });
+
+  it('should bind the configured host port', async () => {
+    ({ context } = createContext({
+      configuration: {
+        workspace: { name: 'identity-platform-test' },
+        google: { identityPlatform: { emulator: { port: 19099 } } },
+      },
+      functions: [EmulatorStartForIdentityPlatform],
+    }));
+    firebaseEmulatorService = context.service(FirebaseEmulatorService);
+    jest.spyOn(firebaseEmulatorService, 'start').mockResolvedValue();
+
+    const actualResult = await context.call(EmulatorStart, {
+      name: 'google.identityPlatform',
+    });
+
+    expect(actualResult).toEqual({
+      configuration: {
+        FIREBASE_AUTH_EMULATOR_HOST: `127.0.0.1:19099`,
+        GOOGLE_CLOUD_PROJECT: 'demo-identity-platform-test',
+        GCP_PROJECT: 'demo-identity-platform-test',
+        GCLOUD_PROJECT: 'demo-identity-platform-test',
+        FIREBASE_CONFIG: '{}',
+      },
+      name: 'google.identityPlatform',
+    });
+    expect(firebaseEmulatorService.start).toHaveBeenCalledExactlyOnceWith(
+      'identity-platform-test-identity-platform',
+      fileURLToPath(
+        new URL('../../assets/firebase-auth.json', import.meta.url),
+      ),
+      [{ host: '127.0.0.1', container: 9099, local: 19099 }],
+    );
+  });
 });
