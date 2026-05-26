@@ -21,6 +21,9 @@ import { GoogleSpannerListDatabases } from '../google-spanner/index.js';
 import { EmulatorStartForSpanner } from './start-spanner.js';
 import { EmulatorStopForSpanner } from './stop-spanner.js';
 
+const SPANNER_HOST_GRPC_PORT = 19010;
+const SPANNER_HOST_HTTP_PORT = 19020;
+
 describe('EmulatorStartForSpanner', () => {
   let context: WorkspaceContext;
   let functionRegistry: FunctionRegistry<WorkspaceContext>;
@@ -29,7 +32,17 @@ describe('EmulatorStartForSpanner', () => {
 
   beforeEach(async () => {
     ({ context, functionRegistry } = createContext({
-      configuration: { workspace: { name: 'spanner-test' } },
+      configuration: {
+        workspace: { name: 'spanner-test' },
+        google: {
+          spanner: {
+            emulator: {
+              grpcPort: SPANNER_HOST_GRPC_PORT,
+              httpPort: SPANNER_HOST_HTTP_PORT,
+            },
+          },
+        },
+      },
       functions: [EmulatorStartForSpanner, EmulatorStopForSpanner],
     }));
 
@@ -83,7 +96,7 @@ describe('EmulatorStartForSpanner', () => {
 
     expect(actualResult.name).toEqual('google.spanner');
     expect(actualResult.configuration).toEqual({
-      SPANNER_EMULATOR_HOST: `127.0.0.1:9010`,
+      SPANNER_EMULATOR_HOST: `127.0.0.1:${SPANNER_HOST_GRPC_PORT}`,
       GOOGLE_CLOUD_PROJECT: 'demo-spanner-test',
       GCP_PROJECT: 'demo-spanner-test',
       GCLOUD_PROJECT: 'demo-spanner-test',
@@ -115,7 +128,7 @@ describe('EmulatorStartForSpanner', () => {
 
     expect(actualResult.name).toEqual('google.spanner');
     expect(actualResult.configuration).toEqual({
-      SPANNER_EMULATOR_HOST: `127.0.0.1:9010`,
+      SPANNER_EMULATOR_HOST: `127.0.0.1:${SPANNER_HOST_GRPC_PORT}`,
       GOOGLE_CLOUD_PROJECT: 'demo-spanner-test',
       GCP_PROJECT: 'demo-spanner-test',
       GCLOUD_PROJECT: 'demo-spanner-test',
@@ -140,7 +153,7 @@ describe('EmulatorStartForSpanner', () => {
   async function getSpannerDatabases(): Promise<Record<string, string[]>> {
     const spanner = new Spanner({
       servicePath: '127.0.0.1',
-      port: 9010,
+      port: SPANNER_HOST_GRPC_PORT,
       projectId: 'demo-spanner-test',
       sslCreds: grpc.credentials.createInsecure(),
     });

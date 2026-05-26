@@ -16,6 +16,8 @@ import {
   SPANNER_HTTP_PORT,
   SPANNER_IMAGE,
   getSpannerContainerName,
+  getSpannerEmulatorGrpcPort,
+  getSpannerEmulatorHttpPort,
 } from '../../emulators/index.js';
 import { GoogleSpannerListDatabases } from '../google-spanner/index.js';
 import type { EmulatorStartForSpanner } from './start-spanner.js';
@@ -36,8 +38,17 @@ async function startSpanner(
     return {};
   }
 
-  const emulatorConf = await startSpannerEmulator(context);
-  const instanceAndDatabaseConf = await initializeEmulator(context);
+  const grpcHostPort = getSpannerEmulatorGrpcPort(context);
+  const httpHostPort = getSpannerEmulatorHttpPort(context);
+  const emulatorConf = await startSpannerEmulator(
+    context,
+    grpcHostPort,
+    httpHostPort,
+  );
+  const instanceAndDatabaseConf = await initializeEmulator(
+    context,
+    grpcHostPort,
+  );
 
   context.logger.info('🗃️ Successfully initialized Spanner emulator.');
 
@@ -46,6 +57,8 @@ async function startSpanner(
 
 async function startSpannerEmulator(
   context: WorkspaceContext,
+  grpcHostPort: number,
+  httpHostPort: number,
 ): Promise<Record<string, string>> {
   context.logger.info('🗃️ Starting Spanner emulator.');
 
@@ -60,20 +73,19 @@ async function startSpannerEmulator(
   await dockerEmulatorService.start(
     `${SPANNER_IMAGE}:${imageVersion}`,
     containerName,
-    [SPANNER_GRPC_PORT, SPANNER_HTTP_PORT].map((p) => ({
-      host: '127.0.0.1',
-      local: p,
-      container: p,
-    })) as any,
+    [
+      { host: '127.0.0.1', local: grpcHostPort, container: SPANNER_GRPC_PORT },
+      { host: '127.0.0.1', local: httpHostPort, container: SPANNER_HTTP_PORT },
+    ],
   );
 
   await dockerEmulatorService.waitForAvailability(
     containerName,
-    `http://127.0.0.1:${SPANNER_HTTP_PORT}/v1/projects/${gcpProject}/instances`,
+    `http://127.0.0.1:${httpHostPort}/v1/projects/${gcpProject}/instances`,
   );
 
   return {
-    SPANNER_EMULATOR_HOST: `127.0.0.1:${SPANNER_GRPC_PORT}`,
+    SPANNER_EMULATOR_HOST: `127.0.0.1:${grpcHostPort}`,
     GOOGLE_CLOUD_PROJECT: gcpProject,
     GCP_PROJECT: gcpProject,
     GCLOUD_PROJECT: gcpProject,
@@ -82,10 +94,11 @@ async function startSpannerEmulator(
 
 async function initializeEmulator(
   context: WorkspaceContext,
+  port: number,
 ): Promise<Record<string, string>> {
   const spanner = new Spanner({
     servicePath: '127.0.0.1',
-    port: SPANNER_GRPC_PORT,
+    port,
     projectId: getLocalGcpProject(context),
     sslCreds: grpc.credentials.createInsecure(),
   });
