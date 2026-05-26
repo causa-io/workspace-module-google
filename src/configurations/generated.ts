@@ -274,6 +274,14 @@ export class GoogleFirebaseStorageEmulator {
   @AllowMissing()
   @IsString()
   readonly containerName?: string;
+
+  /**
+   * The host port to which the Firebase Storage emulator is bound.
+   * Override this to run several workspaces in parallel on the same machine. Defaults to `9199`.
+   */
+  @AllowMissing()
+  @IsNumber()
+  readonly port?: number;
   [property: string]: any;
 }
 
@@ -322,6 +330,14 @@ export class GoogleFirestoreEmulator {
   @AllowMissing()
   @IsString()
   readonly containerName?: string;
+
+  /**
+   * The host port to which the Firestore emulator is bound.
+   * Override this to run several workspaces in parallel on the same machine. Defaults to `8080`.
+   */
+  @AllowMissing()
+  @IsNumber()
+  readonly port?: number;
   [property: string]: any;
 }
 
@@ -388,6 +404,14 @@ export class GoogleIdentityPlatformEmulator {
   @AllowMissing()
   @IsString()
   readonly containerName?: string;
+
+  /**
+   * The host port to which the Identity Platform (Firebase Auth) emulator is bound.
+   * Override this to run several workspaces in parallel on the same machine. Defaults to `9099`.
+   */
+  @AllowMissing()
+  @IsNumber()
+  readonly port?: number;
   [property: string]: any;
 }
 
@@ -464,6 +488,14 @@ export class GooglePubSubEmulator {
   @AllowMissing()
   @IsString()
   readonly containerName?: string;
+
+  /**
+   * The host port to which the Pub/Sub emulator is bound.
+   * Override this to run several workspaces in parallel on the same machine. Defaults to `8085`.
+   */
+  @AllowMissing()
+  @IsNumber()
+  readonly port?: number;
   [property: string]: any;
 }
 
@@ -625,6 +657,22 @@ export class GoogleSpannerEmulator {
   @AllowMissing()
   @IsString()
   readonly containerName?: string;
+
+  /**
+   * The host port to which the Spanner emulator gRPC API is bound.
+   * Override this to run several workspaces in parallel on the same machine. Defaults to `9010`.
+   */
+  @AllowMissing()
+  @IsNumber()
+  readonly grpcPort?: number;
+
+  /**
+   * The host port to which the Spanner emulator HTTP API is bound.
+   * Override this to run several workspaces in parallel on the same machine. Defaults to `9020`.
+   */
+  @AllowMissing()
+  @IsNumber()
+  readonly httpPort?: number;
 
   /**
    * The name of the Spanner instance that will automatically be created in the emulator.

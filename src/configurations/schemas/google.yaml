@@ -113,6 +113,12 @@ properties:
                 type: string
                 description: The name of the local Docker container running the emulator.
 
+              port:
+                type: number
+                description: |-
+                  The host port to which the Firebase Storage emulator is bound.
+                  Override this to run several workspaces in parallel on the same machine. Defaults to `9199`.
+
           securityRuleFiles:
             type: array
             items:
@@ -137,6 +143,12 @@ properties:
                 type: string
                 description: The name of the local Docker container running the emulator.
 
+              port:
+                type: number
+                description: |-
+                  The host port to which the Identity Platform (Firebase Auth) emulator is bound.
+                  Override this to run several workspaces in parallel on the same machine. Defaults to `9099`.
+
       firestore:
         title: GoogleFirestore
         type: object
@@ -150,6 +162,12 @@ properties:
               containerName:
                 type: string
                 description: The name of the local Docker container running the emulator.
+
+              port:
+                type: number
+                description: |-
+                  The host port to which the Firestore emulator is bound.
+                  Override this to run several workspaces in parallel on the same machine. Defaults to `8080`.
 
           securityRuleFiles:
             type: array
@@ -174,6 +192,12 @@ properties:
               containerName:
                 type: string
                 description: The name of the local Docker container running the emulator.
+
+              port:
+                type: number
+                description: |-
+                  The host port to which the Pub/Sub emulator is bound.
+                  Override this to run several workspaces in parallel on the same machine. Defaults to `8085`.
 
           topicConfigurationsDirectory:
             type: string
@@ -223,6 +247,18 @@ properties:
               instanceName:
                 type: string
                 description: The name of the Spanner instance that will automatically be created in the emulator.
+
+              grpcPort:
+                type: number
+                description: |-
+                  The host port to which the Spanner emulator gRPC API is bound.
+                  Override this to run several workspaces in parallel on the same machine. Defaults to `9010`.
+
+              httpPort:
+                type: number
+                description: |-
+                  The host port to which the Spanner emulator HTTP API is bound.
+                  Override this to run several workspaces in parallel on the same machine. Defaults to `9020`.
 
           instance:
             title: GoogleSpannerInstance
