@@ -43,6 +43,7 @@
     "@google-cloud/bigquery": "^8.3.1",
     "@google-cloud/iam-credentials": "^4.2.2",
     "@google-cloud/logging": "^11.2.1",
+    "@google-cloud/monitoring": "^5.3.2",
     "@google-cloud/pubsub": "^5.3.0",
     "@google-cloud/resource-manager": "^6.2.2",
     "@google-cloud/run": "^3.2.1",
