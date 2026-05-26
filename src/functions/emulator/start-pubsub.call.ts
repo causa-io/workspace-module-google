@@ -10,6 +10,7 @@ import {
   PUBSUB_PORT,
   formatPubSubTopicAsEnvironmentVariable,
   getPubSubContainerName,
+  getPubSubEmulatorPort,
 } from '../../emulators/index.js';
 import { GcloudEmulatorService } from '../../services/gcloud-emulator.js';
 import type { EmulatorStartForPubSub } from './start-pubsub.js';
@@ -30,8 +31,9 @@ async function startPubSub(
     return {};
   }
 
-  const emulatorConf = await startPubSubEmulator(context);
-  const topicsConf = await createTopicsIfNeeded(context);
+  const hostPort = getPubSubEmulatorPort(context);
+  const emulatorConf = await startPubSubEmulator(context, hostPort);
+  const topicsConf = await createTopicsIfNeeded(context, hostPort);
 
   context.logger.info('📫 Successfully initialized Pub/Sub emulator.');
 
@@ -40,6 +42,7 @@ async function startPubSub(
 
 async function startPubSubEmulator(
   context: WorkspaceContext,
+  hostPort: number,
 ): Promise<Record<string, string>> {
   context.logger.info('📫 Starting Pub/Sub emulator.');
 
@@ -50,14 +53,14 @@ async function startPubSubEmulator(
   await gcloudEmulatorService.start(
     'pubsub',
     containerName,
-    [{ host: '127.0.0.1', local: PUBSUB_PORT, container: PUBSUB_PORT }],
+    [{ host: '127.0.0.1', local: hostPort, container: PUBSUB_PORT }],
     {
-      availabilityEndpoint: `http://127.0.0.1:${PUBSUB_PORT}/v1/projects/${gcpProject}/topics`,
+      availabilityEndpoint: `http://127.0.0.1:${hostPort}/v1/projects/${gcpProject}/topics`,
     },
   );
 
   return {
-    PUBSUB_EMULATOR_HOST: `127.0.0.1:${PUBSUB_PORT}`,
+    PUBSUB_EMULATOR_HOST: `127.0.0.1:${hostPort}`,
     GOOGLE_CLOUD_PROJECT: gcloudEmulatorService.localGcpProject,
     GCP_PROJECT: gcloudEmulatorService.localGcpProject,
     GCLOUD_PROJECT: gcloudEmulatorService.localGcpProject,
@@ -66,6 +69,7 @@ async function startPubSubEmulator(
 
 async function createTopicsIfNeeded(
   context: WorkspaceContext,
+  hostPort: number,
 ): Promise<Record<string, string>> {
   if (context.get('events.broker') !== 'google.pubSub') {
     context.logger.warn(
@@ -80,7 +84,7 @@ async function createTopicsIfNeeded(
 
   const pubSub = new PubSub({
     projectId: gcpProject,
-    apiEndpoint: `127.0.0.1:${PUBSUB_PORT}`,
+    apiEndpoint: `127.0.0.1:${hostPort}`,
   });
 
   const envVars = await Promise.all(
