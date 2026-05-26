@@ -6,5 +6,6 @@ export { EventTopicBrokerDeleteTriggerResourceForPubSubSubscription } from './br
 export { EventTopicBrokerDeleteTriggerResourceForServiceAccount } from './broker-delete-trigger-resource-service-account.js';
 export { EventTopicBrokerGetTopicIdForPubSub } from './broker-get-topic-id-pubsub.js';
 export { EventTopicBrokerPublishEventsForGoogle } from './broker-publish-events-google.js';
+export { EventTopicBrokerWaitForProcessingForPubSub } from './broker-wait-for-processing-pubsub.js';
 export { EventTopicCreateBackfillSourceForBigQuery } from './create-backfill-source-bigquery.js';
 export { EventTopicQueryEventsForBigQuery } from './query-events-bigquery.js';
