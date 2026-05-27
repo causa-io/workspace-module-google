@@ -21,6 +21,7 @@ import {
   EventTopicBrokerDeleteTriggerResourceForServiceAccount,
   EventTopicBrokerGetTopicIdForPubSub,
   EventTopicBrokerPublishEventsForGoogle,
+  EventTopicBrokerWaitForProcessingForPubSub,
   EventTopicCreateBackfillSourceForBigQuery,
   EventTopicQueryEventsForBigQuery,
 } from './event-topic/index.js';
@@ -79,6 +80,7 @@ export function registerFunctions(context: ModuleRegistrationContext) {
     EventTopicBrokerDeleteTriggerResourceForServiceAccount,
     EventTopicBrokerGetTopicIdForPubSub,
     EventTopicBrokerPublishEventsForGoogle,
+    EventTopicBrokerWaitForProcessingForPubSub,
     EventTopicCreateBackfillSourceForBigQuery,
     EventTopicQueryEventsForBigQuery,
     GoogleAppCheckGenerateToken,

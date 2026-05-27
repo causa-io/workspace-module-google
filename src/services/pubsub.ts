@@ -4,6 +4,11 @@ import { iam_v1 } from 'googleapis';
 import type { GoogleConfiguration } from '../configurations/index.js';
 import { ResourceManagerService } from './resource-manager.js';
 
+export {
+  PUBSUB_SUBSCRIPTION_ID_REGEX,
+  shortSubscriptionId,
+} from './pubsub.utils.js';
+
 /**
  * A service for managing Pub/Sub resources
  */
