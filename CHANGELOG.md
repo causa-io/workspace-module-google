@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.18.0-beta.3 (2026-05-27)
+
 Features:
 
 - Implement `EventTopicBrokerWaitForProcessing` for Pub/Sub, polling Cloud Monitoring metrics until all temporary subscriptions of the targeted backfill are drained.
