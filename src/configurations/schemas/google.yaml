@@ -400,6 +400,28 @@ properties:
               events during a backfill targeting a project-scoped trigger. Defaults to the project's name
               (`project.name`) when unset.
 
+          eventBackfillServiceCloneConfig:
+            title: GoogleCloudRunEventBackfillServiceCloneConfig
+            type: object
+            description: |-
+              When set, project-scoped backfill triggers do not send events to the live Cloud Run service. Instead, a
+              temporary copy of the service is deployed for each trigger, isolating the backfill load (in particular its
+              scaling) from production. The copy is deleted once the backfill is cleaned up. Ingress is always
+              restricted to internal traffic for the copy. The properties of this object override the scaling settings
+              of the copied service. Unset properties are inherited from the live service.
+            properties:
+              minInstanceCount:
+                type: number
+                description: The minimum number of instances for the temporary service copy.
+
+              maxInstanceCount:
+                type: number
+                description: The maximum number of instances for the temporary service copy.
+
+              requestConcurrency:
+                type: number
+                description: The maximum number of concurrent requests per instance for the temporary service copy.
+
           secretEnvironmentVariables:
             type: object
             description: |-

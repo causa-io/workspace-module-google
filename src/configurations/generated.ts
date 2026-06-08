@@ -75,6 +75,41 @@ export class GoogleCloudFunctions {
 }
 
 /**
+ * When set, project-scoped backfill triggers do not send events to the live Cloud Run service. Instead, a
+ * temporary copy of the service is deployed for each trigger, isolating the backfill load (in particular its
+ * scaling) from production. The copy is deleted once the backfill is cleaned up. Ingress is always
+ * restricted to internal traffic for the copy. The properties of this object override the scaling settings
+ * of the copied service. Unset properties are inherited from the live service.
+ */
+export class GoogleCloudRunEventBackfillServiceCloneConfig {
+  constructor(init: GoogleCloudRunEventBackfillServiceCloneConfig) {
+    Object.assign(this, init);
+  }
+
+  /**
+   * The maximum number of instances for the temporary service copy.
+   */
+  @AllowMissing()
+  @IsNumber()
+  readonly maxInstanceCount?: number;
+
+  /**
+   * The minimum number of instances for the temporary service copy.
+   */
+  @AllowMissing()
+  @IsNumber()
+  readonly minInstanceCount?: number;
+
+  /**
+   * The maximum number of concurrent requests per instance for the temporary service copy.
+   */
+  @AllowMissing()
+  @IsNumber()
+  readonly requestConcurrency?: number;
+  [property: string]: any;
+}
+
+/**
  * The type of allowed ingress that can reach the container.
  * See https://cloud.google.com/run/docs/securing/ingress#settings for more details.
  */
@@ -114,6 +149,16 @@ export class GoogleCloudRun {
   @AllowMissing()
   @IsString()
   readonly dockerRepository?: string;
+
+  /**
+   * When set, project-scoped backfill triggers do not send events to the live Cloud Run service. Instead, a
+   * temporary copy of the service is deployed for each trigger, isolating the backfill load (in particular its
+   * scaling) from production. The copy is deleted once the backfill is cleaned up. Ingress is always
+   * restricted to internal traffic for the copy. The properties of this object override the scaling settings
+   * of the copied service. Unset properties are inherited from the live service.
+   */
+  @AllowMissing()
+  readonly eventBackfillServiceCloneConfig?: GoogleCloudRunEventBackfillServiceCloneConfig;
 
   /**
    * For `serviceContainer` projects deployed on Cloud Run, the name of the Cloud Run service that receives
