@@ -16,6 +16,7 @@ describe('ModelSchemaExtractDatabaseForGoogleSpanner', () => {
       name: 'MyTable',
       path: '/abs/my-table.yaml',
       properties: [],
+      additionalProperties: false,
       extensions,
       ...overrides,
     };
