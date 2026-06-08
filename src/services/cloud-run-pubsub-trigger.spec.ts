@@ -5,7 +5,7 @@ import { jest } from '@jest/globals';
 import { grpc } from 'google-gax';
 import 'jest-extended';
 import { CloudRunPubSubTriggerService } from './cloud-run-pubsub-trigger.js';
-import { CloudRunService } from './cloud-run.js';
+import { CloudRunService, IngressTraffic } from './cloud-run.js';
 import { IamService } from './iam.js';
 import { PubSubService } from './pubsub.js';
 
@@ -144,6 +144,87 @@ describe('CloudRunPubSubTriggerService', () => {
       'projects/my-project/locations/my-region/services/my-service2/invokerBindings/backfill-pubsub-1234@my-project.iam.gserviceaccount.com',
       actualPubSubSubscriptionId3,
     ]);
+  });
+
+  it('should create a temporary service copy when clone scaling is provided', async () => {
+    const copyServiceId =
+      'projects/my-project/locations/my-region/services/backfill-1234-my-service-abcdef';
+    jest.spyOn(cloudRunService, 'copy').mockResolvedValue({
+      name: copyServiceId,
+      uri: 'https://copy.example.com',
+    });
+    const clone = {
+      minInstanceCount: 1,
+      maxInstanceCount: 3,
+      requestConcurrency: 1,
+    };
+
+    const actualResources = await service.create(
+      '1234',
+      'projects/my-project/topics/my-topic',
+      'projects/my-project/locations/my-region/services/my-service',
+      '/some/path',
+      { clone },
+    );
+
+    expect(cloudRunService.copy).toHaveBeenCalledExactlyOnceWith(
+      'projects/my-project/locations/my-region/services/my-service',
+      expect.stringMatching(/^backfill-1234-my-service-[0-9a-f]{6}$/),
+      {
+        overrides: {
+          ...clone,
+          ingress: IngressTraffic.INGRESS_TRAFFIC_INTERNAL_ONLY,
+          labels: { 'causa-backfill-id': '1234' },
+        },
+      },
+    );
+    expect(cloudRunService.addInvokerBinding).toHaveBeenCalledExactlyOnceWith(
+      copyServiceId,
+      'backfill-pubsub-1234@my-project.iam.gserviceaccount.com',
+    );
+    expect(cloudRunService.getServiceUri).toHaveBeenCalledExactlyOnceWith(
+      copyServiceId,
+    );
+    const actualPubSubSubscriptionId = (
+      pubSubService.pubSub.createSubscription as jest.Mock
+    ).mock.calls[0][1];
+    expect(actualResources).toIncludeSameMembers([
+      copyServiceId,
+      'projects/my-project/serviceAccounts/backfill-pubsub-1234',
+      actualPubSubSubscriptionId,
+    ]);
+  });
+
+  it('should keep the copy service ID for cleanup when a later step fails', async () => {
+    const copyServiceId =
+      'projects/my-project/locations/my-region/services/backfill-1234-my-service-abcdef';
+    jest.spyOn(cloudRunService, 'copy').mockResolvedValue({
+      name: copyServiceId,
+      uri: 'https://copy.example.com',
+    });
+    const expectedError = new Error('💥');
+    (pubSubService.pubSub.createSubscription as any).mockRejectedValue(
+      expectedError,
+    );
+
+    const actualPromise = service.create(
+      '1234',
+      'projects/my-project/topics/my-topic',
+      'projects/my-project/locations/my-region/services/my-service',
+      '/some/path',
+      { clone: { maxInstanceCount: 3 } },
+    );
+
+    await expect(actualPromise).rejects.toThrow(EventTopicTriggerCreationError);
+    await expect(actualPromise).rejects.toThrow(
+      expect.objectContaining({
+        parent: expectedError,
+        resourceIds: [
+          copyServiceId,
+          'projects/my-project/serviceAccounts/backfill-pubsub-1234',
+        ],
+      }),
+    );
   });
 
   it('should throw an EventTopicTriggerCreationError with the IDs of the already-created resources', async () => {
