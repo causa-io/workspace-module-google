@@ -16,6 +16,7 @@ describe('ModelSchemaExtractDatabaseForGoogleFirestore', () => {
       name: 'MyCollection',
       path: '/abs/my-collection.yaml',
       properties: [],
+      additionalProperties: false,
       extensions,
       ...overrides,
     };

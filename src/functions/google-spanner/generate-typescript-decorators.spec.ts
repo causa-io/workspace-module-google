@@ -17,6 +17,7 @@ describe('ModelGenerateTypeScriptDecoratorsForGoogleSpanner', () => {
       name: 'MyClass',
       path: join(projectPath, 'src', 'schemas', 'my-class.json'),
       properties: [],
+      additionalProperties: false,
       databases: [],
       extensions,
       ...overrides,
@@ -176,6 +177,7 @@ describe('ModelGenerateTypeScriptDecoratorsForGoogleSpanner', () => {
       name: 'Nested',
       path: join(projectPath, 'src', 'schemas', 'nested.json'),
       properties: [],
+      additionalProperties: false,
       databases: [],
       extensions: {},
     };
@@ -196,6 +198,7 @@ describe('ModelGenerateTypeScriptDecoratorsForGoogleSpanner', () => {
       name: 'Nested',
       path: join(projectPath, 'src', 'schemas', 'nested.json'),
       properties: [],
+      additionalProperties: false,
       databases: [],
       extensions: {},
     };

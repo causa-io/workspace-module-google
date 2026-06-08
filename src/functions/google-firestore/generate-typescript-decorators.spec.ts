@@ -17,6 +17,7 @@ describe('ModelGenerateTypeScriptDecoratorsForGoogleFirestore', () => {
       name: 'MyClass',
       path: join(projectPath, 'src', 'schemas', 'my-class.json'),
       properties: [],
+      additionalProperties: false,
       databases: [],
       extensions,
       ...overrides,

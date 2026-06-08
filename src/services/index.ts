@@ -4,7 +4,13 @@ export {
   type MetricPoint,
 } from './cloud-monitoring.js';
 export { CloudRunPubSubTriggerService } from './cloud-run-pubsub-trigger.js';
-export { CloudRunService } from './cloud-run.js';
+export {
+  CLOUD_RUN_SERVICE_ID_REGEX,
+  CloudRunService,
+  IngressTraffic,
+  shortServiceId,
+  type CloudRunServiceOverrides,
+} from './cloud-run.js';
 export * from './firebase-app.errors.js';
 export { FirebaseAppService } from './firebase-app.js';
 export type { FirebaseAppType } from './firebase-app.js';

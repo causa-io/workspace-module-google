@@ -5,7 +5,12 @@ import { randomBytes } from 'crypto';
 import { grpc } from 'google-gax';
 import type { Logger } from 'pino';
 import type { GoogleConfiguration } from '../configurations/index.js';
-import { CloudRunService } from './cloud-run.js';
+import {
+  CloudRunService,
+  IngressTraffic,
+  shortServiceId,
+  type CloudRunServiceOverrides,
+} from './cloud-run.js';
 import { IamService } from './iam.js';
 import { PubSubService } from './pubsub.js';
 
@@ -226,6 +231,41 @@ export class CloudRunPubSubTriggerService {
   }
 
   /**
+   * Creates a temporary copy of a Cloud Run service to receive backfill traffic in isolation.
+   *
+   * @param backfillId The ID of the backfilling operation.
+   * @param sourceService The ID of the Cloud Run service to copy.
+   * @param overrides The overrides to apply to the copy.
+   * @returns The ID of the created service copy.
+   */
+  private async createServiceCopy(
+    backfillId: string,
+    sourceService: string,
+    overrides: CloudRunServiceOverrides,
+  ): Promise<string> {
+    const sourceName = shortServiceId(sourceService);
+    const suffix = randomBytes(3).toString('hex');
+    const maxSourceNameLength = 63 - `backfill-${backfillId}--${suffix}`.length;
+    const truncatedSourceName = sourceName
+      .slice(0, maxSourceNameLength)
+      .replace(/-+$/, '');
+    const name = `backfill-${backfillId}-${truncatedSourceName}-${suffix}`;
+
+    this.logger.info(
+      `🚀 Creating temporary Cloud Run service '${name}' as a copy of '${sourceService}' for the backfill.`,
+    );
+    const service = await this.cloudRunService.copy(sourceService, name, {
+      overrides: {
+        ...overrides,
+        ingress: IngressTraffic.INGRESS_TRAFFIC_INTERNAL_ONLY,
+        labels: { 'causa-backfill-id': backfillId },
+      },
+    });
+
+    return service.name ?? '';
+  }
+
+  /**
    * Creates a Pub/Sub trigger (push subscription) pointing to a Cloud Run service.
    * This requires several resources, such as:
    * - A service account that should be used by Pub/Sub to invoke Cloud Run services for the backfill.
@@ -233,10 +273,16 @@ export class CloudRunPubSubTriggerService {
    * - A Pub/Sub subscription that will push messages to the Cloud Run service.
    * The IDs of these resources are returned, and should be deleted as part of the backfill cleaning.
    *
+   * When `options.clone` is set, a temporary copy of the Cloud Run service is created and used as the trigger target
+   * instead of the live service. This isolates the backfill load (in particular its scaling) from production. The copy
+   * is added to the list of resources to clean up. The invoker IAM binding is not tracked separately because deleting
+   * the service removes it.
+   *
    * @param backfillId The ID of the backfilling operation.
    * @param topicId The ID of the Pub/Sub topic to subscribe to.
    * @param serviceId The ID of the Cloud Run service to invoke.
    * @param path The HTTP endpoint of the Cloud Run service to invoke.
+   * @param options Options for the trigger creation.
    * @returns The IDs of the resources that were created. They should be added to the list of resources to delete as
    *   part of the backfill cleaning.
    */
@@ -245,10 +291,27 @@ export class CloudRunPubSubTriggerService {
     topicId: string,
     serviceId: string,
     path: string,
+    options: {
+      /**
+       * When set, a temporary copy of the service is created with these overrides and used as the trigger target.
+       */
+      clone?: CloudRunServiceOverrides;
+    } = {},
   ): Promise<string[]> {
+    const { clone } = options;
     const resourceIds: string[] = [];
 
     try {
+      let targetServiceId = serviceId;
+      if (clone) {
+        targetServiceId = await this.createServiceCopy(
+          backfillId,
+          serviceId,
+          clone,
+        );
+        resourceIds.push(targetServiceId);
+      }
+
       const pubSubInvokerServiceAccount =
         await this.getBackfillInvokerServiceAccount(backfillId);
       if (pubSubInvokerServiceAccount.resourceId) {
@@ -257,17 +320,18 @@ export class CloudRunPubSubTriggerService {
 
       const { serviceAccountEmail } = pubSubInvokerServiceAccount;
       const iamResourceId = await this.grantPubSubInvokerRole(
-        serviceId,
+        targetServiceId,
         serviceAccountEmail,
       );
-      if (iamResourceId) {
+      // For a temporary service copy, deleting the service removes the binding along with it.
+      if (iamResourceId && !clone) {
         resourceIds.push(iamResourceId);
       }
 
       const subscriptionId = await this.createSubscription(
         backfillId,
         topicId,
-        serviceId,
+        targetServiceId,
         path,
         serviceAccountEmail,
       );

@@ -62,6 +62,10 @@ Backfilling is supported when `google.pubSub` is set as the `events.broker`. Tem
 
 When no source is specified, the default is to fetch events to backfill from the BigQuery dataset configured in `google.pubSub.bigQueryStorage`. A custom BigQuery table can also be set as source using the `bq://<projectId>.<datasetId>.<tableId>` format. It should have the `data` and `attributes` columns.
 
+The Pub/Sub publish options used when backfilling can be tuned through `google.pubSub.backfillPublishOptions`, which exposes the `maxOutstandingBytes`, `maxOutstandingMessages`, `maxBytes`, `maxMessages`, and `maxMilliseconds` fields.
+
+By default, project-scoped triggers send backfill events to the live Cloud Run service. Setting `google.cloudRun.eventBackfillServiceCloneConfig` instead deploys a temporary copy of the service for each trigger, isolating the backfill load (in particular its scaling, and therefore the load on backing resources such as databases) from production. The copy reuses the live service's revision template, restricts its ingress to internal traffic, and applies the `minInstanceCount`, `maxInstanceCount`, and `requestConcurrency` overrides from the configuration (unset fields are inherited from the live service). The copy is deleted as part of the backfill cleanup.
+
 ### Querying
 
 This module implements the `DatabaseQueryRecords`, `ServiceContainerQueryLogs`, and `EventTopicQueryEvents` workspace functions, which expose read-only access to data stored in or emitted by deployed services:
