@@ -450,6 +450,51 @@ export class GoogleLoadBalancing {
 }
 
 /**
+ * Options when publishing events in batches to Pub/Sub during a backfill.
+ */
+export class GooglePubSubBackfillPublishOptions {
+  constructor(init: GooglePubSubBackfillPublishOptions) {
+    Object.assign(this, init);
+  }
+
+  /**
+   * The maximum number of bytes to buffer before publishing a batch.
+   */
+  @AllowMissing()
+  @IsNumber()
+  readonly maxBytes?: number;
+
+  /**
+   * The maximum number of messages to buffer before publishing a batch.
+   */
+  @AllowMissing()
+  @IsNumber()
+  readonly maxMessages?: number;
+
+  /**
+   * The maximum duration to wait, in milliseconds, before publishing a batch.
+   */
+  @AllowMissing()
+  @IsNumber()
+  readonly maxMilliseconds?: number;
+
+  /**
+   * The maximum number of bytes allowed in outstanding (in-flight) publish requests before applying flow control.
+   */
+  @AllowMissing()
+  @IsNumber()
+  readonly maxOutstandingBytes?: number;
+
+  /**
+   * The maximum number of outstanding (in-flight) messages allowed before applying flow control.
+   */
+  @AllowMissing()
+  @IsNumber()
+  readonly maxOutstandingMessages?: number;
+  [property: string]: any;
+}
+
+/**
  * Configuration for the storage of Pub/Sub events in BigQuery.
  */
 export class GooglePubSubBigQueryStorage {
@@ -506,6 +551,12 @@ export class GooglePubSub {
   constructor(init: GooglePubSub) {
     Object.assign(this, init);
   }
+
+  /**
+   * Options when publishing events in batches to Pub/Sub during a backfill.
+   */
+  @AllowMissing()
+  readonly backfillPublishOptions?: GooglePubSubBackfillPublishOptions;
 
   /**
    * Configuration for the storage of Pub/Sub events in BigQuery.

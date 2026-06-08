@@ -226,6 +226,31 @@ properties:
                   The BigQuery location for the datasets.
                   See https://cloud.google.com/bigquery/docs/locations for more details.
 
+          backfillPublishOptions:
+            title: GooglePubSubBackfillPublishOptions
+            type: object
+            description: Options when publishing events in batches to Pub/Sub during a backfill.
+            properties:
+              maxOutstandingBytes:
+                type: number
+                description: The maximum number of bytes allowed in outstanding (in-flight) publish requests before applying flow control.
+
+              maxOutstandingMessages:
+                type: number
+                description: The maximum number of outstanding (in-flight) messages allowed before applying flow control.
+
+              maxBytes:
+                type: number
+                description: The maximum number of bytes to buffer before publishing a batch.
+
+              maxMessages:
+                type: number
+                description: The maximum number of messages to buffer before publishing a batch.
+
+              maxMilliseconds:
+                type: number
+                description: The maximum duration to wait, in milliseconds, before publishing a batch.
+
       spanner:
         title: GoogleSpanner
         type: object
