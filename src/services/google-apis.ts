@@ -1,8 +1,12 @@
 import { WorkspaceContext } from '@causa/workspace';
-import { AuthClient } from 'google-auth-library';
-import { GoogleApis, google } from 'googleapis';
+import { Common, GoogleApis, google } from 'googleapis';
 import type { GoogleConfiguration } from '../configurations/index.js';
 import type { ApiClient, OptionsOfApiClient } from './google-apis.types.js';
+
+/**
+ * The type of authentication client returned by `googleapis`.
+ */
+type AnyAuthClient = Awaited<ReturnType<Common.GoogleAuth['getClient']>>;
 
 /**
  * A service that exposes the lowest level of Google API clients, from `googleapis`.
@@ -23,14 +27,14 @@ export class GoogleApisService {
   /**
    * The promise returning the `JSONClient` configured with the {@link GoogleApisService.projectId}.
    */
-  private authClientPromise: Promise<AuthClient> | undefined;
+  private authClientPromise: Promise<AnyAuthClient> | undefined;
 
   /**
    * Possibly initializes and returns the auth client to use with Google API clients.
    *
    * @returns The auth client.
    */
-  async getAuthClient(): Promise<AuthClient> {
+  async getAuthClient(): Promise<AnyAuthClient> {
     if (!this.authClientPromise) {
       const auth = new google.auth.GoogleAuth({
         projectId: this.projectId,
