@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.18.0-beta.4 (2026-06-08)
+
 Features:
 
 - Add the `google.pubSub.backfillPublishOptions` configuration to override the Pub/Sub publish options used when backfilling events.
