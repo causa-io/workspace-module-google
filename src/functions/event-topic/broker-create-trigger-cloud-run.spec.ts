@@ -102,6 +102,7 @@ describe('EventTopicBrokerCreateTriggerForCloudRun', () => {
       'my-topic',
       'projects/my-project/locations/my-location/services/my-service',
       '/some/path',
+      { clone: undefined },
     );
   });
 
@@ -121,6 +122,7 @@ describe('EventTopicBrokerCreateTriggerForCloudRun', () => {
       'my-topic',
       'projects/my-project/locations/custom/services/my-service',
       '/some/path',
+      { clone: undefined },
     );
   });
 
@@ -141,6 +143,7 @@ describe('EventTopicBrokerCreateTriggerForCloudRun', () => {
       'my-topic',
       'projects/custom-project/locations/custom/services/my-service',
       '/some/path',
+      { clone: undefined },
     );
   });
 
@@ -210,6 +213,7 @@ describe('EventTopicBrokerCreateTriggerForCloudRun', () => {
       'my-topic',
       'projects/my-project/locations/my-location/services/my-service',
       '/events/my-topic',
+      { clone: undefined },
     );
   });
 
@@ -243,6 +247,76 @@ describe('EventTopicBrokerCreateTriggerForCloudRun', () => {
       'my-topic',
       'projects/my-project/locations/my-location/services/custom-service',
       '/events/my-topic?region=eu&dryRun=true',
+      { clone: undefined },
+    );
+  });
+
+  it('should pass the clone config for an object trigger when set', async () => {
+    const cloneConfig = {
+      minInstanceCount: 1,
+      maxInstanceCount: 3,
+      requestConcurrency: 1,
+    };
+    context = createServiceContainerContext({
+      google: {
+        project: 'my-project',
+        cloudRun: {
+          location: 'my-location',
+          eventBackfillServiceCloneConfig: cloneConfig,
+        },
+      },
+    });
+    triggerService = context.service(CloudRunPubSubTriggerService);
+
+    const actualResourceIds = await context.call(
+      EventTopicBrokerCreateTrigger,
+      {
+        backfillId: '1234',
+        topicId: 'my-topic',
+        trigger: { name: 'backfill', options: {} },
+      },
+    );
+
+    expect(actualResourceIds).toEqual(['resource1']);
+    expect(triggerService.create).toHaveBeenCalledExactlyOnceWith(
+      '1234',
+      'my-topic',
+      'projects/my-project/locations/my-location/services/my-service',
+      '/events/my-topic',
+      { clone: cloneConfig },
+    );
+  });
+
+  it('should ignore the clone config for a raw URI trigger', async () => {
+    ({ context } = createContext({
+      configuration: {
+        workspace: { name: 'my-workspace' },
+        events: { broker: 'google.pubSub' },
+        google: {
+          project: 'my-project',
+          cloudRun: {
+            location: 'my-location',
+            eventBackfillServiceCloneConfig: { maxInstanceCount: 3 },
+          },
+        },
+      },
+      functions: [EventTopicBrokerCreateTriggerForCloudRun],
+    }));
+    triggerService = context.service(CloudRunPubSubTriggerService);
+    jest.spyOn(triggerService, 'create').mockResolvedValue(['resource1']);
+
+    await context.call(EventTopicBrokerCreateTrigger, {
+      backfillId: '1234',
+      topicId: 'my-topic',
+      trigger: 'services/my-service/some/path',
+    });
+
+    expect(triggerService.create).toHaveBeenCalledExactlyOnceWith(
+      '1234',
+      'my-topic',
+      'projects/my-project/locations/my-location/services/my-service',
+      '/some/path',
+      { clone: undefined },
     );
   });
 

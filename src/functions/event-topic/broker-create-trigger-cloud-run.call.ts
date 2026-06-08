@@ -94,12 +94,20 @@ function resolveFromObject(
 export default async function call(
   this: EventTopicBrokerCreateTriggerForCloudRun,
 ): Promise<string[]> {
-  const { serviceId, path } =
-    typeof this.trigger === 'string'
-      ? resolveFromString(this._context, this.trigger)
-      : resolveFromObject(this._context, this.trigger);
+  // Cloning is only supported for project-scoped triggers, where the service is defined by the project's configuration.
+  // Raw URI triggers keep targeting the live service.
+  const isProjectScoped = typeof this.trigger !== 'string';
+  const { serviceId, path } = isProjectScoped
+    ? resolveFromObject(this._context, this.trigger)
+    : resolveFromString(this._context, this.trigger);
+
+  const clone = isProjectScoped
+    ? this._context
+        .asConfiguration<GoogleConfiguration>()
+        .get('google.cloudRun.eventBackfillServiceCloneConfig')
+    : undefined;
 
   return await this._context
     .service(CloudRunPubSubTriggerService)
-    .create(this.backfillId, this.topicId, serviceId, path);
+    .create(this.backfillId, this.topicId, serviceId, path, { clone });
 }
