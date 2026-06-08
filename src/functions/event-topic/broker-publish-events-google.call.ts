@@ -1,5 +1,6 @@
 import type { PublishOptions } from '@google-cloud/pubsub';
 import { FlowControlledPublisher } from '@google-cloud/pubsub/build/src/publisher/flow-publisher.js';
+import type { GoogleConfiguration } from '../../configurations/index.js';
 import { PubSubService } from '../../services/index.js';
 import type { EventTopicBrokerPublishEventsForGoogle } from './broker-publish-events-google.js';
 
@@ -9,26 +10,41 @@ import type { EventTopicBrokerPublishEventsForGoogle } from './broker-publish-ev
 const PUBLISH_PROGRESS_LOG_INTERVAL = 10000;
 
 /**
- * Options when publishing events in batches to Pub/Sub.
+ * Default options when publishing events in batches to Pub/Sub.
+ * These can be overridden through the `google.pubSub.backfillPublishOptions` configuration.
  */
-const PUBLISH_OPTIONS: PublishOptions = {
-  flowControlOptions: {
-    maxOutstandingBytes: 10 * 1024 * 1024,
-    maxOutstandingMessages: 1000,
-  },
-  batching: {
-    maxBytes: 10 * 1024 * 1024,
-    maxMessages: 1000,
-    maxMilliseconds: 1000,
-  },
+const DEFAULT_PUBLISH_OPTIONS = {
+  maxOutstandingBytes: 10 * 1024 * 1024,
+  maxOutstandingMessages: 1000,
+  maxBytes: 10 * 1024 * 1024,
+  maxMessages: 1000,
+  maxMilliseconds: 1000,
 };
 
 export default async function call(
   this: EventTopicBrokerPublishEventsForGoogle,
 ): Promise<void> {
+  const publishOptions = {
+    ...DEFAULT_PUBLISH_OPTIONS,
+    ...this._context
+      .asConfiguration<GoogleConfiguration>()
+      .get('google.pubSub.backfillPublishOptions'),
+  };
+  const options: PublishOptions = {
+    flowControlOptions: {
+      maxOutstandingBytes: publishOptions.maxOutstandingBytes,
+      maxOutstandingMessages: publishOptions.maxOutstandingMessages,
+    },
+    batching: {
+      maxBytes: publishOptions.maxBytes,
+      maxMessages: publishOptions.maxMessages,
+      maxMilliseconds: publishOptions.maxMilliseconds,
+    },
+  };
+
   const publisher: FlowControlledPublisher = this._context
     .service(PubSubService)
-    .pubSub.topic(this.topicId, PUBLISH_OPTIONS)
+    .pubSub.topic(this.topicId, options)
     .flowControlled();
 
   this._context.logger.info('📫 Publishing events.');

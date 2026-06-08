@@ -15,13 +15,15 @@ describe('EventTopicBrokerPublishEventsForGoogle', () => {
   let context: WorkspaceContext;
   let publisher: { publish: jest.Mock; all: jest.Mock };
   let publishMock: jest.Mock;
+  let topicMock: jest.Mock;
 
-  beforeEach(() => {
+  function init(configuration: Record<string, any> = {}) {
     ({ context } = createContext({
       configuration: {
         workspace: { name: 'my-workspace' },
         events: { broker: 'google.pubSub' },
         google: { project: 'my-project' },
+        ...configuration,
       },
       functions: [EventTopicBrokerPublishEventsForGoogle],
     }));
@@ -31,10 +33,14 @@ describe('EventTopicBrokerPublishEventsForGoogle', () => {
       publish: publishMock,
       all: jest.fn().mockResolvedValue([] as never),
     };
-    jest.spyOn(context.service(PubSubService).pubSub, 'topic').mockReturnValue({
-      flowControlled: () => publisher,
-    } as any);
-  });
+    topicMock = jest
+      .spyOn(context.service(PubSubService).pubSub, 'topic')
+      .mockReturnValue({
+        flowControlled: () => publisher,
+      } as any) as unknown as jest.Mock;
+  }
+
+  beforeEach(() => init());
 
   function makeSource(numEvents: number): () => AsyncIterable<BackfillEvent> {
     return async function* () {
@@ -72,6 +78,17 @@ describe('EventTopicBrokerPublishEventsForGoogle', () => {
       source: makeSource(3),
     });
 
+    expect(topicMock).toHaveBeenCalledExactlyOnceWith('my-topic', {
+      flowControlOptions: {
+        maxOutstandingBytes: 10 * 1024 * 1024,
+        maxOutstandingMessages: 1000,
+      },
+      batching: {
+        maxBytes: 10 * 1024 * 1024,
+        maxMessages: 1000,
+        maxMilliseconds: 1000,
+      },
+    });
     expect(publishMock).toHaveBeenCalledTimes(3);
     const actualMessages = publishMock.mock.calls.map(([message]: any) => ({
       ...message,
@@ -108,6 +125,43 @@ describe('EventTopicBrokerPublishEventsForGoogle', () => {
 
     await publishPromise;
     expect(publishMock).toHaveBeenCalledTimes(3);
+    expect(publisher.all).toHaveBeenCalledOnce();
+  });
+
+  it('should use the configured publish options', async () => {
+    init({
+      google: {
+        project: 'my-project',
+        pubSub: {
+          backfillPublishOptions: {
+            maxOutstandingBytes: 1,
+            maxOutstandingMessages: 2,
+            maxBytes: 3,
+            maxMessages: 4,
+            maxMilliseconds: 5,
+          },
+        },
+      },
+    });
+
+    await context.call(EventTopicBrokerPublishEvents, {
+      eventTopic: 'my-topic',
+      topicId: 'my-topic',
+      source: makeSource(1),
+    });
+
+    expect(topicMock).toHaveBeenCalledExactlyOnceWith('my-topic', {
+      flowControlOptions: {
+        maxOutstandingBytes: 1,
+        maxOutstandingMessages: 2,
+      },
+      batching: {
+        maxBytes: 3,
+        maxMessages: 4,
+        maxMilliseconds: 5,
+      },
+    });
+    expect(publishMock).toHaveBeenCalledTimes(1);
     expect(publisher.all).toHaveBeenCalledOnce();
   });
 });
