@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+Features:
+
+- Add the `google.pubSub.backfillPublishOptions` configuration to override the Pub/Sub publish options used when backfilling events.
+- Add the `google.cloudRun.eventBackfillServiceCloneConfig` configuration. When set, project-scoped backfill triggers deploy a temporary internal-ingress copy of the Cloud Run service (one per trigger) instead of sending events to the live service, isolating the backfill load and scaling from production. The `minInstanceCount`, `maxInstanceCount`, and `requestConcurrency` properties override the scaling of the copy, which is deleted during backfill cleanup.
+
 ## v0.18.0-beta.3 (2026-05-27)
 
 Features:
