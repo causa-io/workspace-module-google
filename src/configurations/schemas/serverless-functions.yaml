@@ -5,9 +5,11 @@ type: object
 description: Google-specific refinement of the serverless functions configuration.
 properties:
   serverlessFunctions:
+    title: GoogleServerlessFunctions
     type: object
     properties:
       platform:
+        title: GoogleServerlessFunctionsPlatform
         anyOf:
           - type: string
 

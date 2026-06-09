@@ -11,6 +11,7 @@ const config = {
   ],
   rootDir: 'src',
   testEnvironment: 'node',
+  setupFiles: ['reflect-metadata'],
   setupFilesAfterEnv: ['jest-extended/all'],
   testMatch: ['**/*.spec.ts'],
   extensionsToTreatAsEsm: ['.ts'],

@@ -513,4 +513,6 @@ properties:
 
 $defs:
   _TemplateString:
-    type: string
+    title: TemplateString
+    oneOf:
+      - type: string
