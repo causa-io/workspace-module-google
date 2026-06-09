@@ -5,13 +5,16 @@ type: object
 description: Google-specific refinement of the infrastructure configuration with known processors.
 properties:
   infrastructure:
+    title: GoogleInfrastructure
     type: object
     properties:
       processors:
         type: array
         items:
+          title: GoogleInfrastructureProcessor
           anyOf:
-            - type: object
+            - title: GoogleGenericProcessor
+              type: object
               properties:
                 name:
                   type: string
@@ -23,6 +26,7 @@ properties:
               description: Enables GCP services defined in the `google.services` configuration.
               properties:
                 name:
+                  title: GoogleServicesEnableProcessorName
                   type: string
                   enum:
                     - GoogleServicesEnable
@@ -36,6 +40,7 @@ properties:
                 Sets the `google.pubSub.topicConfigurationsDirectory` configuration value.
               properties:
                 name:
+                  title: GooglePubSubWriteTopicsProcessorName
                   type: string
                   enum:
                     - GooglePubSubWriteTopics
@@ -49,6 +54,7 @@ properties:
                 Sets the `google.spanner.databaseConfigurationsDirectory` configuration value.
               properties:
                 name:
+                  title: GoogleSpannerWriteDatabasesProcessorName
                   type: string
                   enum:
                     - GoogleSpannerWriteDatabases
@@ -62,6 +68,7 @@ properties:
                 Sets the `google.firestore.securityRuleFile` configuration value.
               properties:
                 name:
+                  title: GoogleFirestoreMergeRulesProcessorName
                   type: string
                   enum:
                     - GoogleFirestoreMergeRules
@@ -75,6 +82,7 @@ properties:
                 Sets the `google.firebaseStorage.securityRuleFile` configuration value.
               properties:
                 name:
+                  title: GoogleFirebaseStorageMergeRulesProcessorName
                   type: string
                   enum:
                     - GoogleFirebaseStorageMergeRules

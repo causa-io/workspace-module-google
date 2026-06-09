@@ -5,9 +5,11 @@ type: object
 description: Google-specific refinement of the events configuration.
 properties:
   events:
+    title: GoogleEvents
     type: object
     properties:
       broker:
+        title: GoogleEventsBroker
         anyOf:
           - type: string
 

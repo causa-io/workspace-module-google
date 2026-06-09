@@ -5,9 +5,11 @@ type: object
 description: Google-specific extensions to the service container configuration.
 properties:
   serviceContainer:
+    title: GoogleServiceContainer
     type: object
     properties:
       platform:
+        title: ServiceContainerPlatform
         anyOf:
           - type: string
 
@@ -21,8 +23,10 @@ properties:
         type: object
         description: A map of triggers that call the service's endpoints when they occur.
         additionalProperties:
+          title: ServiceContainerTrigger
           anyOf:
-            - type: object
+            - title: ServiceContainerGenericTrigger
+              type: object
               properties:
                 type:
                   type: string
@@ -222,6 +226,7 @@ properties:
                 - type
 
       outputs:
+        title: ServiceContainerOutputs
         type: object
         properties:
           google.firestore:
@@ -240,4 +245,6 @@ properties:
 
 $defs:
   _TemplateString:
-    type: string
+    title: TemplateString
+    oneOf:
+      - type: string
