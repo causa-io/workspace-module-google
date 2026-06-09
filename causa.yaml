@@ -11,8 +11,8 @@ project:
 
 causa:
   modules:
-    "@causa/workspace-core": ">= 0.30.0"
-    "@causa/workspace-typescript": ">= 0.20.0"
+    "@causa/workspace-core": ^1.0.0
+    "@causa/workspace-typescript": ^1.0.0
 
 model:
   schema: jsonschema
