@@ -35,7 +35,9 @@ export class ModelGenerateTypeScriptDecoratorsForGoogleFirestore extends ModelGe
       return [];
     }
 
-    const globs = (this.configuration as any)?.google?.firestore?.globs;
+    const firestoreConfiguration = (this.configuration as any)?.google
+      ?.firestore;
+    const globs = firestoreConfiguration?.globs;
     if (Array.isArray(globs)) {
       const projectPath = this._context.getProjectPathOrThrow();
       const absoluteGlobs = globs.map((g) => join(projectPath, g));
@@ -57,9 +59,9 @@ export class ModelGenerateTypeScriptDecoratorsForGoogleFirestore extends ModelGe
       path?: unknown;
       hasSoftDelete?: unknown;
     };
-    if (typeof name !== 'string') {
+    if (name !== undefined && typeof name !== 'string') {
       throw new Error(
-        `Invalid '${GOOGLE_FIRESTORE_COLLECTION_EXTENSION}' attribute on '${debugName}'. Expected an object with a 'name' string property.`,
+        `Invalid '${GOOGLE_FIRESTORE_COLLECTION_EXTENSION}' attribute on '${debugName}'. Expected the 'name' property to be a string.`,
       );
     }
     if (!Array.isArray(path)) {
@@ -95,7 +97,16 @@ export class ModelGenerateTypeScriptDecoratorsForGoogleFirestore extends ModelGe
     });
 
     const pathExpression =
-      path.length === 1 ? elements[0] : `[${elements.join(', ')}].join("/")`;
+      firestoreConfiguration?.pathAsArray === true
+        ? `[${elements.join(', ')}]`
+        : path.length === 1
+          ? elements[0]
+          : `[${elements.join(', ')}].join("/")`;
+
+    const decoratorOptions = [`path: (doc) => ${pathExpression}`];
+    if (name !== undefined) {
+      decoratorOptions.push(`name: ${JSON.stringify(name)}`);
+    }
 
     const decorators: TypeScriptDecorator[] = [];
     addDecoratorToList(
@@ -103,8 +114,7 @@ export class ModelGenerateTypeScriptDecoratorsForGoogleFirestore extends ModelGe
       { schema: this.schema },
       'FirestoreCollection',
       CAUSA_GOOGLE_MODULE,
-      (alias) =>
-        `@${alias}({ name: ${JSON.stringify(name)}, path: (doc) => ${pathExpression} })`,
+      (alias) => `@${alias}({ ${decoratorOptions.join(', ')} })`,
     );
 
     if (hasSoftDelete === true) {
