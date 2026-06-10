@@ -222,6 +222,43 @@ describe('ModelGenerateTypeScriptDecoratorsForGoogleFirestore', () => {
     ]);
   });
 
+  it('should return the path as an array when pathAsArray is true', async () => {
+    const schema = makeSchema(
+      {
+        googleFirestoreCollection: { path: ['users', { property: 'userId' }] },
+      },
+      { properties: [makeProperty('userId')] },
+    );
+
+    const actual = await callForClass(schema, {
+      configuration: { google: { firestore: { pathAsArray: true } } },
+    });
+
+    expect(actual[0].source).toBe(
+      `@_CausaRuntimeGoogleFirestoreCollection({ path: (doc) => ["users", doc.userId] })`,
+    );
+  });
+
+  it('should return a single-element path as an array when pathAsArray is true', async () => {
+    const schema = makeSchema(
+      {
+        googleFirestoreCollection: {
+          name: 'my-collection',
+          path: [{ property: 'id' }],
+        },
+      },
+      { properties: [makeProperty('id')] },
+    );
+
+    const actual = await callForClass(schema, {
+      configuration: { google: { firestore: { pathAsArray: true } } },
+    });
+
+    expect(actual[0].source).toBe(
+      `@_CausaRuntimeGoogleFirestoreCollection({ path: (doc) => [doc.id], name: "my-collection" })`,
+    );
+  });
+
   it('should throw when the collection attribute name is not a string', () => {
     const schema = makeSchema({
       googleFirestoreCollection: { name: 123, path: [{ property: 'id' }] },

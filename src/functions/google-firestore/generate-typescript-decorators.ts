@@ -35,7 +35,9 @@ export class ModelGenerateTypeScriptDecoratorsForGoogleFirestore extends ModelGe
       return [];
     }
 
-    const globs = (this.configuration as any)?.google?.firestore?.globs;
+    const firestoreConfiguration = (this.configuration as any)?.google
+      ?.firestore;
+    const globs = firestoreConfiguration?.globs;
     if (Array.isArray(globs)) {
       const projectPath = this._context.getProjectPathOrThrow();
       const absoluteGlobs = globs.map((g) => join(projectPath, g));
@@ -95,7 +97,11 @@ export class ModelGenerateTypeScriptDecoratorsForGoogleFirestore extends ModelGe
     });
 
     const pathExpression =
-      path.length === 1 ? elements[0] : `[${elements.join(', ')}].join("/")`;
+      firestoreConfiguration?.pathAsArray === true
+        ? `[${elements.join(', ')}]`
+        : path.length === 1
+          ? elements[0]
+          : `[${elements.join(', ')}].join("/")`;
 
     const decoratorOptions = [`path: (doc) => ${pathExpression}`];
     if (name !== undefined) {
