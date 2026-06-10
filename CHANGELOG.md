@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v1.1.0 (2026-06-10)
+
 Features:
 
 - Make the `name` property of the `googleFirestoreCollection` schema extension optional. When it is not set, the `name` option is omitted from the generated `@FirestoreCollection` decorator.
