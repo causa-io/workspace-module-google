@@ -1,6 +1,6 @@
 {
   "name": "@causa/workspace-google",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "The Causa workspace module providing many functionalities related to GCP and its services.",
   "repository": {
     "type": "git",
