@@ -130,7 +130,8 @@ additionalProperties: false
 causa:
   # This must be set for the decorators to be added to the class.
   googleFirestoreCollection:
-    # Mandatory, the name of the Firestore collection.
+    # Optional, the name of the Firestore collection.
+    # If not set, the `name` is omitted from the decorator options.
     name: myCollection
     # Mandatory, determines how to create the path for a document.
     path: [property: id]
@@ -166,6 +167,8 @@ model:
           # Same as Spanner globs.
           globs:
             - ../firestore/*.yaml
+          # Optional, generates the document path as an array of segments instead of a slash-joined string.
+          pathAsArray: true
 ```
 
 ## 🔨 Custom `google` commands
