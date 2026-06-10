@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+Features:
+
+- Make the `name` property of the `googleFirestoreCollection` schema extension optional. When it is not set, the `name` option is omitted from the generated `@FirestoreCollection` decorator.
+- Add the `google.firestore.pathAsArray` code generator configuration. When `true`, the generated `@FirestoreCollection` `path` function returns the path segments as an array instead of a slash-joined string.
+
 ## v1.0.1 (2026-06-10)
 
 Fixes:
