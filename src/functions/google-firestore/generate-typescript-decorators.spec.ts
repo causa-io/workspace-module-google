@@ -133,7 +133,7 @@ describe('ModelGenerateTypeScriptDecoratorsForGoogleFirestore', () => {
 
     expect(actual).toEqual([
       {
-        source: `@_CausaRuntimeGoogleFirestoreCollection({ name: "my-collection", path: (doc) => doc.id })`,
+        source: `@_CausaRuntimeGoogleFirestoreCollection({ path: (doc) => doc.id, name: "my-collection" })`,
         imports: {
           '@causa/runtime-google': [
             'FirestoreCollection as _CausaRuntimeGoogleFirestoreCollection',
@@ -159,7 +159,7 @@ describe('ModelGenerateTypeScriptDecoratorsForGoogleFirestore', () => {
 
     expect(actual).toEqual([
       {
-        source: `@_CausaRuntimeGoogleFirestoreCollection({ name: "my-collection", path: (doc) => doc.id })`,
+        source: `@_CausaRuntimeGoogleFirestoreCollection({ path: (doc) => doc.id, name: "my-collection" })`,
         imports: {
           '@causa/runtime-google': [
             'FirestoreCollection as _CausaRuntimeGoogleFirestoreCollection',
@@ -198,17 +198,37 @@ describe('ModelGenerateTypeScriptDecoratorsForGoogleFirestore', () => {
     const actual = await callForClass(schema);
 
     expect(actual[0].source).toBe(
-      `@_CausaRuntimeGoogleFirestoreCollection({ name: "my-collection", path: (doc) => ["users", doc.userId, "documents", doc.documentId].join("/") })`,
+      `@_CausaRuntimeGoogleFirestoreCollection({ path: (doc) => ["users", doc.userId, "documents", doc.documentId].join("/"), name: "my-collection" })`,
     );
   });
 
-  it('should throw when the collection attribute is missing name', () => {
+  it('should omit the name from the decorator when the collection attribute has no name', async () => {
+    const schema = makeSchema(
+      { googleFirestoreCollection: { path: [{ property: 'id' }] } },
+      { properties: [makeProperty('id')] },
+    );
+
+    const actual = await callForClass(schema);
+
+    expect(actual).toEqual([
+      {
+        source: `@_CausaRuntimeGoogleFirestoreCollection({ path: (doc) => doc.id })`,
+        imports: {
+          '@causa/runtime-google': [
+            'FirestoreCollection as _CausaRuntimeGoogleFirestoreCollection',
+          ],
+        },
+      },
+    ]);
+  });
+
+  it('should throw when the collection attribute name is not a string', () => {
     const schema = makeSchema({
-      googleFirestoreCollection: { path: [{ property: 'id' }] },
+      googleFirestoreCollection: { name: 123, path: [{ property: 'id' }] },
     });
 
     expect(() => callForClass(schema)).toThrow(
-      `Expected an object with a 'name' string property`,
+      `Expected the 'name' property to be a string`,
     );
   });
 
