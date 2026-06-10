@@ -107,8 +107,12 @@ describe('ModelGenerateTypeScriptDecoratorsForGoogleSpanner', () => {
 
     expect(actual).toEqual([
       {
-        source: '@SpannerTable({"primaryKey":["id"]})',
-        imports: { '@causa/runtime-google': ['SpannerTable'] },
+        source: '@_CausaRuntimeGoogleSpannerTable({"primaryKey":["id"]})',
+        imports: {
+          '@causa/runtime-google': [
+            'SpannerTable as _CausaRuntimeGoogleSpannerTable',
+          ],
+        },
       },
     ]);
   });
@@ -121,7 +125,7 @@ describe('ModelGenerateTypeScriptDecoratorsForGoogleSpanner', () => {
     const actual = await callDecorators(schema);
 
     expect(actual[0].source).toBe(
-      '@SpannerTable({"primaryKey":["id"],"name":"users"})',
+      '@_CausaRuntimeGoogleSpannerTable({"primaryKey":["id"],"name":"users"})',
     );
   });
 
@@ -141,8 +145,12 @@ describe('ModelGenerateTypeScriptDecoratorsForGoogleSpanner', () => {
 
     expect(actual).toEqual([
       {
-        source: '@SpannerColumn()',
-        imports: { '@causa/runtime-google': ['SpannerColumn'] },
+        source: '@_CausaRuntimeGoogleSpannerColumn()',
+        imports: {
+          '@causa/runtime-google': [
+            'SpannerColumn as _CausaRuntimeGoogleSpannerColumn',
+          ],
+        },
       },
     ]);
   });
@@ -156,7 +164,9 @@ describe('ModelGenerateTypeScriptDecoratorsForGoogleSpanner', () => {
 
     const actual = await callDecorators(schema, { property });
 
-    expect(actual[0].source).toBe('@SpannerColumn({"isInt":true})');
+    expect(actual[0].source).toBe(
+      '@_CausaRuntimeGoogleSpannerColumn({"isInt":true})',
+    );
   });
 
   it('should infer isJson for map properties', async () => {
@@ -168,7 +178,9 @@ describe('ModelGenerateTypeScriptDecoratorsForGoogleSpanner', () => {
 
     const actual = await callDecorators(schema, { property });
 
-    expect(actual[0].source).toBe('@SpannerColumn({"isJson":true})');
+    expect(actual[0].source).toBe(
+      '@_CausaRuntimeGoogleSpannerColumn({"isJson":true})',
+    );
   });
 
   it('should infer isJson for refs to object schemas', async () => {
@@ -189,7 +201,9 @@ describe('ModelGenerateTypeScriptDecoratorsForGoogleSpanner', () => {
       schemas: { [schema.path]: schema, [nested.path]: nested },
     });
 
-    expect(actual[0].source).toBe('@SpannerColumn({"isJson":true})');
+    expect(actual[0].source).toBe(
+      '@_CausaRuntimeGoogleSpannerColumn({"isJson":true})',
+    );
   });
 
   it('should infer isJson for arrays of object refs', async () => {
@@ -214,7 +228,9 @@ describe('ModelGenerateTypeScriptDecoratorsForGoogleSpanner', () => {
       schemas: { [schema.path]: schema, [nested.path]: nested },
     });
 
-    expect(actual[0].source).toBe('@SpannerColumn({"isJson":true})');
+    expect(actual[0].source).toBe(
+      '@_CausaRuntimeGoogleSpannerColumn({"isJson":true})',
+    );
   });
 
   it('should infer isInt for arrays of integers', async () => {
@@ -227,7 +243,9 @@ describe('ModelGenerateTypeScriptDecoratorsForGoogleSpanner', () => {
 
     const actual = await callDecorators(schema, { property });
 
-    expect(actual[0].source).toBe('@SpannerColumn({"isInt":true})');
+    expect(actual[0].source).toBe(
+      '@_CausaRuntimeGoogleSpannerColumn({"isInt":true})',
+    );
   });
 
   it('should respect tsOptions overriding the inferred type', async () => {
@@ -242,7 +260,9 @@ describe('ModelGenerateTypeScriptDecoratorsForGoogleSpanner', () => {
 
     const actual = await callDecorators(schema, { property });
 
-    expect(actual[0].source).toBe('@SpannerColumn({"isBigInt":true})');
+    expect(actual[0].source).toBe(
+      '@_CausaRuntimeGoogleSpannerColumn({"isBigInt":true})',
+    );
   });
 
   it('should add the name option when overridden', async () => {
@@ -255,7 +275,9 @@ describe('ModelGenerateTypeScriptDecoratorsForGoogleSpanner', () => {
 
     const actual = await callDecorators(schema, { property });
 
-    expect(actual[0].source).toBe('@SpannerColumn({"name":"otherName"})');
+    expect(actual[0].source).toBe(
+      '@_CausaRuntimeGoogleSpannerColumn({"name":"otherName"})',
+    );
   });
 
   it('should add the softDelete option for the configured column', async () => {
@@ -272,7 +294,9 @@ describe('ModelGenerateTypeScriptDecoratorsForGoogleSpanner', () => {
       },
     });
 
-    expect(actual[0].source).toBe('@SpannerColumn({"softDelete":true})');
+    expect(actual[0].source).toBe(
+      '@_CausaRuntimeGoogleSpannerColumn({"softDelete":true})',
+    );
   });
 
   it('should return no decorators when the schema path does not match the configured globs', async () => {
@@ -296,6 +320,6 @@ describe('ModelGenerateTypeScriptDecoratorsForGoogleSpanner', () => {
     });
 
     expect(actual).toHaveLength(1);
-    expect(actual[0].source).toContain('@SpannerTable');
+    expect(actual[0].source).toContain('@_CausaRuntimeGoogleSpannerTable');
   });
 });

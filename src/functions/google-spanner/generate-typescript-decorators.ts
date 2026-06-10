@@ -99,7 +99,7 @@ export class ModelGenerateTypeScriptDecoratorsForGoogleSpanner extends ModelGene
       { schema: this.schema },
       'SpannerTable',
       CAUSA_GOOGLE_MODULE,
-      `@SpannerTable(${JSON.stringify({ primaryKey, name })})`,
+      (alias) => `@${alias}(${JSON.stringify({ primaryKey, name })})`,
     );
     return decorators;
   }
@@ -162,9 +162,10 @@ export class ModelGenerateTypeScriptDecoratorsForGoogleSpanner extends ModelGene
     }
 
     const hasOptions = Object.keys(columnAttributes).length > 0;
-    const source = hasOptions
-      ? `@SpannerColumn(${JSON.stringify(columnAttributes)})`
-      : '@SpannerColumn()';
+    const source = (alias: string) =>
+      hasOptions
+        ? `@${alias}(${JSON.stringify(columnAttributes)})`
+        : `@${alias}()`;
 
     const decorators: TypeScriptDecorator[] = [];
     addDecoratorToList(
