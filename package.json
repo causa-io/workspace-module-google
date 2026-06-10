@@ -36,9 +36,9 @@
   },
   "dependencies": {
     "@causa/cli": "^1.0.0",
-    "@causa/workspace": "^1.0.0",
+    "@causa/workspace": "^1.0.1",
     "@causa/workspace-core": "^1.0.1",
-    "@causa/workspace-typescript": "^1.0.0",
+    "@causa/workspace-typescript": "^1.0.1",
     "@google-cloud/apikeys": "^2.2.2",
     "@google-cloud/bigquery": "^8.3.1",
     "@google-cloud/iam-credentials": "^4.2.2",
@@ -61,7 +61,7 @@
     "pino": "^10.3.1"
   },
   "devDependencies": {
-    "@swc/core": "^1.15.40",
+    "@swc/core": "^1.15.41",
     "@swc/jest": "^0.2.39",
     "@tsconfig/node22": "^22.0.5",
     "@types/jest": "^30.0.0",
