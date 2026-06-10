@@ -133,8 +133,12 @@ describe('ModelGenerateTypeScriptDecoratorsForGoogleFirestore', () => {
 
     expect(actual).toEqual([
       {
-        source: `@FirestoreCollection({ name: "my-collection", path: (doc) => doc.id })`,
-        imports: { '@causa/runtime-google': ['FirestoreCollection'] },
+        source: `@_CausaRuntimeGoogleFirestoreCollection({ name: "my-collection", path: (doc) => doc.id })`,
+        imports: {
+          '@causa/runtime-google': [
+            'FirestoreCollection as _CausaRuntimeGoogleFirestoreCollection',
+          ],
+        },
       },
     ]);
   });
@@ -155,13 +159,19 @@ describe('ModelGenerateTypeScriptDecoratorsForGoogleFirestore', () => {
 
     expect(actual).toEqual([
       {
-        source: `@FirestoreCollection({ name: "my-collection", path: (doc) => doc.id })`,
-        imports: { '@causa/runtime-google': ['FirestoreCollection'] },
+        source: `@_CausaRuntimeGoogleFirestoreCollection({ name: "my-collection", path: (doc) => doc.id })`,
+        imports: {
+          '@causa/runtime-google': [
+            'FirestoreCollection as _CausaRuntimeGoogleFirestoreCollection',
+          ],
+        },
       },
       {
-        source: '@SoftDeletedFirestoreCollection()',
+        source: '@_CausaRuntimeGoogleSoftDeletedFirestoreCollection()',
         imports: {
-          '@causa/runtime-google': ['SoftDeletedFirestoreCollection'],
+          '@causa/runtime-google': [
+            'SoftDeletedFirestoreCollection as _CausaRuntimeGoogleSoftDeletedFirestoreCollection',
+          ],
         },
       },
     ]);
@@ -188,7 +198,7 @@ describe('ModelGenerateTypeScriptDecoratorsForGoogleFirestore', () => {
     const actual = await callForClass(schema);
 
     expect(actual[0].source).toBe(
-      `@FirestoreCollection({ name: "my-collection", path: (doc) => ["users", doc.userId, "documents", doc.documentId].join("/") })`,
+      `@_CausaRuntimeGoogleFirestoreCollection({ name: "my-collection", path: (doc) => ["users", doc.userId, "documents", doc.documentId].join("/") })`,
     );
   });
 
@@ -267,6 +277,8 @@ describe('ModelGenerateTypeScriptDecoratorsForGoogleFirestore', () => {
     });
 
     expect(actual).toHaveLength(1);
-    expect(actual[0].source).toContain('@FirestoreCollection');
+    expect(actual[0].source).toContain(
+      '@_CausaRuntimeGoogleFirestoreCollection',
+    );
   });
 });

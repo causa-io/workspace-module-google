@@ -103,7 +103,8 @@ export class ModelGenerateTypeScriptDecoratorsForGoogleFirestore extends ModelGe
       { schema: this.schema },
       'FirestoreCollection',
       CAUSA_GOOGLE_MODULE,
-      `@FirestoreCollection({ name: ${JSON.stringify(name)}, path: (doc) => ${pathExpression} })`,
+      (alias) =>
+        `@${alias}({ name: ${JSON.stringify(name)}, path: (doc) => ${pathExpression} })`,
     );
 
     if (hasSoftDelete === true) {
@@ -112,7 +113,7 @@ export class ModelGenerateTypeScriptDecoratorsForGoogleFirestore extends ModelGe
         { schema: this.schema },
         'SoftDeletedFirestoreCollection',
         CAUSA_GOOGLE_MODULE,
-        '@SoftDeletedFirestoreCollection()',
+        (alias) => `@${alias}()`,
       );
     }
 
