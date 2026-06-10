@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v1.0.1 (2026-06-10)
+
 Fixes:
 
 - Generate aliased imports for the Google Spanner and Firestore decorators (`@SpannerTable`, `@SpannerColumn`, `@FirestoreCollection`, `@SoftDeletedFirestoreCollection`), preventing the external decorator imports from clashing with generated type names.
