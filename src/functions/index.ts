@@ -57,6 +57,7 @@ import {
   SecretFetchForGoogleSecretManager,
 } from './secret/index.js';
 import { ServiceContainerQueryLogsForCloudRun } from './service-container/index.js';
+import { ModelGenerateTypeScriptTriggerDecoratorsForGoogle } from './typescript/index.js';
 
 export function registerFunctions(context: ModuleRegistrationContext) {
   context.registerFunctionImplementations(
@@ -96,6 +97,7 @@ export function registerFunctions(context: ModuleRegistrationContext) {
     GoogleSpannerWriteDatabases,
     ModelGenerateTypeScriptDecoratorsForGoogleFirestore,
     ModelGenerateTypeScriptDecoratorsForGoogleSpanner,
+    ModelGenerateTypeScriptTriggerDecoratorsForGoogle,
     ModelSchemaExtractDatabaseForGoogleFirestore,
     ModelSchemaExtractDatabaseForGoogleSpanner,
     ProjectGetArtefactDestinationForCloudFunctions,
