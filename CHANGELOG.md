@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+Features:
+
+- Implement `ModelGenerateTypeScriptTriggerDecorators` for the Google platform. When generating NestJS event controllers, each trigger-handling method receives a `@UseEventHandler` decorator with the handler ID matching the trigger type: `PUBSUB_EVENT_HANDLER_ID` for `event` / `google.pubSub`, `CLOUD_TASKS_EVENT_HANDLER_ID` for `task` / `google.tasks`, `CLOUD_SCHEDULER_EVENT_HANDLER_ID` for `cron` / `google.scheduler`, and `CLOUDEVENTS_EVENT_HANDLER_ID` for `google.eventarc`.
+
 ## v1.1.0 (2026-06-10)
 
 Features:
