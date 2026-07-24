@@ -869,8 +869,7 @@ export class GoogleSecretsConfiguration {
 }
 
 export type GoogleServerlessFunctionsPlatform =
-  | string
-  | GoogleCloudFunctionsPlatform;
+  string | GoogleCloudFunctionsPlatform;
 
 export class GoogleServerlessFunctions {
   constructor(init: GoogleServerlessFunctions) {
