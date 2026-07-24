@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v1.3.0 (2026-07-24)
+
 Features:
 
 - Populate the `id` of `QueriedEvent`s returned by `EventTopicQueryEventsForBigQuery` with the Pub/Sub `message_id` column read from the BigQuery raw events table.
