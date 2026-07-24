@@ -26,9 +26,13 @@ model:
 javascript:
   dependencies:
     check:
-      allowlist: [GHSA-w5hq-g745-h8pq]
+      allowlist:
+        - GHSA-w5hq-g745-h8pq
+        - GHSA-4x5r-pxfx-6jf8
+        - GHSA-8988-4f7v-96qf
     update:
       packageTargets:
         "@types/node": minor
         # `google-gax` should only be manually updated to always match the Spanner client's version.
         google-gax: semver
+        typescript: minor

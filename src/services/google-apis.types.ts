@@ -87,11 +87,10 @@ type ArgsOf4<
   (options: infer O3): any;
   (options: infer O4): any;
 }
-  ?
-      | ValidOptions<O1, V>
-      | ValidOptions<O2, V>
-      | ValidOptions<O3, V>
-      | ValidOptions<O4, V>
+  ? | ValidOptions<O1, V>
+    | ValidOptions<O2, V>
+    | ValidOptions<O3, V>
+    | ValidOptions<O4, V>
   : never;
 
 type ArgsOf5<
@@ -104,12 +103,11 @@ type ArgsOf5<
   (options: infer O4): any;
   (options: infer O5): any;
 }
-  ?
-      | ValidOptions<O1, V>
-      | ValidOptions<O2, V>
-      | ValidOptions<O3, V>
-      | ValidOptions<O4, V>
-      | ValidOptions<O5, V>
+  ? | ValidOptions<O1, V>
+    | ValidOptions<O2, V>
+    | ValidOptions<O3, V>
+    | ValidOptions<O4, V>
+    | ValidOptions<O5, V>
   : never;
 
 type ArgsOf6<
@@ -123,13 +121,12 @@ type ArgsOf6<
   (options: infer O5): any;
   (options: infer O6): any;
 }
-  ?
-      | ValidOptions<O1, V>
-      | ValidOptions<O2, V>
-      | ValidOptions<O3, V>
-      | ValidOptions<O4, V>
-      | ValidOptions<O5, V>
-      | ValidOptions<O6, V>
+  ? | ValidOptions<O1, V>
+    | ValidOptions<O2, V>
+    | ValidOptions<O3, V>
+    | ValidOptions<O4, V>
+    | ValidOptions<O5, V>
+    | ValidOptions<O6, V>
   : never;
 
 type ArgsOf7<
@@ -144,14 +141,13 @@ type ArgsOf7<
   (options: infer O6): any;
   (options: infer O7): any;
 }
-  ?
-      | ValidOptions<O1, V>
-      | ValidOptions<O2, V>
-      | ValidOptions<O3, V>
-      | ValidOptions<O4, V>
-      | ValidOptions<O5, V>
-      | ValidOptions<O6, V>
-      | ValidOptions<O7, V>
+  ? | ValidOptions<O1, V>
+    | ValidOptions<O2, V>
+    | ValidOptions<O3, V>
+    | ValidOptions<O4, V>
+    | ValidOptions<O5, V>
+    | ValidOptions<O6, V>
+    | ValidOptions<O7, V>
   : never;
 
 type ArgsOf8<
@@ -167,15 +163,14 @@ type ArgsOf8<
   (options: infer O7): any;
   (options: infer O8): any;
 }
-  ?
-      | ValidOptions<O1, V>
-      | ValidOptions<O2, V>
-      | ValidOptions<O3, V>
-      | ValidOptions<O4, V>
-      | ValidOptions<O5, V>
-      | ValidOptions<O6, V>
-      | ValidOptions<O7, V>
-      | ValidOptions<O8, V>
+  ? | ValidOptions<O1, V>
+    | ValidOptions<O2, V>
+    | ValidOptions<O3, V>
+    | ValidOptions<O4, V>
+    | ValidOptions<O5, V>
+    | ValidOptions<O6, V>
+    | ValidOptions<O7, V>
+    | ValidOptions<O8, V>
   : never;
 
 type ArgsOf9<
@@ -192,16 +187,15 @@ type ArgsOf9<
   (options: infer O8): any;
   (options: infer O9): any;
 }
-  ?
-      | ValidOptions<O1, V>
-      | ValidOptions<O2, V>
-      | ValidOptions<O3, V>
-      | ValidOptions<O4, V>
-      | ValidOptions<O5, V>
-      | ValidOptions<O6, V>
-      | ValidOptions<O7, V>
-      | ValidOptions<O8, V>
-      | ValidOptions<O9, V>
+  ? | ValidOptions<O1, V>
+    | ValidOptions<O2, V>
+    | ValidOptions<O3, V>
+    | ValidOptions<O4, V>
+    | ValidOptions<O5, V>
+    | ValidOptions<O6, V>
+    | ValidOptions<O7, V>
+    | ValidOptions<O8, V>
+    | ValidOptions<O9, V>
   : never;
 
 type ArgsOf10<
@@ -219,17 +213,16 @@ type ArgsOf10<
   (options: infer O9): any;
   (options: infer O10): any;
 }
-  ?
-      | ValidOptions<O1, V>
-      | ValidOptions<O2, V>
-      | ValidOptions<O3, V>
-      | ValidOptions<O4, V>
-      | ValidOptions<O5, V>
-      | ValidOptions<O6, V>
-      | ValidOptions<O7, V>
-      | ValidOptions<O8, V>
-      | ValidOptions<O9, V>
-      | ValidOptions<O10, V>
+  ? | ValidOptions<O1, V>
+    | ValidOptions<O2, V>
+    | ValidOptions<O3, V>
+    | ValidOptions<O4, V>
+    | ValidOptions<O5, V>
+    | ValidOptions<O6, V>
+    | ValidOptions<O7, V>
+    | ValidOptions<O8, V>
+    | ValidOptions<O9, V>
+    | ValidOptions<O10, V>
   : never;
 
 type ArgsOf11<
@@ -248,18 +241,17 @@ type ArgsOf11<
   (options: infer O10): any;
   (options: infer O11): any;
 }
-  ?
-      | ValidOptions<O1, V>
-      | ValidOptions<O2, V>
-      | ValidOptions<O3, V>
-      | ValidOptions<O4, V>
-      | ValidOptions<O5, V>
-      | ValidOptions<O6, V>
-      | ValidOptions<O7, V>
-      | ValidOptions<O8, V>
-      | ValidOptions<O9, V>
-      | ValidOptions<O10, V>
-      | ValidOptions<O11, V>
+  ? | ValidOptions<O1, V>
+    | ValidOptions<O2, V>
+    | ValidOptions<O3, V>
+    | ValidOptions<O4, V>
+    | ValidOptions<O5, V>
+    | ValidOptions<O6, V>
+    | ValidOptions<O7, V>
+    | ValidOptions<O8, V>
+    | ValidOptions<O9, V>
+    | ValidOptions<O10, V>
+    | ValidOptions<O11, V>
   : never;
 
 type ArgsOf12<
@@ -279,19 +271,18 @@ type ArgsOf12<
   (options: infer O11): any;
   (options: infer O12): any;
 }
-  ?
-      | ValidOptions<O1, V>
-      | ValidOptions<O2, V>
-      | ValidOptions<O3, V>
-      | ValidOptions<O4, V>
-      | ValidOptions<O5, V>
-      | ValidOptions<O6, V>
-      | ValidOptions<O7, V>
-      | ValidOptions<O8, V>
-      | ValidOptions<O9, V>
-      | ValidOptions<O10, V>
-      | ValidOptions<O11, V>
-      | ValidOptions<O12, V>
+  ? | ValidOptions<O1, V>
+    | ValidOptions<O2, V>
+    | ValidOptions<O3, V>
+    | ValidOptions<O4, V>
+    | ValidOptions<O5, V>
+    | ValidOptions<O6, V>
+    | ValidOptions<O7, V>
+    | ValidOptions<O8, V>
+    | ValidOptions<O9, V>
+    | ValidOptions<O10, V>
+    | ValidOptions<O11, V>
+    | ValidOptions<O12, V>
   : never;
 
 type ReturnOf1<
@@ -333,11 +324,10 @@ type ReturnOf4<
   (options: infer O3): infer R3;
   (options: infer O4): infer R4;
 }
-  ?
-      | ValidReturn<O1, V, R1>
-      | ValidReturn<O2, V, R2>
-      | ValidReturn<O3, V, R3>
-      | ValidReturn<O4, V, R4>
+  ? | ValidReturn<O1, V, R1>
+    | ValidReturn<O2, V, R2>
+    | ValidReturn<O3, V, R3>
+    | ValidReturn<O4, V, R4>
   : never;
 
 type ReturnOf5<
@@ -350,12 +340,11 @@ type ReturnOf5<
   (options: infer O4): infer R4;
   (options: infer O5): infer R5;
 }
-  ?
-      | ValidReturn<O1, V, R1>
-      | ValidReturn<O2, V, R2>
-      | ValidReturn<O3, V, R3>
-      | ValidReturn<O4, V, R4>
-      | ValidReturn<O5, V, R5>
+  ? | ValidReturn<O1, V, R1>
+    | ValidReturn<O2, V, R2>
+    | ValidReturn<O3, V, R3>
+    | ValidReturn<O4, V, R4>
+    | ValidReturn<O5, V, R5>
   : never;
 
 type ReturnOf6<
@@ -369,13 +358,12 @@ type ReturnOf6<
   (options: infer O5): infer R5;
   (options: infer O6): infer R6;
 }
-  ?
-      | ValidReturn<O1, V, R1>
-      | ValidReturn<O2, V, R2>
-      | ValidReturn<O3, V, R3>
-      | ValidReturn<O4, V, R4>
-      | ValidReturn<O5, V, R5>
-      | ValidReturn<O6, V, R6>
+  ? | ValidReturn<O1, V, R1>
+    | ValidReturn<O2, V, R2>
+    | ValidReturn<O3, V, R3>
+    | ValidReturn<O4, V, R4>
+    | ValidReturn<O5, V, R5>
+    | ValidReturn<O6, V, R6>
   : never;
 
 type ReturnOf7<
@@ -390,14 +378,13 @@ type ReturnOf7<
   (options: infer O6): infer R6;
   (options: infer O7): infer R7;
 }
-  ?
-      | ValidReturn<O1, V, R1>
-      | ValidReturn<O2, V, R2>
-      | ValidReturn<O3, V, R3>
-      | ValidReturn<O4, V, R4>
-      | ValidReturn<O5, V, R5>
-      | ValidReturn<O6, V, R6>
-      | ValidReturn<O7, V, R7>
+  ? | ValidReturn<O1, V, R1>
+    | ValidReturn<O2, V, R2>
+    | ValidReturn<O3, V, R3>
+    | ValidReturn<O4, V, R4>
+    | ValidReturn<O5, V, R5>
+    | ValidReturn<O6, V, R6>
+    | ValidReturn<O7, V, R7>
   : never;
 
 type ReturnOf8<
@@ -413,15 +400,14 @@ type ReturnOf8<
   (options: infer O7): infer R7;
   (options: infer O8): infer R8;
 }
-  ?
-      | ValidReturn<O1, V, R1>
-      | ValidReturn<O2, V, R2>
-      | ValidReturn<O3, V, R3>
-      | ValidReturn<O4, V, R4>
-      | ValidReturn<O5, V, R5>
-      | ValidReturn<O6, V, R6>
-      | ValidReturn<O7, V, R7>
-      | ValidReturn<O8, V, R8>
+  ? | ValidReturn<O1, V, R1>
+    | ValidReturn<O2, V, R2>
+    | ValidReturn<O3, V, R3>
+    | ValidReturn<O4, V, R4>
+    | ValidReturn<O5, V, R5>
+    | ValidReturn<O6, V, R6>
+    | ValidReturn<O7, V, R7>
+    | ValidReturn<O8, V, R8>
   : never;
 
 type ReturnOf9<
@@ -438,16 +424,15 @@ type ReturnOf9<
   (options: infer O8): infer R8;
   (options: infer O9): infer R9;
 }
-  ?
-      | ValidReturn<O1, V, R1>
-      | ValidReturn<O2, V, R2>
-      | ValidReturn<O3, V, R3>
-      | ValidReturn<O4, V, R4>
-      | ValidReturn<O5, V, R5>
-      | ValidReturn<O6, V, R6>
-      | ValidReturn<O7, V, R7>
-      | ValidReturn<O8, V, R8>
-      | ValidReturn<O9, V, R9>
+  ? | ValidReturn<O1, V, R1>
+    | ValidReturn<O2, V, R2>
+    | ValidReturn<O3, V, R3>
+    | ValidReturn<O4, V, R4>
+    | ValidReturn<O5, V, R5>
+    | ValidReturn<O6, V, R6>
+    | ValidReturn<O7, V, R7>
+    | ValidReturn<O8, V, R8>
+    | ValidReturn<O9, V, R9>
   : never;
 
 type ReturnOf10<
@@ -465,17 +450,16 @@ type ReturnOf10<
   (options: infer O9): infer R9;
   (options: infer O10): infer R10;
 }
-  ?
-      | ValidReturn<O1, V, R1>
-      | ValidReturn<O2, V, R2>
-      | ValidReturn<O3, V, R3>
-      | ValidReturn<O4, V, R4>
-      | ValidReturn<O5, V, R5>
-      | ValidReturn<O6, V, R6>
-      | ValidReturn<O7, V, R7>
-      | ValidReturn<O8, V, R8>
-      | ValidReturn<O9, V, R9>
-      | ValidReturn<O10, V, R10>
+  ? | ValidReturn<O1, V, R1>
+    | ValidReturn<O2, V, R2>
+    | ValidReturn<O3, V, R3>
+    | ValidReturn<O4, V, R4>
+    | ValidReturn<O5, V, R5>
+    | ValidReturn<O6, V, R6>
+    | ValidReturn<O7, V, R7>
+    | ValidReturn<O8, V, R8>
+    | ValidReturn<O9, V, R9>
+    | ValidReturn<O10, V, R10>
   : never;
 
 type ReturnOf11<
@@ -494,18 +478,17 @@ type ReturnOf11<
   (options: infer O10): infer R10;
   (options: infer O11): infer R11;
 }
-  ?
-      | ValidReturn<O1, V, R1>
-      | ValidReturn<O2, V, R2>
-      | ValidReturn<O3, V, R3>
-      | ValidReturn<O4, V, R4>
-      | ValidReturn<O5, V, R5>
-      | ValidReturn<O6, V, R6>
-      | ValidReturn<O7, V, R7>
-      | ValidReturn<O8, V, R8>
-      | ValidReturn<O9, V, R9>
-      | ValidReturn<O10, V, R10>
-      | ValidReturn<O11, V, R11>
+  ? | ValidReturn<O1, V, R1>
+    | ValidReturn<O2, V, R2>
+    | ValidReturn<O3, V, R3>
+    | ValidReturn<O4, V, R4>
+    | ValidReturn<O5, V, R5>
+    | ValidReturn<O6, V, R6>
+    | ValidReturn<O7, V, R7>
+    | ValidReturn<O8, V, R8>
+    | ValidReturn<O9, V, R9>
+    | ValidReturn<O10, V, R10>
+    | ValidReturn<O11, V, R11>
   : never;
 
 type ReturnOf12<
@@ -525,17 +508,16 @@ type ReturnOf12<
   (options: infer O11): infer R11;
   (options: infer O12): infer R12;
 }
-  ?
-      | ValidReturn<O1, V, R1>
-      | ValidReturn<O2, V, R2>
-      | ValidReturn<O3, V, R3>
-      | ValidReturn<O4, V, R4>
-      | ValidReturn<O5, V, R5>
-      | ValidReturn<O6, V, R6>
-      | ValidReturn<O7, V, R7>
-      | ValidReturn<O8, V, R8>
-      | ValidReturn<O9, V, R9>
-      | ValidReturn<O10, V, R10>
-      | ValidReturn<O11, V, R11>
-      | ValidReturn<O12, V, R12>
+  ? | ValidReturn<O1, V, R1>
+    | ValidReturn<O2, V, R2>
+    | ValidReturn<O3, V, R3>
+    | ValidReturn<O4, V, R4>
+    | ValidReturn<O5, V, R5>
+    | ValidReturn<O6, V, R6>
+    | ValidReturn<O7, V, R7>
+    | ValidReturn<O8, V, R8>
+    | ValidReturn<O9, V, R9>
+    | ValidReturn<O10, V, R10>
+    | ValidReturn<O11, V, R11>
+    | ValidReturn<O12, V, R12>
   : never;

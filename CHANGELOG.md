@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+Features:
+
+- Populate the `id` of `QueriedEvent`s returned by `EventTopicQueryEventsForBigQuery` with the Pub/Sub `message_id` column read from the BigQuery raw events table.
+- Populate the `id` of `QueriedLogEntry`s returned by `ServiceContainerQueryLogsForCloudRun` with the Cloud Logging entry `insertId`.
+
 ## v1.2.0 (2026-06-11)
 
 Features:

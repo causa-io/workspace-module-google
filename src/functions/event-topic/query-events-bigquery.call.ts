@@ -38,7 +38,7 @@ export default async function call(
   }
 
   const query = `
-    SELECT publish_time, data, attributes
+    SELECT message_id, publish_time, data, attributes
     FROM \`${tableId}\`
     WHERE ${conditions.join(' AND ')}
     ORDER BY publish_time ASC
@@ -50,6 +50,7 @@ export default async function call(
   const [rows] = await bigQuery.query({ query, params });
 
   return rows.map((row: any) => ({
+    id: row.message_id,
     timestamp: new Date(row.publish_time.value),
     attributes: row.attributes ? JSON.parse(row.attributes) : {},
     data: JSON.parse(row.data.toString('utf8')),
