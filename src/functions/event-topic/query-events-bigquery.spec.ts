@@ -84,11 +84,13 @@ describe('EventTopicQueryEventsForBigQuery', () => {
     queryMock.mockResolvedValueOnce([
       [
         {
+          message_id: 'message-0',
           publish_time: { value: '2026-04-30T10:00:00.000Z' },
           data: '{"id":0}',
           attributes: '{"k":"v0"}',
         },
         {
+          message_id: 'message-1',
           publish_time: { value: '2026-04-30T11:00:00.000Z' },
           data: '{"id":1}',
           attributes: null,
@@ -104,11 +106,13 @@ describe('EventTopicQueryEventsForBigQuery', () => {
 
     expect(actualEvents).toEqual([
       {
+        id: 'message-0',
         timestamp: new Date('2026-04-30T10:00:00.000Z'),
         attributes: { k: 'v0' },
         data: { id: 0 },
       },
       {
+        id: 'message-1',
         timestamp: new Date('2026-04-30T11:00:00.000Z'),
         attributes: {},
         data: { id: 1 },
