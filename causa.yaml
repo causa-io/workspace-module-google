@@ -32,3 +32,4 @@ javascript:
         "@types/node": minor
         # `google-gax` should only be manually updated to always match the Spanner client's version.
         google-gax: semver
+        typescript: minor
