@@ -43,6 +43,7 @@ export default async function call(
   });
 
   return pageEntries.map((entry) => ({
+    id: entry.metadata.insertId ?? undefined,
     timestamp: entry.metadata.timestamp as Date,
     message: entry.toStructuredJSON(),
   }));

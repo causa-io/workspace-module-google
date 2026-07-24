@@ -26,9 +26,9 @@ describe('ServiceContainerQueryLogsForCloudRun', () => {
     ) as any;
   });
 
-  function makeEntry(timestamp: string, structured: any) {
+  function makeEntry(insertId: string, timestamp: string, structured: any) {
     return {
-      metadata: { timestamp: new Date(timestamp) },
+      metadata: { insertId, timestamp: new Date(timestamp) },
       toStructuredJSON: () => structured,
     } as any;
   }
@@ -51,8 +51,8 @@ describe('ServiceContainerQueryLogsForCloudRun', () => {
   it('should query Cloud Logging with the Cloud Run prefix and default time range', async () => {
     getEntriesMock.mockResolvedValueOnce([
       [
-        makeEntry('2026-04-30T09:00:00.000Z', 'world'),
-        makeEntry('2026-04-30T10:00:00.000Z', { message: 'hello' }),
+        makeEntry('insert-0', '2026-04-30T09:00:00.000Z', 'world'),
+        makeEntry('insert-1', '2026-04-30T10:00:00.000Z', { message: 'hello' }),
       ],
       {},
       {},
@@ -65,8 +65,13 @@ describe('ServiceContainerQueryLogsForCloudRun', () => {
     const after = Date.now();
 
     expect(actualEntries).toEqual([
-      { timestamp: new Date('2026-04-30T09:00:00.000Z'), message: 'world' },
       {
+        id: 'insert-0',
+        timestamp: new Date('2026-04-30T09:00:00.000Z'),
+        message: 'world',
+      },
+      {
+        id: 'insert-1',
         timestamp: new Date('2026-04-30T10:00:00.000Z'),
         message: { message: 'hello' },
       },
