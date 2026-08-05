@@ -450,9 +450,9 @@ properties:
             title: GoogleCloudRunIngress
             type: string
             enum:
-              - all
-              - internal
-              - internal-and-cloud-load-balancing
+              - INGRESS_TRAFFIC_ALL
+              - INGRESS_TRAFFIC_INTERNAL_ONLY
+              - INGRESS_TRAFFIC_INTERNAL_LOAD_BALANCER
             description: |-
               The type of allowed ingress that can reach the container.
               See https://cloud.google.com/run/docs/securing/ingress#settings for more details.
