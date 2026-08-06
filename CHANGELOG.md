@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v1.3.1 (2026-08-06)
+
 Fixes:
 
 - Change the accepted values for the `google.cloudRun.ingress` configuration to upper snake case. The previous values were the ones accepted by the `gcloud` CLI and the Cloud Run v1 API annotation, not the ones expected by the Cloud Run v2 API and the Cloud Run service container Terraform module.
