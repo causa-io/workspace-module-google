@@ -127,9 +127,9 @@ export class GoogleCloudRunEventBackfillServiceCloneConfig {
  * See https://cloud.google.com/run/docs/securing/ingress#settings for more details.
  */
 export enum GoogleCloudRunIngress {
-  All = 'all',
-  Internal = 'internal',
-  InternalAndCloudLoadBalancing = 'internal-and-cloud-load-balancing',
+  IngressTrafficAll = 'INGRESS_TRAFFIC_ALL',
+  IngressTrafficInternalOnly = 'INGRESS_TRAFFIC_INTERNAL_ONLY',
+  IngressTrafficInternalLoadBalancer = 'INGRESS_TRAFFIC_INTERNAL_LOAD_BALANCER',
 }
 
 /**
@@ -1595,7 +1595,11 @@ export class GoogleCloudRun {
    * See https://cloud.google.com/run/docs/securing/ingress#settings for more details.
    */
   @AllowMissing()
-  @IsIn(['all', 'internal', 'internal-and-cloud-load-balancing'])
+  @IsIn([
+    'INGRESS_TRAFFIC_ALL',
+    'INGRESS_TRAFFIC_INTERNAL_ONLY',
+    'INGRESS_TRAFFIC_INTERNAL_LOAD_BALANCER',
+  ])
   readonly ingress?: GoogleCloudRunIngress;
 
   /**
