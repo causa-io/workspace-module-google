@@ -2,6 +2,7 @@ import type { WorkspaceContext } from '@causa/workspace';
 import type { BackfillEvent } from '@causa/workspace-core';
 import type { GoogleConfiguration } from '../../configurations/index.js';
 import { BigQueryService } from '../../services/index.js';
+import { rawEventsTableName } from '../google-pubsub/index.js';
 import {
   BIGQUERY_SOURCE_REGEX,
   type EventTopicCreateBackfillSourceForBigQuery,
@@ -34,8 +35,7 @@ function resolveTableId(
   const rawEventsDatasetId = googleConf.getOrThrow(
     'google.pubSub.bigQueryStorage.rawEventsDatasetId',
   );
-  const tableName = self.eventTopic.replace(/[-\.]/g, '_');
-  return `${projectId}.${rawEventsDatasetId}.${tableName}`;
+  return `${projectId}.${rawEventsDatasetId}.${rawEventsTableName(self.eventTopic)}`;
 }
 
 export default async function call(

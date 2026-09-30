@@ -20,6 +20,16 @@ const DEFAULT_TOPIC_CONFIGURATIONS_DIRECTORY = join(
 );
 
 /**
+ * Returns the name of the BigQuery table storing the raw events of a topic.
+ *
+ * @param topic The ID of the topic.
+ * @returns The name of the BigQuery table.
+ */
+export function rawEventsTableName(topic: string): string {
+  return topic.replace(/[-.]/g, '_');
+}
+
+/**
  * A single Pub/Sub topic configuration, to be written to a JSON file.
  */
 type TopicConfiguration = EventTopicDefinition & {
@@ -91,7 +101,7 @@ export class GooglePubSubWriteTopics
       topics.map(async (topic) => {
         const topicConfiguration: TopicConfiguration = {
           ...topic,
-          bigQueryTableName: topic.id.replace(/[-\.]/g, '_'),
+          bigQueryTableName: rawEventsTableName(topic.id),
         };
         const topicFile = join(absoluteDir, `${topic.id}.json`);
         await writeFile(topicFile, JSON.stringify(topicConfiguration));
