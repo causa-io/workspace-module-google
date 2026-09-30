@@ -4,6 +4,7 @@ import {
   type GraphRuleOutput,
 } from '@causa/workspace-core';
 import { cloudRunCronTriggers } from './cloud-run-cron-triggers.js';
+import { cloudRunPubSubTriggers } from './cloud-run-pubsub-triggers.js';
 import { cloudRunServices } from './cloud-run-services.js';
 import { cloudRunTasksTriggers } from './cloud-run-tasks-triggers.js';
 
@@ -19,6 +20,7 @@ export const cloudRunModule: GraphRule = {
   async run(graph) {
     const outputs: GraphRuleOutput[] = await Promise.all([
       cloudRunServices(graph),
+      cloudRunPubSubTriggers(graph),
       cloudRunTasksTriggers(graph),
       cloudRunCronTriggers(graph),
     ]);
