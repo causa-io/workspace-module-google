@@ -12,7 +12,7 @@ export type SpannerDatabase = {
   id: string;
 
   /**
-   * The paths (relative to the workspace root) containing DDL statements for this database.
+   * The absolute paths of the files containing DDL statements for this database.
    */
   ddlFiles: string[];
 
