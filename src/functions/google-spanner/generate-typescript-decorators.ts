@@ -1,3 +1,4 @@
+import { splitSchemaPath } from '@causa/workspace-core/jsonschema';
 import { ModelGenerateTypeScriptDecorators } from '@causa/workspace-typescript';
 import {
   type TypeScriptDecorator,
@@ -51,7 +52,7 @@ export class ModelGenerateTypeScriptDecoratorsForGoogleSpanner extends ModelGene
     if (Array.isArray(globs)) {
       const projectPath = this._context.getProjectPathOrThrow();
       const absoluteGlobs = globs.map((g) => join(projectPath, g));
-      const schemaPath = this.schema.path.split('#')[0];
+      const { file: schemaPath } = splitSchemaPath(this.schema.path);
       if (!micromatch.isMatch(schemaPath, absoluteGlobs)) {
         return [];
       }

@@ -1,1 +1,1 @@
-export { GooglePubSubWriteTopics } from './write-topics.js';
+export { GooglePubSubWriteTopics, rawEventsTableName } from './write-topics.js';
