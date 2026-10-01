@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v1.4.0-beta.1 (2026-10-01)
+
 Features:
 
 - Implement `GraphListRules` for Google Cloud, contributing Firestore, Spanner, Pub/Sub, Cloud Tasks, Cloud Scheduler, Cloud Run, BigQuery, and API router nodes and edges to the architecture graph. Infrastructure nodes reference the Google Cloud resource they stand for.
