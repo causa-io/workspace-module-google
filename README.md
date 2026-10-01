@@ -74,6 +74,15 @@ This module implements the `DatabaseQueryRecords`, `ServiceContainerQueryLogs`, 
 - `ServiceContainerQueryLogs` is supported when `serviceContainer.platform` is `google.cloudRun`. It queries Cloud Logging for log entries emitted by the service's Cloud Run revisions. By default, only the last hour of logs and up to 1 000 entries are returned.
 - `EventTopicQueryEvents` is supported when `events.broker` is `google.pubSub`, `events.format` is `json`, and `google.pubSub.bigQueryStorage.rawEventsDatasetId` is set. It reads events from the topic's BigQuery raw events table. Same defaults as for log queries: last hour and up to 1 000 events.
 
+### Architecture graph
+
+This module contributes to the architecture graph extracted by `cs graph extract` (see the core module):
+
+- Some rules read the workspace configuration and model: the Firestore database and the collections schemas bind to (`firestoreFromConfiguration`), the triggers of type `google.pubSub` and the entities projects access through the databases and collections listed in `serviceContainer.outputs` (`googleServiceContainerFromConfiguration`), and the triggers of type `google.task(s)`.
+- Other rules mirror the resources created by the Causa Terraform modules for Google Cloud, one rule per module (Cloud Run services, event topics, Spanner databases, and API router), by joining the arguments of their blocks with the configuration the modules read. Each resource is linked by a `deploys` edge from the projects applying the block.
+
+Infrastructure nodes carry the Google Cloud resource they stand for in `data.resource`: its `type` (e.g. `pubsub.googleapis.com/Topic`), its `id`, i.e. its full resource name (or `idPrefix` when the full name is not known), and the `scope`, i.e. the project whose configuration should be used to render the identifier.
+
 ### Secrets backend
 
 This module implements the `google.secretManager` secret backend, allowing fetching secrets from the Google Secret Manager service. Here are some example of how secrets with the `google.secretManager` backend should be defined:
