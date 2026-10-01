@@ -4,6 +4,7 @@ import {
   type GraphRuleOutput,
 } from '@causa/workspace-core';
 import { cloudRunCronTriggers } from './cloud-run-cron-triggers.js';
+import { cloudRunGrants } from './cloud-run-grants.js';
 import { cloudRunPubSubTriggers } from './cloud-run-pubsub-triggers.js';
 import { cloudRunServices } from './cloud-run-services.js';
 import { cloudRunTasksTriggers } from './cloud-run-tasks-triggers.js';
@@ -23,6 +24,7 @@ export const cloudRunModule: GraphRule = {
       cloudRunPubSubTriggers(graph),
       cloudRunTasksTriggers(graph),
       cloudRunCronTriggers(graph),
+      cloudRunGrants(graph),
     ]);
     return {
       nodes: outputs.flatMap((o) => o.nodes ?? []),
