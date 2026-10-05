@@ -1,5 +1,6 @@
 import type { GraphEnvironmentFetcher } from '@causa/workspace-core';
 import { googleCloudRun } from './cloud-run.js';
+import { googleCloudScheduler } from './cloud-scheduler.js';
 import { googleConsoleLinks } from './console-links.js';
 import { googleErrorReporting } from './error-reporting.js';
 
@@ -8,6 +9,7 @@ import { googleErrorReporting } from './error-reporting.js';
  */
 export const GOOGLE_GRAPH_ENVIRONMENT_FETCHERS: GraphEnvironmentFetcher[] = [
   googleCloudRun,
+  googleCloudScheduler,
   googleConsoleLinks,
   googleErrorReporting,
 ];
