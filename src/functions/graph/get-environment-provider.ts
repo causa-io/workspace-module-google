@@ -5,6 +5,7 @@ import {
 import {
   CLOUD_TASKS_QUEUE_RESOLVER,
   GOOGLE_GRAPH_ENVIRONMENT_FETCHERS,
+  GOOGLE_GRAPH_METRIC_DEFINITIONS,
 } from '../../graph/index.js';
 
 /**
@@ -16,6 +17,7 @@ import {
 export class GraphGetEnvironmentProviderForGoogle extends GraphGetEnvironmentProvider {
   _call(): GraphEnvironmentProvider {
     return {
+      metrics: GOOGLE_GRAPH_METRIC_DEFINITIONS,
       prefixResolvers: [CLOUD_TASKS_QUEUE_RESOLVER],
       fetchers: GOOGLE_GRAPH_ENVIRONMENT_FETCHERS,
     };
