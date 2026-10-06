@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+Features:
+
+- Implement `GraphGetEnvironmentProvider` for Google Cloud, resolving the names of Cloud Tasks queues, reading metrics and alerts from Cloud Monitoring, alerts from Error Reporting, the state of Cloud Run services and Cloud Scheduler jobs, and building links to the Google Cloud console.
+- Implement `GraphFetchEnvironmentMetricSeries` for the metrics read from Cloud Monitoring.
+- Pass arguments by reference rather than copying them for all Google function definitions that do not transform their arguments, using `@causa/workspace`'s `PassArgumentsByReference`.
+
 ## v1.4.0-beta.1 (2026-10-01)
 
 Features:
