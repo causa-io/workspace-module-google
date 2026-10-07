@@ -4,7 +4,7 @@ import {
   domainAt,
   domainOfFile,
   DomainsFact,
-  GraphFact,
+  GraphExtractionFact,
   type EntityFacts,
   type GraphContext,
   type GraphFactOutput,
@@ -95,7 +95,7 @@ export type SpannerFacts = {
  * The Spanner databases of the workspace, as `GoogleSpannerListDatabases` lists them, and the tables their DDL files
  * create.
  */
-export class SpannerFact extends GraphFact<SpannerFacts> {
+export class SpannerFact extends GraphExtractionFact<SpannerFacts> {
   async compute(graph: GraphContext): Promise<GraphFactOutput<SpannerFacts>> {
     const { context } = graph;
     const instance = context

@@ -1,6 +1,6 @@
 import type { ServiceContainerConfiguration } from '@causa/workspace-core';
 import {
-  GraphFact,
+  GraphExtractionFact,
   ProjectsFact,
   serviceId,
   type GraphContext,
@@ -125,7 +125,7 @@ export type CloudRunService = {
  * The blocks of the Cloud Run module, evaluated against the configuration of the projects they deploy.
  * Blocks whose `configuration_file` does not name a project of the workspace cannot be mirrored, and are reported.
  */
-export class CloudRunFact extends GraphFact<CloudRunService[]> {
+export class CloudRunFact extends GraphExtractionFact<CloudRunService[]> {
   async compute(
     graph: GraphContext,
   ): Promise<GraphFactOutput<CloudRunService[]>> {
