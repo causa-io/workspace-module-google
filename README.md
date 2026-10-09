@@ -83,6 +83,20 @@ This module contributes to the architecture graph extracted by `cs graph extract
 
 Infrastructure nodes carry the Google Cloud resource they stand for in `data.resource`: its `type` (e.g. `pubsub.googleapis.com/Topic`), its `id`, i.e. its full resource name (or `idPrefix` when the full name is not known), and the `scope`, i.e. the project whose configuration should be used to render the identifier.
 
+When the graph is enriched with environment data, this module resolves the names of Cloud Tasks queues by listing the queues of the environment. Queues that cannot be resolved are removed from their nodes. This module's fetchers then:
+
+- read metrics of services, API routers, Pub/Sub topics and subscriptions, Cloud Tasks queues, and Spanner, Firestore, and BigQuery databases from Cloud Monitoring
+- add the `deployment` of Cloud Run services, and the `lastAttempt` and `nextRun` of Cloud Scheduler jobs. They describe services and jobs as they are when the graph is enriched, with a warning when they changed after `at`.
+- add `links` to the Google Cloud console for each resource
+- attach the alerts open in Cloud Monitoring to the nodes of their resources. Matching an alert to a node requires the condition of its policy to keep the labels making up the resource name (e.g. `project_id`, `location`, and `service_name`), along with `monitored_resource` when the metric is written against several resource types, like `logging.googleapis.com/log_entry_count`.
+- attach the open Error Reporting groups of Cloud Run services to their nodes, as alerts with the `error` severity. A group is open when it has occurrences during the last 30 days, and is not acknowledged, resolved, or muted.
+
+The requests and latencies of API routers are also grouped by the `node` the requests were routed to, by mapping the serverless network endpoint groups of their load balancers to Cloud Run services. They are listed using the Compute Engine API (`compute.networkEndpointGroups.list`) in the projects of the API routers.
+
+`GraphFetchEnvironmentMetricSeries` is implemented for the metrics read from Cloud Monitoring.
+
+Cloud Monitoring exposes complete data with a delay of a few minutes. Metrics, including their time series, are read over windows ending at most 5 minutes ago.
+
 ### Secrets backend
 
 This module implements the `google.secretManager` secret backend, allowing fetching secrets from the Google Secret Manager service. Here are some example of how secrets with the `google.secretManager` backend should be defined:

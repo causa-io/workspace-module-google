@@ -47,7 +47,11 @@ import {
   ModelGenerateTypeScriptDecoratorsForGoogleSpanner,
   ModelSchemaExtractDatabaseForGoogleSpanner,
 } from './google-spanner/index.js';
-import { GraphListRulesForGoogle } from './graph/index.js';
+import {
+  GraphFetchEnvironmentMetricSeriesForGoogle,
+  GraphGetEnvironmentProviderForGoogle,
+  GraphListRulesForGoogle,
+} from './graph/index.js';
 import {
   ProjectGetArtefactDestinationForCloudFunctions,
   ProjectGetArtefactDestinationForCloudRun,
@@ -96,6 +100,8 @@ export function registerFunctions(context: ModuleRegistrationContext) {
     GoogleServicesEnable,
     GoogleSpannerListDatabases,
     GoogleSpannerWriteDatabases,
+    GraphFetchEnvironmentMetricSeriesForGoogle,
+    GraphGetEnvironmentProviderForGoogle,
     GraphListRulesForGoogle,
     ModelGenerateTypeScriptDecoratorsForGoogleFirestore,
     ModelGenerateTypeScriptDecoratorsForGoogleSpanner,
