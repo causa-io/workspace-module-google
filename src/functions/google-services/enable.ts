@@ -1,6 +1,7 @@
 import { CliCommand } from '@causa/cli';
 import { callDeferred, WorkspaceFunction } from '@causa/workspace';
 import type { InfrastructureProcessor } from '@causa/workspace-core';
+import { PassArgumentsByReference } from '@causa/workspace/function-registry';
 import { AllowMissing } from '@causa/workspace/validation';
 import { IsBoolean } from 'class-validator';
 import { googleCommandDefinition } from '../../cli/index.js';
@@ -36,6 +37,7 @@ They will be enabled in the 'google.project' GCP project.`,
   summary: 'Enables the GCP services used by the current project.',
   outputFn: ({ services }) => console.log(services.join('\n')),
 })
+@PassArgumentsByReference()
 export class GoogleServicesEnable
   extends WorkspaceFunction<Promise<GoogleServicesEnableResult>>
   implements InfrastructureProcessor

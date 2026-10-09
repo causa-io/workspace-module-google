@@ -1,6 +1,7 @@
 import { CliCommand } from '@causa/cli';
 import { WorkspaceFunction } from '@causa/workspace';
 import type { InfrastructureProcessor } from '@causa/workspace-core';
+import { PassArgumentsByReference } from '@causa/workspace/function-registry';
 import { AllowMissing } from '@causa/workspace/validation';
 import { IsBoolean } from 'class-validator';
 import { firestoreCommandDefinition } from '../../cli/index.js';
@@ -46,6 +47,7 @@ Input files are looked for in the workspace using the globs defined in google.fi
   summary: 'Merge Firestore security rules into a single file.',
   outputFn: ({ securityRuleFile }) => console.log(securityRuleFile),
 })
+@PassArgumentsByReference()
 export class GoogleFirestoreMergeRules
   extends WorkspaceFunction<Promise<GoogleFirestoreMergeRulesResult>>
   implements InfrastructureProcessor

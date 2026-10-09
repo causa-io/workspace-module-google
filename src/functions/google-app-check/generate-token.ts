@@ -1,5 +1,6 @@
 import { CliCommand, CliOption } from '@causa/cli';
 import { callDeferred, WorkspaceFunction } from '@causa/workspace';
+import { PassArgumentsByReference } from '@causa/workspace/function-registry';
 import { AllowMissing } from '@causa/workspace/validation';
 import { IsString } from 'class-validator';
 import { appCheckCommandDefinition } from '../../cli/index.js';
@@ -18,6 +19,7 @@ If the Firebase app ID is not specified, it will:
   summary: 'Generates an AppCheck token.',
   outputFn: (token) => console.log(token),
 })
+@PassArgumentsByReference()
 export class GoogleAppCheckGenerateToken extends WorkspaceFunction<
   Promise<string>
 > {

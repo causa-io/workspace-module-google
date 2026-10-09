@@ -1,4 +1,5 @@
 import { callDeferred, WorkspaceFunction } from '@causa/workspace';
+import { PassArgumentsByReference } from '@causa/workspace/function-registry';
 import { AllowMissing } from '@causa/workspace/validation';
 import { IsObject, IsString } from 'class-validator';
 
@@ -9,6 +10,7 @@ import { IsObject, IsString } from 'class-validator';
  * If `google.firebase.adminServiceAccount` is set, the service account will be used to sign the token. Otherwise, an
  * attempt will be made to find a valid service account in the `google.project`.
  */
+@PassArgumentsByReference()
 export class GoogleIdentityPlatformGenerateCustomToken extends WorkspaceFunction<
   Promise<string>
 > {

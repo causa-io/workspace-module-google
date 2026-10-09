@@ -4,6 +4,7 @@ import {
   EventTopicList,
   type InfrastructureProcessor,
 } from '@causa/workspace-core';
+import { PassArgumentsByReference } from '@causa/workspace/function-registry';
 import { CAUSA_FOLDER } from '@causa/workspace/initialization';
 import { AllowMissing } from '@causa/workspace/validation';
 import { IsBoolean } from 'class-validator';
@@ -46,6 +47,7 @@ type TopicConfiguration = EventTopicDefinition & {
  * topic configurations.
  * This function returns a partial configuration, such that it can be used as a processor.
  */
+@PassArgumentsByReference()
 export class GooglePubSubWriteTopics
   extends WorkspaceFunction<Promise<ProcessorResult>>
   implements InfrastructureProcessor
