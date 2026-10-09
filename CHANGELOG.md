@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v1.4.0-beta.2 (2026-10-09)
+
 Features:
 
 - Implement `GraphGetEnvironmentProvider` for Google Cloud, resolving the names of Cloud Tasks queues, reading metrics and alerts from Cloud Monitoring, alerts from Error Reporting, the state of Cloud Run services and Cloud Scheduler jobs, and building links to the Google Cloud console.
