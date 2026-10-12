@@ -23,6 +23,7 @@ import {
   EventTopicBrokerGetTopicIdForPubSub,
   EventTopicBrokerPublishEventsForGoogle,
   EventTopicBrokerWaitForProcessingForPubSub,
+  EventTopicCountEventsForBigQuery,
   EventTopicCreateBackfillSourceForBigQuery,
   EventTopicQueryEventsForBigQuery,
 } from './event-topic/index.js';
@@ -91,6 +92,7 @@ export function registerFunctions(context: ModuleRegistrationContext) {
     EventTopicBrokerGetTopicIdForPubSub,
     EventTopicBrokerPublishEventsForGoogle,
     EventTopicBrokerWaitForProcessingForPubSub,
+    EventTopicCountEventsForBigQuery,
     EventTopicCreateBackfillSourceForBigQuery,
     EventTopicQueryEventsForBigQuery,
     GoogleAppCheckGenerateToken,
