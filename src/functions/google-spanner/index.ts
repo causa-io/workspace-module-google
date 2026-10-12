@@ -1,3 +1,4 @@
+export { DatabaseCountRecordsForSpanner } from './count-records.js';
 export { ModelSchemaExtractDatabaseForGoogleSpanner } from './extract-database.js';
 export { ModelGenerateTypeScriptDecoratorsForGoogleSpanner } from './generate-typescript-decorators.js';
 export {
