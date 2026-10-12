@@ -9,6 +9,7 @@ import type { GoogleConfiguration } from '../../configurations/index.js';
 /**
  * Implements {@link EventTopicQueryEvents} for Pub/Sub topics whose events are stored in BigQuery via a BigQuery
  * subscription. The events are read from the dataset configured at `google.pubSub.bigQueryStorage.rawEventsDatasetId`.
+ * Events are returned once per Pub/Sub message ID.
  */
 export class EventTopicQueryEventsForBigQuery extends EventTopicQueryEvents {
   async _call(): Promise<QueriedEvent[]> {

@@ -37,10 +37,12 @@ export default async function call(
     conditions.push(`(${this.filter})`);
   }
 
+  // Events written several times to the table by the BigQuery subscription are only returned once.
   const query = `
     SELECT message_id, publish_time, data, attributes
     FROM \`${tableId}\`
     WHERE ${conditions.join(' AND ')}
+    QUALIFY ROW_NUMBER() OVER (PARTITION BY message_id ORDER BY publish_time) = 1
     ORDER BY publish_time ASC
     LIMIT ${limit}`;
 

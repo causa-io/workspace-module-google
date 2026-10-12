@@ -17,7 +17,7 @@ export const BIGQUERY_SOURCE_REGEX = /^bq:\/\/(?<tableId>.+)$/;
  * Two cases are supported:
  * - The `source` is a `bq://<projectId>.<datasetId>.<tableId>` URI.
  * - The `source` is omitted and the broker is `google.pubSub` with `google.pubSub.bigQueryStorage.rawEventsDatasetId`
- *   configured: events are read from the default BigQuery storage for the topic.
+ *   configured: events are read from the default BigQuery storage for the topic, once per Pub/Sub message ID.
  *
  * The returned async iterable pages through the query results and yields each row as a {@link BackfillEvent}.
  */
