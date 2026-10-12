@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+Features:
+
+- Implement `DatabaseCountRecords` for Spanner, counting the rows of a table matching each filter in a single query.
+- Implement `EventTopicCountEvents` for events stored in BigQuery, counting the events matching each filter in a single query.
+- Return the tables created by the DDL files of each database in `GoogleSpannerListDatabases`, and in the files written by `GoogleSpannerWriteDatabases`.
+
+Fixes:
+
+- Return events once per Pub/Sub message ID in `EventTopicQueryEvents` and the default BigQuery backfill source, as the BigQuery subscription may write a message several times.
+
 ## v1.4.0-beta.2 (2026-10-09)
 
 Features:
