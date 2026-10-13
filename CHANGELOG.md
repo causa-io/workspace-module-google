@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v1.4.0-beta.3 (2026-10-13)
+
 Features:
 
 - Implement `DatabaseCountRecords` for Spanner, counting the rows of a table matching each filter in a single query.
