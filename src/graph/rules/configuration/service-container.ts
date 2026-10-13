@@ -18,7 +18,11 @@ import {
   firestoreCollectionPath,
   SPANNER_ENGINE,
 } from '../../ids.js';
-import { ddlSource, resolveSpannerTable, SpannerFact } from '../../spanner.js';
+import {
+  ddlSource,
+  resolveEntitySpannerTable,
+  SpannerFact,
+} from '../../spanner.js';
 
 /**
  * The elements declared by the Google-specific parts of the `serviceContainer` configuration of every service container
@@ -37,7 +41,7 @@ export const googleServiceContainerFromConfiguration: GraphRule = {
   description:
     'One `delivers` edge from a topic to each trigger of type `google.pubSub` naming it, when an event schema defines the topic. One `accesses` edge from a project to each entity persisted in a Spanner database or a Firestore collection listed in its `serviceContainer.outputs`.',
   async run(graph) {
-    const { locator } = graph;
+    const { locator, context } = graph;
     const [domains, projects, model, spanner] = await Promise.all([
       graph.get(DomainsFact),
       graph.get(ProjectsFact),
@@ -49,7 +53,7 @@ export const googleServiceContainerFromConfiguration: GraphRule = {
 
     const entities = [...model.entities.values()];
     const spannerEntities = entities.flatMap((entity) => {
-      const resolution = resolveSpannerTable(spanner, entity, domains);
+      const resolution = resolveEntitySpannerTable(spanner, entity, domains);
       return resolution?.kind === 'resolved' ? [{ entity, resolution }] : [];
     });
 
@@ -111,7 +115,7 @@ export const googleServiceContainerFromConfiguration: GraphRule = {
             type: 'accesses',
             from: projectId(project.directory),
             to: entity.id,
-            sources: [source, ddlSource(resolution.table)],
+            sources: [source, ddlSource(context.rootPath, resolution.table)],
           });
         }
       }

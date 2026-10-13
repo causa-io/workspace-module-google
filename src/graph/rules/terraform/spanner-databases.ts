@@ -16,7 +16,11 @@ import {
 } from '@causa/workspace-core/graph';
 import { terraformDeploys } from '@causa/workspace-terraform';
 import { SPANNER_ENGINE, spannerInstanceId } from '../../ids.js';
-import { ddlSource, resolveSpannerTable, SpannerFact } from '../../spanner.js';
+import {
+  ddlSource,
+  resolveEntitySpannerTable,
+  SpannerFact,
+} from '../../spanner.js';
 import {
   blockResource,
   infrastructureModules,
@@ -199,7 +203,7 @@ export const spannerDatabasesModule: GraphRule = {
           locator: nodeLocator,
           parent: databaseId(database.locator),
           name: table.name,
-          sources: [ddlSource(table), ...blocks],
+          sources: [ddlSource(context.rootPath, table), ...blocks],
         });
         edges.push(
           ...spannerDatabases.flatMap((module) =>
@@ -210,7 +214,7 @@ export const spannerDatabasesModule: GraphRule = {
     }
 
     for (const entity of model.entities.values()) {
-      const resolution = resolveSpannerTable(spanner, entity, domains);
+      const resolution = resolveEntitySpannerTable(spanner, entity, domains);
       if (!resolution) {
         continue;
       }
@@ -246,7 +250,7 @@ export const spannerDatabasesModule: GraphRule = {
         type: 'realizes',
         from: tableId(resolution.database.locator, resolution.table.name),
         to: entity.id,
-        sources: [binding, ddlSource(resolution.table)],
+        sources: [binding, ddlSource(context.rootPath, resolution.table)],
       });
     }
 

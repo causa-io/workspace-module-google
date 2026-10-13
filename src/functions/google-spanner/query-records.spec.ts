@@ -67,6 +67,7 @@ describe('DatabaseQueryRecordsForSpanner', () => {
         {
           id: DATABASE_NAME,
           ddlFiles: [],
+          tables: [],
           ddls: [
             'CREATE TABLE Singers (id INT64 NOT NULL, name STRING(MAX)) PRIMARY KEY (id)',
           ],

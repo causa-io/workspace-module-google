@@ -84,6 +84,7 @@ describe('GoogleSpannerWriteDatabases', () => {
       id: 'db1',
       ddls: ['CREATE TABLE a', 'ALTER TABLE a1', 'ALTER TABLE a2'],
       ddlFiles: [db1File1, db1File2],
+      tables: [{ name: 'a', file: db1File1, line: 1 }],
     });
     const actualDb2ConfigurationBuffer = await readFile(
       join(context.rootPath, expectedDirectory, 'db2.json'),
@@ -95,6 +96,7 @@ describe('GoogleSpannerWriteDatabases', () => {
       id: 'db2',
       ddls: ['CREATE TABLE b( x, y, z, )', 'ALTER TABLE b1'],
       ddlFiles: [db2File1],
+      tables: [{ name: 'b', file: db2File1, line: 1 }],
     });
   });
 
@@ -142,6 +144,7 @@ describe('GoogleSpannerWriteDatabases', () => {
       id: 'db1',
       ddls: ['CREATE TABLE a', 'ALTER TABLE a1'],
       ddlFiles: [db1File1],
+      tables: [{ name: 'a', file: db1File1, line: 1 }],
     });
   });
 
