@@ -60,7 +60,7 @@ Backfilling is supported when `google.pubSub` is set as the `events.broker`. Tem
 - As a raw URI, using the format `[[projects/<projectId>/]locations/<location>/]services/<name>/path-to-trigger`.
 - As a project-scoped trigger, using the format `<projectPath>#<triggerName>[?<options>]`. The referenced project must be of type `serviceContainer` with `google.cloudRun` as `serviceContainer.platform`. The HTTP path is read from `serviceContainer.triggers[<triggerName>].endpoint` (whose `type` must be `http`), and the `options` query string is forwarded as URL query parameters. The target Cloud Run service name defaults to `project.name`, and can be overridden by setting `google.cloudRun.eventBackfillServiceName`.
 
-When no source is specified, the default is to fetch events to backfill from the BigQuery dataset configured in `google.pubSub.bigQueryStorage`. A custom BigQuery table can also be set as source using the `bq://<projectId>.<datasetId>.<tableId>` format. It should have the `data` and `attributes` columns.
+When no source is specified, the default is to fetch events to backfill from the BigQuery dataset configured in `google.pubSub.bigQueryStorage`, once per Pub/Sub message ID. A custom BigQuery table can also be set as source using the `bq://<projectId>.<datasetId>.<tableId>` format. It should have the `data` and `attributes` columns.
 
 The Pub/Sub publish options used when backfilling can be tuned through `google.pubSub.backfillPublishOptions`, which exposes the `maxOutstandingBytes`, `maxOutstandingMessages`, `maxBytes`, `maxMessages`, and `maxMilliseconds` fields.
 
@@ -68,11 +68,13 @@ By default, project-scoped triggers send backfill events to the live Cloud Run s
 
 ### Querying
 
-This module implements the `DatabaseQueryRecords`, `ServiceContainerQueryLogs`, and `EventTopicQueryEvents` workspace functions, which expose read-only access to data stored in or emitted by deployed services:
+This module implements the `DatabaseQueryRecords`, `DatabaseCountRecords`, `ServiceContainerQueryLogs`, `EventTopicQueryEvents`, and `EventTopicCountEvents` workspace functions, which expose read-only access to data stored in or emitted by deployed services:
 
 - `DatabaseQueryRecords` is supported for the `google.spanner` and `google.firestore` engines. For Spanner, the function takes a database name and a SQL query, runs it on the configured Spanner instance, and returns the matching rows (capped to 100000). For Firestore, the query is the path to a single document, fetched from the default database (or the specified one). The document data is returned as a single-element array. An empty array is returned when the document does not exist.
+- `DatabaseCountRecords` is supported for the `google.spanner` engine. It counts the rows of the table in the schema's `googleSpannerTable` binding, in the database whose DDL creates it, or the one in the domain of the schema when several databases create a table with that name. Properties are read from the column named by their `googleSpannerColumn` extension, or from the column with the same name, and nested properties are read from JSON columns, where a value only equals a constant of the same JSON type.
 - `ServiceContainerQueryLogs` is supported when `serviceContainer.platform` is `google.cloudRun`. It queries Cloud Logging for log entries emitted by the service's Cloud Run revisions. By default, only the last hour of logs and up to 1 000 entries are returned.
-- `EventTopicQueryEvents` is supported when `events.broker` is `google.pubSub`, `events.format` is `json`, and `google.pubSub.bigQueryStorage.rawEventsDatasetId` is set. It reads events from the topic's BigQuery raw events table. Same defaults as for log queries: last hour and up to 1 000 events.
+- `EventTopicQueryEvents` is supported when `events.broker` is `google.pubSub`, `events.format` is `json`, and `google.pubSub.bigQueryStorage.rawEventsDatasetId` is set. It reads events from the topic's BigQuery raw events table, once per Pub/Sub message ID, as the BigQuery subscription may write a message several times. Same defaults as for log queries: last hour and up to 1 000 events.
+- `EventTopicCountEvents` is supported in the same cases as `EventTopicQueryEvents`. It counts the events published within the time range in the topic's BigQuery raw events table, whose `data` column should be of the `JSON` type, once per Pub/Sub message ID. A value only equals a constant of the same JSON type.
 
 ### Architecture graph
 

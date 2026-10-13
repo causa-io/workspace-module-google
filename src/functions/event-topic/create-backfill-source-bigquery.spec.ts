@@ -142,7 +142,25 @@ describe('EventTopicCreateBackfillSourceForBigQuery', () => {
       .replace(/\s+/g, ' ')
       .trim();
     expect(actualQuery).toEqual(
-      'SELECT data, attributes, FROM `my-project.my-dataset.my_topic_name`',
+      'SELECT data, attributes, FROM `my-project.my-dataset.my_topic_name` QUALIFY ROW_NUMBER() OVER (PARTITION BY message_id ORDER BY publish_time) = 1',
+    );
+  });
+
+  it('should filter and deduplicate events from the default BigQuery storage', async () => {
+    mockJob([]);
+
+    const iterable = await context.call(EventTopicCreateBackfillSource, {
+      eventTopic: 'my-topic-name',
+      filter: 'filter-expression',
+    });
+
+    expect(await Array.fromAsync(iterable)).toBeEmpty();
+    const createQueryJobMock = bigQuery.createQueryJob as jest.Mock;
+    const actualQuery = (createQueryJobMock.mock.calls[0][0] as string)
+      .replace(/\s+/g, ' ')
+      .trim();
+    expect(actualQuery).toEqual(
+      'SELECT data, attributes, FROM `my-project.my-dataset.my_topic_name` WHERE (filter-expression) QUALIFY ROW_NUMBER() OVER (PARTITION BY message_id ORDER BY publish_time) = 1',
     );
   });
 });

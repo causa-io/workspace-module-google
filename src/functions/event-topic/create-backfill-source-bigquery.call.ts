@@ -54,6 +54,12 @@ export default async function call(
     WHERE
       (${this.filter})`;
   }
+  if (!this.source) {
+    // Events written several times to the default storage by the BigQuery subscription are only backfilled once.
+    query += `
+    QUALIFY
+      ROW_NUMBER() OVER (PARTITION BY message_id ORDER BY publish_time) = 1`;
+  }
 
   this._context.logger.debug(`Creating BigQuery job from query '${query}'.`);
   const bigQuery = this._context.service(BigQueryService).bigQuery;

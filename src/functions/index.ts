@@ -23,6 +23,7 @@ import {
   EventTopicBrokerGetTopicIdForPubSub,
   EventTopicBrokerPublishEventsForGoogle,
   EventTopicBrokerWaitForProcessingForPubSub,
+  EventTopicCountEventsForBigQuery,
   EventTopicCreateBackfillSourceForBigQuery,
   EventTopicQueryEventsForBigQuery,
 } from './event-topic/index.js';
@@ -41,6 +42,7 @@ import {
 import { GooglePubSubWriteTopics } from './google-pubsub/index.js';
 import { GoogleServicesEnable } from './google-services/index.js';
 import {
+  DatabaseCountRecordsForSpanner,
   DatabaseQueryRecordsForSpanner,
   GoogleSpannerListDatabases,
   GoogleSpannerWriteDatabases,
@@ -67,6 +69,7 @@ import { ModelGenerateTypeScriptTriggerDecoratorsForGoogle } from './typescript/
 export function registerFunctions(context: ModuleRegistrationContext) {
   context.registerFunctionImplementations(
     CausaListConfigurationSchemasForGoogle,
+    DatabaseCountRecordsForSpanner,
     DatabaseQueryRecordsForFirestore,
     DatabaseQueryRecordsForSpanner,
     EmulatorStartForFirebaseStorage,
@@ -89,6 +92,7 @@ export function registerFunctions(context: ModuleRegistrationContext) {
     EventTopicBrokerGetTopicIdForPubSub,
     EventTopicBrokerPublishEventsForGoogle,
     EventTopicBrokerWaitForProcessingForPubSub,
+    EventTopicCountEventsForBigQuery,
     EventTopicCreateBackfillSourceForBigQuery,
     EventTopicQueryEventsForBigQuery,
     GoogleAppCheckGenerateToken,

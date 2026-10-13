@@ -110,6 +110,7 @@ describe('EmulatorStartForSpanner', () => {
       {
         id: 'first-db',
         ddlFiles: [],
+        tables: [],
         ddls: [
           'CREATE TABLE MyTable (id INT64 NOT NULL) PRIMARY KEY (id)',
           'ALTER TABLE MyTable ADD COLUMN otherColumn STRING(MAX)',
@@ -118,6 +119,7 @@ describe('EmulatorStartForSpanner', () => {
       {
         id: 'second-db',
         ddlFiles: [],
+        tables: [],
         ddls: [
           'CREATE TABLE MyOtherTable (id INT64 NOT NULL) PRIMARY KEY (id)',
         ],

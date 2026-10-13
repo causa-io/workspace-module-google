@@ -122,6 +122,9 @@ describe('EventTopicQueryEventsForBigQuery', () => {
     const { query, params } = queryMock.mock.calls[0][0];
     expect(query).toContain('`my-project.my-dataset.my_topic_name_v1`');
     expect(query).toContain('publish_time >= @from');
+    expect(query).toContain(
+      'QUALIFY ROW_NUMBER() OVER (PARTITION BY message_id ORDER BY publish_time) = 1',
+    );
     expect(query).toContain('ORDER BY publish_time ASC');
     expect(query).toContain('LIMIT 1000');
     expect(params.to).toBeUndefined();

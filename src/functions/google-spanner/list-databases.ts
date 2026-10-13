@@ -3,6 +3,26 @@ import { readFile } from 'fs/promises';
 import type { GoogleConfiguration } from '../../configurations/index.js';
 
 /**
+ * A table created by a `CREATE TABLE` statement in a Spanner DDL file.
+ */
+export type SpannerTable = {
+  /**
+   * The name of the table.
+   */
+  readonly name: string;
+
+  /**
+   * The absolute path of the DDL file creating the table.
+   */
+  readonly file: string;
+
+  /**
+   * The line of the statement in the file.
+   */
+  readonly line: number;
+};
+
+/**
  * The definition of a Spanner database with its DDL statements.
  */
 export type SpannerDatabase = {
@@ -20,7 +40,18 @@ export type SpannerDatabase = {
    * The DDL statements for the database.
    */
   ddls: string[];
+
+  /**
+   * The tables created by the `CREATE TABLE` statements of the DDL files.
+   */
+  tables: SpannerTable[];
 };
+
+/**
+ * Matches a `CREATE TABLE` DDL statement, capturing the name of the table.
+ */
+const CREATE_TABLE_REGEX =
+  /^CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?[`"']?([A-Za-z_]\w*)/i;
 
 /**
  * The default format used to infer the ID / name of the database from the format parts.
@@ -82,17 +113,23 @@ export class GoogleSpannerListDatabases extends WorkspaceFunction<
       Object.entries(databaseDdlFiles).map(async ([id, ddlFiles]) => {
         ddlFiles.sort();
 
-        const ddlsInFiles = await Promise.all(
-          ddlFiles.map((ddlFile) => this.parseDdlFile(ddlFile)),
-        );
+        const statements = (
+          await Promise.all(
+            ddlFiles.map((ddlFile) => this.parseDdlFile(ddlFile)),
+          )
+        ).flat();
 
-        const ddls = ddlsInFiles.flatMap((ddls) => ddls);
+        const ddls = statements.map(({ statement }) => statement);
+        const tables = statements.flatMap(({ statement, file, line }) => {
+          const name = statement.match(CREATE_TABLE_REGEX)?.[1];
+          return name ? [{ name, file, line }] : [];
+        });
 
         this._context.logger.debug(
           `🗃️ Found Spanner database '${id}' with ${ddlFiles.length} DDL file(s) and ${ddls.length} statement(s).`,
         );
 
-        return { id, ddlFiles, ddls };
+        return { id, ddlFiles, ddls, tables };
       }),
     );
   }
@@ -102,23 +139,29 @@ export class GoogleSpannerListDatabases extends WorkspaceFunction<
    * End-of-the-line comments are removed, and statements are split using semicolons.
    *
    * @param path The path to the SQL file containing DDL statements.
-   * @returns The list of DDL statements.
+   * @returns The list of DDL statements, along with the file and the line at which each statement starts.
    */
-  private async parseDdlFile(path: string): Promise<string[]> {
+  private async parseDdlFile(
+    path: string,
+  ): Promise<{ statement: string; file: string; line: number }[]> {
     const rawFile = (await readFile(path)).toString();
-    return (
-      rawFile
-        // Removing comments using the `-- My comment until the end of the line` syntax.
-        .replace(/--.*$/gm, '')
-        // Trimming lines for readability in logs, and joining them to easily split into statements.
+    // Removing comments using the `-- My comment until the end of the line` syntax, which preserves line numbers.
+    const withoutComments = rawFile.replace(/--.*$/gm, '');
+
+    let line = 1;
+    return withoutComments.split(';').map((rawStatement) => {
+      const leadingWhitespace = rawStatement.match(/^\s*/)![0];
+      const startLine = line + leadingWhitespace.split('\n').length - 1;
+      line += rawStatement.split('\n').length - 1;
+
+      const statement = rawStatement
+        // Trimming lines for readability in logs, and joining them into a single line.
         .split('\n')
-        .map((statement) => statement.trim())
+        .map((statementLine) => statementLine.trim())
         .join(' ')
-        // Splitting the SQL statements.
-        .split(';')
-        // Trimming for readability in logs.
-        .map((statement) => statement.trim())
-    );
+        .trim();
+      return { statement, file: path, line: startLine };
+    });
   }
 
   _supports(): boolean {
