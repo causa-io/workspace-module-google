@@ -101,24 +101,34 @@ function distributionBounds(distribution: Distribution): number[] | undefined {
 }
 
 /**
- * Converts a Cloud Monitoring distribution to a {@link GraphDistribution}.
+ * A distribution read from Cloud Monitoring, whose layout is described by its bounds until it is named.
+ */
+export type MonitoringDistribution = Omit<GraphDistribution, 'layout'> & {
+  /**
+   * The bounds of the buckets, in the unit of the metric.
+   */
+  readonly bounds: number[];
+};
+
+/**
+ * A value read from Cloud Monitoring, before the layouts of distributions are named.
+ */
+export type MonitoringMeasure = number | MonitoringDistribution;
+
+/**
+ * Converts a Cloud Monitoring distribution to a {@link MonitoringDistribution}.
  *
  * @param distribution The distribution.
  * @param scale The factor applied to the values.
- * @param layoutBaseName The base name of the layout.
- * @param layouts The registry of layouts.
  * @returns The distribution.
  */
-function toGraphDistribution(
+function toMonitoringDistribution(
   distribution: Distribution,
   scale: number,
-  layoutBaseName: string,
-  layouts: BucketLayoutRegistry,
-): GraphDistribution {
+): MonitoringDistribution {
   const bounds = (distributionBounds(distribution) ?? []).map((b) =>
     Number((b * scale).toPrecision(BOUND_SIGNIFICANT_DIGITS)),
   );
-  const layout = layouts.register(layoutBaseName, bounds);
   const count = toNumber(distribution.count);
   const buckets: Record<string, number> = {};
   (distribution.bucketCounts ?? []).forEach((bucketCount, index) => {
@@ -129,7 +139,7 @@ function toGraphDistribution(
   });
 
   return {
-    layout,
+    bounds,
     count,
     ...(count > 0 ? { mean: toNumber(distribution.mean) * scale } : {}),
     buckets,
@@ -137,33 +147,109 @@ function toGraphDistribution(
 }
 
 /**
- * Converts the value of a point to a {@link GraphMetricMeasure}.
+ * Converts the value of a point to a {@link MonitoringMeasure}.
  *
  * @param value The value of the point.
  * @param metric The metric.
  * @param period The alignment period, in seconds.
- * @param layouts The registry of layouts.
  * @returns The measure.
  */
 export function toMeasure(
   value: TypedValue,
   metric: MonitoringMetric,
   period: number,
-  layouts: BucketLayoutRegistry,
-): GraphMetricMeasure {
+): MonitoringMeasure {
   const scale = metric.scale ?? 1;
   if (value.distributionValue) {
     if (metric.countRate) {
       return toNumber(value.distributionValue.count) / period;
     }
 
-    return toGraphDistribution(
-      value.distributionValue,
-      scale,
-      metric.metricType,
-      layouts,
-    );
+    return toMonitoringDistribution(value.distributionValue, scale);
   }
 
   return toNumber(value.doubleValue ?? value.int64Value) * scale;
+}
+
+/**
+ * Returns the bounds of the shortest layout of the distributions, if the bounds of all the other layouts start with
+ * them.
+ *
+ * @param distributions The distributions.
+ * @returns The bounds of the shortest layout, or `undefined` if there is no distribution, or if it is not a prefix of
+ *   all the other layouts.
+ */
+function commonBounds(
+  distributions: MonitoringDistribution[],
+): number[] | undefined {
+  if (distributions.length === 0) {
+    return undefined;
+  }
+
+  const shortest = distributions
+    .map((d) => d.bounds)
+    .reduce((a, b) => (b.length < a.length ? b : a));
+  return distributions.every(({ bounds }) =>
+    shortest.every((bound, index) => bounds[index] === bound),
+  )
+    ? shortest
+    : undefined;
+}
+
+/**
+ * Moves the counts of the buckets past the last of the given bounds, which are a prefix of the layout of the buckets,
+ * into the last bucket of the given bounds.
+ *
+ * @param buckets The counts of the buckets, keyed by index.
+ * @param bounds The bounds of the layout to which the buckets are converted.
+ * @returns The counts of the buckets in the layout.
+ */
+function foldBuckets(
+  buckets: Record<string, number>,
+  bounds: number[],
+): Record<string, number> {
+  // With N bounds, bucket N holds the values at or above the last bound.
+  const last = bounds.length;
+  const folded: Record<string, number> = {};
+  for (const [index, count] of Object.entries(buckets)) {
+    const target = Math.min(Number(index), last);
+    folded[target] = (folded[target] ?? 0) + count;
+  }
+
+  return folded;
+}
+
+/**
+ * Converts the measures read for a metric to {@link GraphMetricMeasure}s, naming the layouts of distributions.
+ * The layout of a metric may gain buckets over time, e.g. for the latencies of Cloud Run requests, in which case periods
+ * spanning the change return distributions with both layouts. When the bounds of all the layouts start with the bounds
+ * of the shortest one, all the distributions are converted to the shortest layout, which only loses the detail of the
+ * buckets past its last bound. Otherwise, each distribution keeps its own layout.
+ *
+ * @param measures All the measures read for the metric.
+ * @param baseName The base name of the layouts, e.g. the metric type.
+ * @param layouts The registry naming the layouts.
+ * @returns The converted measures, in the same order.
+ */
+export function toGraphMeasures(
+  measures: MonitoringMeasure[],
+  baseName: string,
+  layouts: BucketLayoutRegistry,
+): GraphMetricMeasure[] {
+  const common = commonBounds(
+    measures.filter((m): m is MonitoringDistribution => typeof m !== 'number'),
+  );
+
+  return measures.map((measure) => {
+    if (typeof measure === 'number') {
+      return measure;
+    }
+
+    const { bounds, buckets, ...distribution } = measure;
+    return {
+      layout: layouts.register(baseName, common ?? bounds),
+      ...distribution,
+      buckets: common ? foldBuckets(buckets, common) : buckets,
+    };
+  });
 }

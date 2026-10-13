@@ -25,8 +25,10 @@ import {
 } from './monitoring-mappings.js';
 import {
   BucketLayoutRegistry,
+  toGraphMeasures,
   toMeasure,
   toNumber,
+  type MonitoringMeasure,
 } from './monitoring-values.js';
 import { googleResources } from './resources.js';
 
@@ -200,7 +202,8 @@ export type MonitoringQueryResult = {
   readonly groupBy?: string[];
 
   /**
-   * The time series that could not be read, e.g. in a project. The values of the nodes they measure are missing.
+   * The reasons why values are missing, e.g. time series that could not be read in a project, or distributions that
+   * could not be merged.
    */
   readonly errors: GraphWarning[];
 
@@ -227,6 +230,8 @@ export type MonitoringQueryOptions = {
  * Metrics with {@link MonitoringMetric.groupByNode} mappings are also grouped by the nodes their time series relate to,
  * unless one of the mappings could not be prepared. Time series relating to resources that are not in the graph are
  * reported as warnings.
+ * Distributions are converted to a common layout when possible, see {@link toGraphMeasures}. Values combining
+ * distributions that cannot be merged are missing, and reported as errors.
  *
  * @param environment The context of the environment, from which the Cloud Monitoring client and the resources of the
  *   graph are obtained.
@@ -314,16 +319,12 @@ export async function queryMonitoringMetric(
     },
     view: 'FULL',
   };
-  const accumulated = new Map<
-    string,
-    Map<
-      number,
-      Map<
-        string,
-        { key: Record<string, string>; measures: GraphMetricMeasure[] }
-      >
-    >
-  >();
+  const readMeasures: {
+    node: string;
+    index: number;
+    groupKey: Record<string, string>;
+    measure: MonitoringMeasure;
+  }[] = [];
   const succeededProjects = new Set<string>();
 
   const projects = new Set(
@@ -394,7 +395,6 @@ export async function queryMonitoringMetric(
           });
         }
       }
-      const serializedGroupKey = JSON.stringify(groupKey);
 
       for (const point of timeSeries.points ?? []) {
         const pointEnd = toNumber(point.interval?.endTime?.seconds);
@@ -403,19 +403,45 @@ export async function queryMonitoringMetric(
           continue;
         }
 
-        const byIndex = accumulated.get(node) ?? new Map();
-        accumulated.set(node, byIndex);
-        const byGroup = byIndex.get(index) ?? new Map();
-        byIndex.set(index, byGroup);
-        const group = byGroup.get(serializedGroupKey) ?? {
-          key: groupKey,
-          measures: [],
-        };
-        byGroup.set(serializedGroupKey, group);
-        group.measures.push(toMeasure(point.value, metric, period, layouts));
+        readMeasures.push({
+          node,
+          index,
+          groupKey,
+          measure: toMeasure(point.value, metric, period),
+        });
       }
     }
   }
+
+  // Distributions are converted once they are all read, such that they can share a common layout.
+  const measures = toGraphMeasures(
+    readMeasures.map(({ measure }) => measure),
+    metric.metricType,
+    layouts,
+  );
+  const accumulated = new Map<
+    string,
+    Map<
+      number,
+      Map<
+        string,
+        { key: Record<string, string>; measures: GraphMetricMeasure[] }
+      >
+    >
+  >();
+  readMeasures.forEach(({ node, index, groupKey }, measureIndex) => {
+    const byIndex = accumulated.get(node) ?? new Map();
+    accumulated.set(node, byIndex);
+    const byGroup = byIndex.get(index) ?? new Map();
+    byIndex.set(index, byGroup);
+    const serializedGroupKey = JSON.stringify(groupKey);
+    const group = byGroup.get(serializedGroupKey) ?? {
+      key: groupKey,
+      measures: [],
+    };
+    byGroup.set(serializedGroupKey, group);
+    group.measures.push(measures[measureIndex]);
+  });
 
   // Rates are 0 when nothing happened during a period, in which case Cloud Monitoring returns no point, or only empty
   // ones. Gauges and distributions without points are left missing, as there may simply be no sample during the period.
@@ -425,6 +451,7 @@ export async function queryMonitoringMetric(
       : grouped
         ? { value: 0, groups: [] }
         : { value: 0 };
+  const unmerged = new Set<string>();
   const values = new Map<string, (MonitoringPoint | undefined)[]>();
   for (const { node, segments } of measured.values()) {
     const byIndex = accumulated.get(node.id);
@@ -435,12 +462,25 @@ export async function queryMonitoringMetric(
 
     const points = Array.from({ length: count }, (_, index) => {
       const byGroup = byIndex?.get(index);
-      const point = byGroup && toPoint(byGroup, metric, kind, grouped);
+      let point: MonitoringPoint | undefined;
+      try {
+        point = byGroup && toPoint(byGroup, metric, kind, grouped);
+      } catch {
+        // Distributions with layouts that are not prefixes of one another cannot be merged.
+        unmerged.add(node.id);
+        return undefined;
+      }
+
       return point ?? (succeeded ? zero : undefined);
     });
     values.set(node.id, points);
   }
 
+  errors.push(
+    ...[...unmerged].map((node) => ({
+      message: `The '${metric.metricType}' distributions of the node '${node}' use bucket layouts that cannot be merged.`,
+    })),
+  );
   const warnings = [...unmapped].sort().map((message) => ({ message }));
   return { values, ...(grouped ? { groupBy } : {}), errors, warnings };
 }
