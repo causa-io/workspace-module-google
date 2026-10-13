@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+Fixes:
+
+- Convert the distributions of a Cloud Monitoring metric to its shortest bucket layout when the others extend it, e.g. after the layout gains buckets, rather than failing the enrichment. Report nodes whose distributions cannot be merged instead.
+
 ## v1.4.0-beta.3 (2026-10-13)
 
 Features:

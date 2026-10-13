@@ -227,6 +227,136 @@ describe('queryMonitoringMetric', () => {
     });
   });
 
+  describe('layouts', () => {
+    const latency: MonitoringMetric = {
+      metric: 'latency',
+      mapping: CLOUD_RUN_SERVICE_MAPPING,
+      metricType: 'run.googleapis.com/request_latencies',
+      groupBy: { code: 'metric.label.response_code_class' },
+    };
+
+    const series = (
+      service: string,
+      code: string,
+      growthFactor: number,
+      bucketCounts: number[],
+      mean: number,
+    ) => ({
+      resource: {
+        labels: { location: 'europe-west1', service_name: service },
+      },
+      metric: { labels: { response_code_class: code } },
+      points: [
+        point({
+          distributionValue: {
+            count: `${bucketCounts.reduce((sum, c) => sum + c, 0)}`,
+            mean,
+            bucketOptions: {
+              exponentialBuckets: {
+                numFiniteBuckets: bucketCounts.length - 2,
+                growthFactor,
+                scale: 1,
+              },
+            },
+            bucketCounts: bucketCounts.map((c) => `${c}`),
+          },
+        }),
+      ],
+    });
+
+    it('should convert all distributions to the shortest layout when it is a prefix of the others', async () => {
+      listTimeSeries.mockResolvedValueOnce([
+        [
+          series('ordering-api', '2xx', 2, [0, 2, 1, 0], 2),
+          series('ordering-api', '3xx', 2, [0, 0, 1, 1, 2], 10),
+          series('ordering-events', '2xx', 2, [1, 0, 0, 0, 0], 0.5),
+        ],
+      ]);
+
+      const actualResult = await queryMonitoringMetric(
+        environment,
+        latency,
+        { end: AT, period: 300, count: 1 },
+        layouts,
+      );
+
+      const layout = 'run.googleapis.com/request_latencies';
+      expect(Object.fromEntries(actualResult.values)).toEqual({
+        'service:domains/ordering/api#ordering-api': [
+          {
+            value: {
+              layout,
+              count: 7,
+              mean: 46 / 7,
+              buckets: { 1: 2, 2: 2, 3: 3 },
+            },
+            groups: [
+              {
+                key: { code: '2xx' },
+                value: { layout, count: 3, mean: 2, buckets: { 1: 2, 2: 1 } },
+              },
+              {
+                key: { code: '3xx' },
+                value: { layout, count: 4, mean: 10, buckets: { 2: 1, 3: 3 } },
+              },
+            ],
+          },
+        ],
+        'service:domains/ordering/api#ordering-events': [
+          {
+            value: { layout, count: 1, mean: 0.5, buckets: { 0: 1 } },
+            groups: [
+              {
+                key: { code: '2xx' },
+                value: { layout, count: 1, mean: 0.5, buckets: { 0: 1 } },
+              },
+            ],
+          },
+        ],
+      });
+      expect(actualResult.errors).toBeEmpty();
+      expect(layouts.all).toEqual({ [layout]: [1, 2, 4] });
+    });
+
+    it('should report the nodes whose distributions use layouts that cannot be merged', async () => {
+      listTimeSeries.mockResolvedValueOnce([
+        [
+          series('ordering-api', '2xx', 2, [0, 2, 1, 0], 2),
+          series('ordering-api', '3xx', 3, [0, 1, 0, 0], 2),
+          series('ordering-events', '2xx', 2, [1, 0, 0, 0], 0.5),
+        ],
+      ]);
+
+      const actualResult = await queryMonitoringMetric(
+        environment,
+        latency,
+        { end: AT, period: 300, count: 1 },
+        layouts,
+      );
+
+      expect(Object.fromEntries(actualResult.values)).toEqual({
+        'service:domains/ordering/api#ordering-api': [undefined],
+        'service:domains/ordering/api#ordering-events': [
+          {
+            value: {
+              layout: expect.any(String),
+              count: 1,
+              mean: 0.5,
+              buckets: { 0: 1 },
+            },
+            groups: [expect.anything()],
+          },
+        ],
+      });
+      expect(actualResult.errors).toEqual([
+        {
+          message:
+            "The 'run.googleapis.com/request_latencies' distributions of the node 'service:domains/ordering/api#ordering-api' use bucket layouts that cannot be merged.",
+        },
+      ]);
+    });
+  });
+
   it('should return the number of values per second for count rates', async () => {
     listTimeSeries.mockResolvedValueOnce([
       [
