@@ -7,6 +7,7 @@ import {
   CORE_GRAPH_METRIC_DEFINITIONS,
   type GraphNodeEntry,
 } from '@causa/workspace-core/graph';
+import { EVENTARC_TRIGGER_MAPPING } from './eventarc-triggers.js';
 import {
   LOAD_BALANCER_BACKEND_MAPPINGS,
   URL_MAP_MAPPING,
@@ -88,6 +89,7 @@ export const MONITORING_RESOURCE_MAPPINGS: readonly MonitoringResourceMapping[] 
     CLOUD_RUN_SERVICE_MAPPING,
     PUBSUB_TOPIC_MAPPING,
     PUBSUB_SUBSCRIPTION_MAPPING,
+    EVENTARC_TRIGGER_MAPPING,
     CLOUD_TASKS_QUEUE_MAPPING,
     SPANNER_INSTANCE_MAPPING,
     SPANNER_DATABASE_MAPPING,
@@ -185,9 +187,9 @@ const CODE = 'code';
 const METHOD = 'method';
 
 /**
- * The metrics read from Cloud Monitoring.
+ * The metrics read from Cloud Monitoring, before the metrics of Pub/Sub subscriptions are extended to Eventarc triggers.
  */
-export const MONITORING_METRICS: readonly MonitoringMetric[] = [
+const METRICS: readonly MonitoringMetric[] = [
   {
     metric: 'requests',
     mapping: CLOUD_RUN_SERVICE_MAPPING,
@@ -415,6 +417,18 @@ export const MONITORING_METRICS: readonly MonitoringMetric[] = [
     minPeriod: 4 * 3600,
   },
 ];
+
+/**
+ * The metrics read from Cloud Monitoring.
+ * Eventarc triggers deliver events through Pub/Sub subscriptions, such that the metrics of Pub/Sub subscriptions are
+ * also read for the nodes realized by Eventarc triggers, through {@link EVENTARC_TRIGGER_MAPPING}.
+ */
+export const MONITORING_METRICS: readonly MonitoringMetric[] = METRICS.flatMap(
+  (metric) =>
+    metric.mapping === PUBSUB_SUBSCRIPTION_MAPPING
+      ? [metric, { ...metric, mapping: EVENTARC_TRIGGER_MAPPING }]
+      : [metric],
+);
 
 /**
  * The definitions of the metrics of the node types defined by the Google module.
