@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v1.4.0-beta.4 (2026-10-14)
+
 Features:
 
 - Add a `brokerSubscription` node per Eventarc trigger deployed by the Cloud Run module, realizing the trigger and targeting the service, with the Eventarc trigger as its resource.
