@@ -3,7 +3,16 @@ import type {
   GraphEnvironmentNodeOutput,
   GraphLink,
 } from '@causa/workspace-core';
-import { googleResources, type ResourceNameSegments } from '../resources.js';
+import {
+  GraphFactError,
+  type GraphEnvironmentContext,
+} from '@causa/workspace-core/graph';
+import { EventarcTriggersFact } from '../eventarc-triggers.js';
+import {
+  googleResources,
+  parseResourceName,
+  type ResourceNameSegments,
+} from '../resources.js';
 
 /**
  * The base URL of the Google Cloud console.
@@ -29,12 +38,33 @@ export function consoleUrl(
 }
 
 /**
+ * Builds the links of a resource from the segments of its name, or from the environment when the name is not enough.
+ */
+type LinkBuilder = (
+  segments: ResourceNameSegments,
+  environment: GraphEnvironmentContext,
+) => GraphLink[] | Promise<GraphLink[]>;
+
+/**
+ * Builds the link to a Pub/Sub subscription.
+ */
+const pubSubSubscriptionLinks = ({
+  projects,
+  subscriptions,
+}: ResourceNameSegments): GraphLink[] => [
+  {
+    label: 'Pub/Sub subscription',
+    url: consoleUrl(
+      ['cloudpubsub', 'subscription', 'detail', subscriptions],
+      projects,
+    ),
+  },
+];
+
+/**
  * The builders of links, keyed by resource type.
  */
-const LINK_BUILDERS: Record<
-  string,
-  (segments: ResourceNameSegments) => GraphLink[]
-> = {
+const LINK_BUILDERS: Record<string, LinkBuilder> = {
   'run.googleapis.com/Service': ({ projects, locations, services }) => [
     {
       label: 'Cloud Run service',
@@ -54,15 +84,36 @@ const LINK_BUILDERS: Record<
       url: consoleUrl(['cloudpubsub', 'topic', 'detail', topics], projects),
     },
   ],
-  'pubsub.googleapis.com/Subscription': ({ projects, subscriptions }) => [
-    {
-      label: 'Pub/Sub subscription',
-      url: consoleUrl(
-        ['cloudpubsub', 'subscription', 'detail', subscriptions],
-        projects,
-      ),
-    },
-  ],
+  'pubsub.googleapis.com/Subscription': pubSubSubscriptionLinks,
+  // Eventarc triggers also link to the Pub/Sub subscription through which they deliver events.
+  'eventarc.googleapis.com/Trigger': async (segments, environment) => {
+    const { projects, locations, triggers } = segments;
+    let subscription: string | undefined;
+    try {
+      const transports = await environment.get(EventarcTriggersFact);
+      subscription = transports.get(
+        `projects/${projects}/locations/${locations}/triggers/${triggers}`,
+      )?.subscription;
+    } catch (error) {
+      // The failure to list the triggers is reported by the fact.
+      if (!(error instanceof GraphFactError)) {
+        throw error;
+      }
+    }
+
+    return [
+      {
+        label: 'Eventarc trigger',
+        url: consoleUrl(
+          ['eventarc', 'triggers', locations, triggers],
+          projects,
+        ),
+      },
+      ...(subscription
+        ? pubSubSubscriptionLinks(parseResourceName(subscription))
+        : []),
+    ];
+  },
   'cloudtasks.googleapis.com/Queue': ({ projects, locations, queues }) => [
     {
       label: 'Cloud Tasks queue',
@@ -162,7 +213,9 @@ export const googleConsoleLinks: GraphEnvironmentFetcher = {
     for (const { node, type, segments } of googleResources(environment)) {
       const builder = LINK_BUILDERS[type];
       if (builder && segments.projects) {
-        nodes[node.id] = { data: { links: builder(segments) } };
+        nodes[node.id] = {
+          data: { links: await builder(segments, environment) },
+        };
       }
     }
 
