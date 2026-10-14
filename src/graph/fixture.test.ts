@@ -33,6 +33,7 @@ infrastructure:
   environmentProject: infrastructure/backend
 google:
   project: shop-dev
+  region: europe-west4
   firestore:
     database: (default)
   spanner:
@@ -73,6 +74,29 @@ serviceContainer:
       type: cron
       schedule: 0 0 * * *
       endpoint: { type: http, path: /cron/nightly }
+    onUpload:
+      type: google.eventarc
+      endpoint: { type: http, path: /events/upload }
+      google.eventarc:
+        location:
+          $format: \${ configuration('google.region') }
+        contentType: application/json
+        filters:
+          - attribute: type
+            value: google.cloud.storage.object.v1.finalized
+          - attribute: bucket
+            value: uploads
+    on_audit:
+      type: google.eventarc
+      endpoint: { type: http, path: /events/audit }
+      google.eventarc:
+        filters:
+          - attribute: type
+            value: google.cloud.audit.log.v1.written
+    disabledUpload:
+      type: google.eventarc
+      enabled: false
+      endpoint: { type: http, path: /events/disabled }
   outputs:
     eventTopics: [ordering.order.v1]
     google.spanner: [main.ordering]

@@ -22,7 +22,7 @@ import {
 /**
  * A trigger defined in the `serviceContainer.triggers` configuration.
  */
-type ServiceContainerTrigger = NonNullable<
+export type ServiceContainerTrigger = NonNullable<
   NonNullable<ServiceContainerConfiguration['serviceContainer']>['triggers']
 >[string];
 
@@ -109,6 +109,12 @@ export type CloudRunService = {
    * paused.
    */
   readonly cronTriggers: ReadonlyMap<string, ServiceContainerTrigger>;
+
+  /**
+   * The triggers the module turns into Eventarc triggers, keyed by name: `google.eventarc` triggers with an HTTP
+   * endpoint, not disabled.
+   */
+  readonly eventarcTriggers: ReadonlyMap<string, ServiceContainerTrigger>;
 
   /**
    * The GCP project part of resource names.
@@ -259,6 +265,11 @@ export class CloudRunFact extends GraphExtractionFact<CloudRunService[]> {
         'cron',
         'google.scheduler',
       ]),
+      eventarcTriggers: ofTypes(
+        argument('enable_eventarc_triggers', enableTriggers),
+        ['google.eventarc'],
+        true,
+      ),
       projectPart: argumentOrConfiguration(
         block,
         'gcp_project_id',
