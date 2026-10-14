@@ -83,6 +83,8 @@ This module contributes to the architecture graph extracted by `cs graph extract
 - Some rules read the workspace configuration and model: the Firestore database and the collections schemas bind to (`firestoreFromConfiguration`), the triggers of type `google.pubSub` and the entities projects access through the databases and collections listed in `serviceContainer.outputs` (`googleServiceContainerFromConfiguration`), and the triggers of type `google.task(s)`.
 - Other rules mirror the resources created by the Causa Terraform modules for Google Cloud, one rule per module (Cloud Run services, event topics, Spanner databases, and API router), by joining the arguments of their blocks with the configuration the modules read. Each resource is linked by a `deploys` edge from the projects applying the block.
 
+Triggers of type `google.eventarc` deployed by the Cloud Run module are realized by a `brokerSubscription` node, which stands for the Pub/Sub push subscription Eventarc manages to deliver events to the service. Its `data.resource` is the Eventarc trigger itself (`eventarc.googleapis.com/Trigger`), as the name of the subscription is only known from the trigger. Its `data.eventType` is the value of the trigger's `type` filter, e.g. `google.cloud.storage.object.v1.finalized`.
+
 Infrastructure nodes carry the Google Cloud resource they stand for in `data.resource`: its `type` (e.g. `pubsub.googleapis.com/Topic`), its `id`, i.e. its full resource name (or `idPrefix` when the full name is not known), and the `scope`, i.e. the project whose configuration should be used to render the identifier.
 
 When the graph is enriched with environment data, this module resolves the names of Cloud Tasks queues by listing the queues of the environment. Queues that cannot be resolved are removed from their nodes. This module's fetchers then:
@@ -92,6 +94,8 @@ When the graph is enriched with environment data, this module resolves the names
 - add `links` to the Google Cloud console for each resource
 - attach the alerts open in Cloud Monitoring to the nodes of their resources. Matching an alert to a node requires the condition of its policy to keep the labels making up the resource name (e.g. `project_id`, `location`, and `service_name`), along with `monitored_resource` when the metric is written against several resource types, like `logging.googleapis.com/log_entry_count`.
 - attach the open Error Reporting groups of Cloud Run services to their nodes, as alerts with the `error` severity. A group is open when it has occurrences during the last 30 days, and is not acknowledged, resolved, or muted.
+
+The Pub/Sub subscriptions through which Eventarc triggers deliver events are read from the triggers, listed using the Eventarc API (`eventarc.triggers.list`) in the projects and locations of the triggers. The metrics, alerts, and console links of the subscriptions are added to the nodes realized by the triggers, alongside a link to the Eventarc trigger.
 
 The requests and latencies of API routers are also grouped by the `node` the requests were routed to, by mapping the serverless network endpoint groups of their load balancers to Cloud Run services. They are listed using the Compute Engine API (`compute.networkEndpointGroups.list`) in the projects of the API routers.
 
