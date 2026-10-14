@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+Features:
+
+- Add a `brokerSubscription` node per Eventarc trigger deployed by the Cloud Run module, realizing the trigger and targeting the service, with the Eventarc trigger as its resource.
+- Read the metrics, alerts, and console links of the Pub/Sub subscriptions through which Eventarc triggers deliver events, using the Eventarc API.
+
 Fixes:
 
 - Convert the distributions of a Cloud Monitoring metric to its shortest bucket layout when the others extend it, e.g. after the layout gains buckets, rather than failing the enrichment. Report nodes whose distributions cannot be merged instead.

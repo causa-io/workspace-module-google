@@ -137,8 +137,10 @@ describe('GOOGLE_TERRAFORM_GRAPH_RULES', () => {
     const { nodes, edges } = summarize(graph);
     expect(nodes).toEqual([
       'infrastructure apiRouter:api',
+      'infrastructure brokerSubscription:domains/ordering/api#on_audit',
       'infrastructure brokerSubscription:domains/ordering/api#onOrder',
       'infrastructure brokerSubscription:domains/ordering/api#onPartnerOrder',
+      'infrastructure brokerSubscription:domains/ordering/api#onUpload',
       'infrastructure brokerSubscription:rawEvents/ordering.order.v1',
       'infrastructure brokerTopic:ordering.order.v1',
       'infrastructure database:google.bigquery/raw_events',
@@ -157,8 +159,10 @@ describe('GOOGLE_TERRAFORM_GRAPH_RULES', () => {
       'delivers brokerTopic:ordering.order.v1 -> brokerSubscription:domains/ordering/api#onPartnerOrder',
       'delivers brokerTopic:ordering.order.v1 -> brokerSubscription:rawEvents/ordering.order.v1',
       'deploys project:infrastructure/backend -> apiRouter:api',
+      'deploys project:infrastructure/backend -> brokerSubscription:domains/ordering/api#on_audit',
       'deploys project:infrastructure/backend -> brokerSubscription:domains/ordering/api#onOrder',
       'deploys project:infrastructure/backend -> brokerSubscription:domains/ordering/api#onPartnerOrder',
+      'deploys project:infrastructure/backend -> brokerSubscription:domains/ordering/api#onUpload',
       'deploys project:infrastructure/backend -> brokerSubscription:rawEvents/ordering.order.v1',
       'deploys project:infrastructure/backend -> brokerTopic:ordering.order.v1',
       'deploys project:infrastructure/backend -> database:google.bigquery/raw_events',
@@ -171,16 +175,20 @@ describe('GOOGLE_TERRAFORM_GRAPH_RULES', () => {
       'deploys project:infrastructure/backend -> table:google.spanner/main.ordering#Order',
       'enqueues service:domains/ordering/api#ordering-api -> queue:process-order',
       'publishes service:domains/ordering/api#ordering-api -> brokerTopic:ordering.order.v1',
+      'realizes brokerSubscription:domains/ordering/api#on_audit -> trigger:domains/ordering/api#on_audit',
       'realizes brokerSubscription:domains/ordering/api#onOrder -> trigger:domains/ordering/api#onOrder',
       'realizes brokerSubscription:domains/ordering/api#onPartnerOrder -> trigger:domains/ordering/api#onPartnerOrder',
+      'realizes brokerSubscription:domains/ordering/api#onUpload -> trigger:domains/ordering/api#onUpload',
       'realizes brokerTopic:ordering.order.v1 -> topic:ordering.order.v1',
       'realizes queue:process-order -> trigger:domains/ordering/api#processOrder',
       'realizes scheduledJob:domains/ordering/api#nightly -> trigger:domains/ordering/api#nightly',
       'realizes service:domains/ordering/api#ordering-api -> project:domains/ordering/api',
       'realizes table:google.spanner/main.ordering#Order -> entity:domains/ordering/entities/order.yaml',
       'routes apiRouter:api -> service:domains/ordering/api#ordering-api',
+      'targets brokerSubscription:domains/ordering/api#on_audit -> service:domains/ordering/api#ordering-api',
       'targets brokerSubscription:domains/ordering/api#onOrder -> service:domains/ordering/api#ordering-api',
       'targets brokerSubscription:domains/ordering/api#onPartnerOrder -> service:domains/ordering/api#ordering-api',
+      'targets brokerSubscription:domains/ordering/api#onUpload -> service:domains/ordering/api#ordering-api',
       'targets brokerSubscription:rawEvents/ordering.order.v1 -> table:google.bigquery/raw_events#ordering_order_v1',
       'targets queue:process-order -> service:domains/ordering/api#ordering-api',
       'targets scheduledJob:domains/ordering/api#nightly -> service:domains/ordering/api#ordering-api',
@@ -202,6 +210,60 @@ describe('GOOGLE_TERRAFORM_GRAPH_RULES', () => {
         scope: 'project:infrastructure/backend',
       },
     });
+    const subscriptions = infrastructure.brokerSubscription;
+    expect(subscriptions['domains/ordering/api#onUpload']).toEqual({
+      name: 'run-ordering-api-onupload',
+      origin: {
+        kind: 'declared',
+        rule: 'cloudRunModule',
+        sources: [
+          {
+            path: 'infrastructure/backend/main.tf',
+            pointer: 'module.ordering_api',
+            location: { start: { line: 1 } },
+          },
+          expect.objectContaining({
+            path: 'domains/ordering/api/causa.yaml',
+            pointer: '/serviceContainer/triggers/onUpload',
+          }),
+        ],
+      },
+      data: {
+        eventType: 'google.cloud.storage.object.v1.finalized',
+        resource: {
+          type: 'eventarc.googleapis.com/Trigger',
+          id: `projects/\${ configuration('google.project') }/locations/\${ configuration('serviceContainer.triggers["onUpload"]["google.eventarc"].location') }/triggers/run-ordering-api-onupload`,
+          scope: 'project:domains/ordering/api',
+        },
+      },
+    });
+    expect(subscriptions['domains/ordering/api#on_audit']).toMatchObject({
+      name: 'run-ordering-api-on-audit',
+      data: {
+        eventType: 'google.cloud.audit.log.v1.written',
+        resource: {
+          type: 'eventarc.googleapis.com/Trigger',
+          id: "projects/${ configuration('google.project') }/locations/${ configuration('google.cloudRun.location') }/triggers/run-ordering-api-on-audit",
+          scope: 'project:domains/ordering/api',
+        },
+      },
+    });
+    const api = projects.find((p) => p.directory === 'domains/ordering/api')!;
+    const actualId = await api.context.render(
+      {
+        $format:
+          subscriptions['domains/ordering/api#onUpload'].data.resource.id,
+      },
+      { renderSecrets: false },
+    );
+    expect(actualId).toEqual(
+      'projects/shop-dev/locations/europe-west4/triggers/run-ordering-api-onupload',
+    );
+    expect(
+      graph.edges?.targets?.find(
+        (e) => e.from === 'brokerSubscription:domains/ordering/api#onUpload',
+      )?.label,
+    ).toEqual('/events/upload');
     expect(infrastructure.queue['process-order'].data.resource).toEqual({
       type: 'cloudtasks.googleapis.com/Queue',
       idPrefix:
