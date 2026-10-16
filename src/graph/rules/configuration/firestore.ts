@@ -28,6 +28,9 @@ import type { GoogleConfiguration } from '../../../configurations/index.js';
  *   collection path, with `{}` in place of document IDs (e.g. `users/{}/bookmarks`), under the single Firestore database
  *   of the workspace. A binding that does not name its root collection is reported.
  * - A `realizes` edge from each collection to the entity whose binding declares it.
+ *
+ * A collection belongs to the domain of the schema declaring its binding. The database holds the collections of all
+ * domains, and belongs to none.
  */
 export const firestoreFromConfiguration: GraphRule = {
   name: 'firestoreFromConfiguration',
@@ -110,6 +113,7 @@ export const firestoreFromConfiguration: GraphRule = {
         type: 'table',
         locator: tableLocator(databaseLocator, collection),
         parent: databaseId(databaseLocator),
+        domain: schema.domain?.directory,
         name: collection,
         sources: [source],
       });

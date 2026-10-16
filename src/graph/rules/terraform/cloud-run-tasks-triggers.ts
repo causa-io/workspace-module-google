@@ -70,6 +70,7 @@ export async function cloudRunTasksTriggers(
         layer: 'infrastructure',
         type: 'queue',
         locator: trigger.queue,
+        domain: service.project.domain?.directory,
         name: trigger.queue,
         sources: [source, queueSource],
         data: { resource },

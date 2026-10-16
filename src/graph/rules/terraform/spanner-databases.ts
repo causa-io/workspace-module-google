@@ -1,3 +1,4 @@
+import { relative } from 'path';
 import {
   GraphOriginKind,
   type DatabaseGraphNodeData,
@@ -10,9 +11,11 @@ import {
   databaseId,
   tableId,
   tableLocator,
+  domainOfFile,
   DomainsFact,
   ModelFact,
   nodeId,
+  type WorkspaceDomain,
 } from '@causa/workspace-core/graph';
 import { terraformDeploys } from '@causa/workspace-terraform';
 import { SPANNER_ENGINE, spannerInstanceId } from '../../ids.js';
@@ -55,6 +58,26 @@ function nameParts(module: InfrastructureModule, warnings: GraphWarning[]) {
 }
 
 /**
+ * Returns the domain all the given DDL files belong to.
+ *
+ * @param rootPath The absolute path of the workspace root.
+ * @param domains The domains of the workspace.
+ * @param files The absolute paths of the DDL files.
+ * @returns The domain, or `undefined` if the files belong to no domain or to several.
+ */
+function ddlDomain(
+  rootPath: string,
+  domains: readonly WorkspaceDomain[],
+  files: readonly string[],
+): string | undefined {
+  const directories = new Set(
+    files.map((f) => domainOfFile(domains, relative(rootPath, f))?.directory),
+  );
+  const [directory] = directories;
+  return directories.size === 1 ? directory : undefined;
+}
+
+/**
  * The resources created by the blocks of the Spanner databases module:
  *
  * - A `google.spanner.instance` node per block, which creates the instance from `google.spanner.instance.name`.
@@ -62,6 +85,9 @@ function nameParts(module: InfrastructureModule, warnings: GraphWarning[]) {
  *   `google.spanner/<instance>.<database>`, and the parent is the instance.
  * - A `table` node per `CREATE TABLE` statement in the DDL files of each database. Tables no schema declares (e.g. an
  *   outbox) are still nodes, realizing nothing.
+ *
+ * A table belongs to the domain of the DDL file creating it, and a database to the domain all its DDL files belong to.
+ * The instance holds the databases of all domains, and belongs to none.
  * - A `realizes` edge from a table to the entity whose binding names it. The table is the one created by the DDL of a
  *   database, disambiguated by domain when several databases create a table with the same name.
  */
@@ -161,6 +187,7 @@ export const spannerDatabasesModule: GraphRule = {
           type: 'database',
           locator: database.locator,
           parent: spannerInstanceId(spanner.instance),
+          domain: ddlDomain(context.rootPath, domains, database.ddlFiles),
           name: database.id,
           sources: [
             { path: database.directory },
@@ -202,6 +229,7 @@ export const spannerDatabasesModule: GraphRule = {
           type: 'table',
           locator: nodeLocator,
           parent: databaseId(database.locator),
+          domain: ddlDomain(context.rootPath, domains, [table.file]),
           name: table.name,
           sources: [ddlSource(context.rootPath, table), ...blocks],
         });

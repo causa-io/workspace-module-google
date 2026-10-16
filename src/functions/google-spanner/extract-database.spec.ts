@@ -87,4 +87,49 @@ describe('ModelSchemaExtractDatabaseForGoogleSpanner', () => {
 
     expect(actual.primaryKeys).toEqual(['id', 'tenant']);
   });
+
+  it('should convert primary key columns to the properties stored in them', () => {
+    const schema = makeSchema(
+      { googleSpannerTable: { primaryKey: ['id', 'messageId', 'author.id'] } },
+      {
+        properties: [
+          {
+            name: 'conversation',
+            type: { kind: 'primitive', type: 'uuid' },
+            nullable: false,
+            required: true,
+            extensions: { googleSpannerColumn: { name: 'id' } },
+          },
+          {
+            name: 'id',
+            type: { kind: 'primitive', type: 'uuid' },
+            nullable: false,
+            required: true,
+            extensions: { googleSpannerColumn: { name: 'messageId' } },
+          },
+          {
+            name: 'author',
+            type: { kind: 'ref', ref: '/abs/author.yaml' },
+            nullable: false,
+            required: true,
+            extensions: {},
+          },
+        ],
+      },
+    );
+
+    const actual = call(schema);
+
+    expect(actual.primaryKeys).toEqual(['conversation', 'id', 'author.id']);
+  });
+
+  it('should keep primary key columns matching no property', () => {
+    const schema = makeSchema({
+      googleSpannerTable: { primaryKey: ['unknown', 'other.id'] },
+    });
+
+    const actual = call(schema);
+
+    expect(actual.primaryKeys).toEqual(['unknown', 'other.id']);
+  });
 });

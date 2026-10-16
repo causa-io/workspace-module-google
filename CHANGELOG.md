@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+Features:
+
+- Set the `domain` of the infrastructure graph nodes. Services, subscriptions, queues, and scheduled jobs belong to the domain of their project, broker topics and raw events tables to the domain of their topic, Spanner tables and databases to the domain of their DDL files, and Firestore collections to the domain of their schema. Resources shared by several domains (the Spanner instance, the Firestore database, the raw events dataset, and the API router) belong to none.
+
+Fixes:
+
+- Return property paths rather than column names in the primary keys of Spanner database bindings, converting the column of each key to the property stored in it (`googleSpannerColumn`), as the runtime does.
+
 ## v1.4.0-beta.4 (2026-10-14)
 
 Features:

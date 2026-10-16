@@ -194,6 +194,31 @@ describe('GOOGLE_TERRAFORM_GRAPH_RULES', () => {
       'targets scheduledJob:domains/ordering/api#nightly -> service:domains/ordering/api#ordering-api',
     ]);
     const infrastructure = graph.nodes?.infrastructure as any;
+    const domains = Object.fromEntries(
+      Object.entries(infrastructure).flatMap(([type, byLocator]) =>
+        Object.entries(byLocator as Record<string, { domain?: string }>).map(
+          ([locator, node]) => [`${type}:${locator}`, node.domain],
+        ),
+      ),
+    );
+    expect(domains).toEqual({
+      'apiRouter:api': undefined,
+      'brokerSubscription:domains/ordering/api#on_audit': 'domains/ordering',
+      'brokerSubscription:domains/ordering/api#onOrder': 'domains/ordering',
+      'brokerSubscription:domains/ordering/api#onPartnerOrder':
+        'domains/ordering',
+      'brokerSubscription:domains/ordering/api#onUpload': 'domains/ordering',
+      'brokerSubscription:rawEvents/ordering.order.v1': 'domains/ordering',
+      'brokerTopic:ordering.order.v1': 'domains/ordering',
+      'database:google.bigquery/raw_events': undefined,
+      'database:google.spanner/main.ordering': 'domains/ordering',
+      'google.spanner.instance:main': undefined,
+      'queue:process-order': 'domains/ordering',
+      'scheduledJob:domains/ordering/api#nightly': 'domains/ordering',
+      'service:domains/ordering/api#ordering-api': 'domains/ordering',
+      'table:google.bigquery/raw_events#ordering_order_v1': 'domains/ordering',
+      'table:google.spanner/main.ordering#Order': 'domains/ordering',
+    });
     expect(
       infrastructure.service['domains/ordering/api#ordering-api'].data,
     ).toMatchObject({
@@ -212,6 +237,7 @@ describe('GOOGLE_TERRAFORM_GRAPH_RULES', () => {
     });
     const subscriptions = infrastructure.brokerSubscription;
     expect(subscriptions['domains/ordering/api#onUpload']).toEqual({
+      domain: 'domains/ordering',
       name: 'run-ordering-api-onupload',
       origin: {
         kind: 'declared',

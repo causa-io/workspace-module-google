@@ -41,6 +41,7 @@ export async function cloudRunCronTriggers(
         layer: 'infrastructure',
         type: 'scheduledJob',
         locator: jobLocator,
+        domain: service.project.domain?.directory,
         name: job,
         sources: [
           source,

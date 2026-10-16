@@ -124,13 +124,16 @@ async function rawEventsDataset(
  * The resources created by the event topics module block.
  *
  * - A `brokerTopic` node per event topic, named by the topic ID: the module creates one Pub/Sub topic per topic listed
- *   by `EventTopicList`. It `realizes` the event topic of the same ID.
+ *   by `EventTopicList`. It `realizes` the event topic of the same ID, and belongs to its domain.
  * - When the block has a raw events dataset (`bigquery_raw_events_dataset`, or
  *   `google.pubSub.bigQueryStorage.rawEventsDatasetId`), a `database` node for the BigQuery dataset, and for each
  *   topic:
  *   - A `table` node, named by the topic ID with `.` and `-` replaced by `_`.
  *   - A BigQuery `brokerSubscription` node: the module creates one `bq-<topic>` subscription per topic, writing events
  *     to the topic's raw table. The broker topic `delivers` to it, and it `targets` the table.
+ *
+ *   The dataset holds the tables of all domains and belongs to none, while the table and subscription of a topic belong
+ *   to the topic's domain.
  */
 export const eventTopicsModule: GraphRule = {
   name: 'eventTopicsModule',
@@ -215,6 +218,7 @@ export const eventTopicsModule: GraphRule = {
         layer: 'infrastructure',
         type: 'brokerTopic',
         locator: topic.id,
+        domain: topic.domain?.directory,
         name: topic.id,
         sources: [source, schemaSource],
         data: {
@@ -251,6 +255,7 @@ export const eventTopicsModule: GraphRule = {
         type: 'table',
         locator: rawTableLocator,
         parent: databaseId(rawEvents.locator),
+        domain: topic.domain?.directory,
         name: tableName,
         description: `Raw \`${topic.id}\` events.`,
         sources: [source, schemaSource],
@@ -283,6 +288,7 @@ export const eventTopicsModule: GraphRule = {
         layer: 'infrastructure',
         type: 'brokerSubscription',
         locator: subscriptionLocator,
+        domain: topic.domain?.directory,
         name: subscription,
         sources: [source, ...rawEvents.sources],
         data: {
