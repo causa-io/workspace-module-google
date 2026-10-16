@@ -1,10 +1,10 @@
 import {
-  type ServiceGraphNodeData,
-  type GraphWarning,
   type GraphRuleEdge,
   type GraphRuleNode,
   type GraphRuleOutput,
+  type GraphWarning,
   type ServiceContainerConfiguration,
+  type ServiceGraphNodeData,
 } from '@causa/workspace-core';
 import {
   projectId,
@@ -16,10 +16,10 @@ import { CloudRunFact } from '../../cloud-run.js';
 import { blockResource } from '../../terraform-modules.js';
 
 /**
- * A `service` node per block of the Cloud Run module, and a `realizes` edge from it to the project whose configuration
- * file the block reads. The service name is the block's `name` argument or the project name, and `platform` is the
- * project's `serviceContainer.platform`. Blocks whose project cannot be found, and arguments that cannot be evaluated,
- * are reported.
+ * A `service` node per block of the Cloud Run module, in the domain of the project whose configuration file the block
+ * reads, and a `realizes` edge from it to that project. The service name is the block's `name` argument or the project
+ * name, and `platform` is the project's `serviceContainer.platform`. Blocks whose project cannot be found, and
+ * arguments that cannot be evaluated, are reported.
  *
  * @param graph The context of the extraction.
  * @returns The services, and their edges.
@@ -60,6 +60,7 @@ export async function cloudRunServices(
       layer: 'infrastructure',
       type: 'service',
       locator: serviceLocator(service.project.directory, service.name),
+      domain: service.project.domain?.directory,
       name: service.name,
       sources: [
         source,

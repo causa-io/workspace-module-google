@@ -48,9 +48,13 @@ describe('GOOGLE_GRAPH_RULES', () => {
         id: "projects/${ configuration('google.project') }/databases/${ configuration('google.firestore.database') }",
       },
     });
+    expect(
+      infrastructure.database['google.firestore/(default)'].domain,
+    ).toBeUndefined();
     expect(infrastructure.table['google.firestore/(default)#carts']).toEqual(
       expect.objectContaining({
         parent: 'database:google.firestore/(default)',
+        domain: 'domains/ordering',
         name: 'carts',
       }),
     );

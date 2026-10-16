@@ -81,6 +81,7 @@ export async function cloudRunPubSubTriggers(
         layer: 'infrastructure',
         type: 'brokerSubscription',
         locator: subscriptionLocator,
+        domain: service.project.domain?.directory,
         name: subscription,
         sources: [
           source,

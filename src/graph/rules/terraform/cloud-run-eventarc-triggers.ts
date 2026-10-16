@@ -119,6 +119,7 @@ export async function cloudRunEventarcTriggers(
         layer: 'infrastructure',
         type: 'brokerSubscription',
         locator: subscriptionLocator,
+        domain: service.project.domain?.directory,
         name: eventarcTrigger,
         sources: [
           source,
